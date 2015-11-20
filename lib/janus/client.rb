@@ -7,25 +7,16 @@ module Janus
 
     include EventEmitter
 
-    attr_accessor :session_id
-    attr_accessor :transaction_queue
-
     attr_accessor :client
-
-    attr_accessor :em
 
     def initialize(url)
       @url = url
       @transaction_queue = Hash.new
     end
 
-    def websocket_client
-      Faye::WebSocket::Client.new(@url, 'janus-protocol')
-    end
-
     def connect
       EventMachine.run do
-        @client = websocket_client
+        @client = websocket_client(@url)
 
         _self = self
 
@@ -85,6 +76,10 @@ module Janus
     def destroy
       disconnect
       EventMachine.stop
+    end
+
+    def websocket_client(url, protocol = 'janus-protocol')
+      Faye::WebSocket::Client.new(url, protocol)
     end
 
   end

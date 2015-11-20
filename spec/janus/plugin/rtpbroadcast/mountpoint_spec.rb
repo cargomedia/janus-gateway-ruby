@@ -18,7 +18,7 @@ class WebSocketClientMock
 
   include EventEmitter
 
-  def initialize
+  def initialize(*args)
     connect_mock
   end
 
@@ -63,7 +63,7 @@ end
 
 describe Janus::Plugin::Rtpbroadcast::Mountpoint do
 
-  let(:client) { Janus::Client.new('ws://10.10.10.111:8188/janus') }
+  let(:client) { Janus::Client.new('') }
   let(:session) { Janus::Session.new(client) }
   let(:plugin) { Janus::Plugin.new(session, Janus::Plugin::Rtpbroadcast.plugin_name) }
   let(:rtp_mountpoint) { Janus::Plugin::Rtpbroadcast::Mountpoint.new(plugin, 'test-mountpoint') }
