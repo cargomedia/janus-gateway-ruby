@@ -1,0 +1,6 @@
+Gemfile.lock
+.rvmrc
+/pkg
+.buildpath
+.project
+.ruby-version
