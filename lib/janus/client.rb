@@ -17,6 +17,9 @@ module Janus
 
     def connect
       EventMachine.run do
+
+        EM.error_handler { |e| raise(e) }
+
         @websocket_client = websocket_client_new(@url)
 
         _self = self
