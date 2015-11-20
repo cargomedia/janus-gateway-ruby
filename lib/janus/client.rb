@@ -19,30 +19,36 @@ module Janus
       @transaction_queue = Hash.new
     end
 
+    def websocket_client
+      Faye::WebSocket::Client.new(@url, 'janus-protocol')
+    end
+
     def connect
       EventMachine.run do
-        @client = Faye::WebSocket::Client.new(@url, 'janus-protocol')
+        @client = websocket_client
+
+        _self = self
 
         @client.on :open do |event|
-          self.emit :open, event
+          _self.emit :open, event
         end
 
         @client.on :message do |event|
           data = JSON.parse(event.data)
 
           unless data['transaction'].nil?
-            @transaction_queue.each do |transaction, callback|
+            _self.transaction_queue.each do |transaction, callback|
               if transaction == data['transaction']
                 callback.call(data)
               end
             end
           end
 
-          self.emit :message, data
+          _self.emit :message, data
         end
 
         @client.on :close do |event|
-          self.emit :error, event
+          _self.emit :error, event
         end
       end
     end
@@ -61,7 +67,7 @@ module Janus
       data[:transaction] = transaction
       @client.send(JSON.generate(data))
 
-      transaction_queue[transaction] = block
+      @transaction_queue[transaction] = block
     end
 
     def new_transaction
