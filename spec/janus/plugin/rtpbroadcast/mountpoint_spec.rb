@@ -24,7 +24,7 @@ class WebSocketClientMock
 
   def connect_mock
     Thread.new do
-      sleep(0.2)
+      sleep(0.5)
       self.emit :open, EventMock.new
     end
   end
@@ -35,12 +35,12 @@ class WebSocketClientMock
 
     case data_json['janus']
       when 'create'
-        response = '{"janus":"success", "transaction":"CvBn1YojWE5e", "data":{"id":"12345"}}'
+        response = '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":"12345"}}'
       when 'attach'
-        response = '{"janus":"success", "session_id":183170935, "transaction":"CvBn1YojWE5e", "data":{"id":"54321"}}'
+        response = '{"janus":"success", "session_id":183170935, "transaction":"ABCDEFGHIJK", "data":{"id":"54321"}}'
       when 'message'
         response = [
-          '{"janus":"success", "session_id":12345, "sender_id":"54321", "transaction":"CvBn1YojWE5e"',
+          '{"janus":"success", "session_id":12345, "sender_id":"54321", "transaction":"ABCDEFGHIJK"',
           '"plugindata":{"plugin":"janus.plugin.cm.rtpbroadcast", "data":{"streaming":"created"',
           '"created":"rndmvr-studio-agent-bulldog1448032631000", "stream":{"id":"rndmvr-studio-agent-bulldog1448032631000"',
           '"description":"rndmvr-studio-agent-bulldog1448032631000", "streams":[{"audioport":8576, "videoport":8369}]}}}}'
@@ -48,7 +48,7 @@ class WebSocketClientMock
     end
 
     Thread.new do
-      sleep(0.1)
+      sleep(0.5)
       self.emit :message, EventMock.new(response)
     end
   end
@@ -70,7 +70,8 @@ describe Janus::Plugin::Rtpbroadcast::Mountpoint do
 
   it 'should create rtpbroadcast mountpoint' do
 
-    client.stub(:websocket_client).and_return(WebSocketClientMock.new)
+    client.stub(:websocket_client_new).and_return(WebSocketClientMock.new)
+    client.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
 
     _self = self
     client.on :open do |data|

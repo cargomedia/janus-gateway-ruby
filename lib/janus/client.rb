@@ -8,6 +8,7 @@ module Janus
     include EventEmitter
 
     attr_accessor :websocket_client
+    attr_reader :transaction_queue
 
     def initialize(url)
       @url = url
@@ -16,7 +17,7 @@ module Janus
 
     def connect
       EventMachine.run do
-        @websocket_client = websocket_client(@url)
+        @websocket_client = websocket_client_new(@url)
 
         _self = self
 
@@ -53,7 +54,7 @@ module Janus
     end
 
     def send_transaction(data, &block)
-      transaction = new_transaction
+      transaction = transaction_id_new
 
       data[:transaction] = transaction
       @websocket_client.send(JSON.generate(data))
@@ -61,8 +62,12 @@ module Janus
       @transaction_queue[transaction] = block
     end
 
-    def new_transaction
-      'CvBn1YojWE5e'
+    def transaction_id_new
+      transaction_id = ''
+      24.times do
+        transaction_id << (65 + rand(25)).chr
+      end
+      transaction_id
     end
 
     def has_client?
@@ -78,7 +83,7 @@ module Janus
       EventMachine.stop
     end
 
-    def websocket_client(url, protocol = 'janus-protocol')
+    def websocket_client_new(url, protocol = 'janus-protocol')
       Faye::WebSocket::Client.new(url, protocol)
     end
 
