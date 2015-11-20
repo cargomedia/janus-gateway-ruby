@@ -7,7 +7,7 @@ module Janus
 
     include EventEmitter
 
-    attr_accessor :client
+    attr_accessor :websocket_client
 
     def initialize(url)
       @url = url
@@ -16,15 +16,15 @@ module Janus
 
     def connect
       EventMachine.run do
-        @client = websocket_client(@url)
+        @websocket_client = websocket_client(@url)
 
         _self = self
 
-        @client.on :open do |event|
+        @websocket_client.on :open do |event|
           _self.emit :open, event
         end
 
-        @client.on :message do |event|
+        @websocket_client.on :message do |event|
           data = JSON.parse(event.data)
 
           unless data['transaction'].nil?
@@ -38,25 +38,25 @@ module Janus
           _self.emit :message, data
         end
 
-        @client.on :close do |event|
+        @websocket_client.on :close do |event|
           _self.emit :error, event
         end
       end
     end
 
     def disconnect
-      @client.close
+      @websocket_client.close
     end
 
     def send(data)
-      @client.send(JSON.generate(data));
+      @websocket_client.send(JSON.generate(data));
     end
 
     def send_transaction(data, &block)
       transaction = new_transaction
 
       data[:transaction] = transaction
-      @client.send(JSON.generate(data))
+      @websocket_client.send(JSON.generate(data))
 
       @transaction_queue[transaction] = block
     end
@@ -66,11 +66,11 @@ module Janus
     end
 
     def has_client?
-      @client.nil? == false
+      @websocket_client.nil? == false
     end
 
     def has_connection?
-      has_client? and @client.ready_state == Faye::WebSocket::API::OPEN
+      has_client? and @websocket_client.ready_state == Faye::WebSocket::API::OPEN
     end
 
     def destroy
