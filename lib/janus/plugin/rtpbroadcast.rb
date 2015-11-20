@@ -1,12 +1,9 @@
 module Janus
 
-  class Plugin
+  class Plugin::Rtpbroadcast
 
-    class Rtpbroadcast
-
-      def self.plugin_name
-        'janus.plugin.cm.rtpbroadcast'
-      end
+    def self.plugin_name
+      'janus.plugin.cm.rtpbroadcast'
     end
   end
 end

@@ -1,6 +1,6 @@
 module Janus
 
-  class Session
+  class Resource::Session < Resource
 
     include EventEmitter
 

@@ -4,10 +4,15 @@ module Janus
   require 'event_emitter'
 
   require 'janus/client'
-  require 'janus/session'
+  require 'janus/resource'
   require 'janus/plugin'
-  require 'janus/version'
+
+  require 'janus/resource/session'
+  require 'janus/resource/plugin'
 
   require 'janus/plugin/rtpbroadcast'
-  require 'janus/plugin/rtpbroadcast/mountpoint'
+  require 'janus/plugin/rtpbroadcast/resource'
+  require 'janus/plugin/rtpbroadcast/resource/mountpoint'
+
+  require 'janus/version'
 end

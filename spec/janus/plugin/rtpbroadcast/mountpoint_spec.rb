@@ -37,7 +37,7 @@ class WebSocketClientMock
       when 'create'
         response = '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":"12345"}}'
       when 'attach'
-        response = '{"janus":"success", "session_id":183170935, "transaction":"ABCDEFGHIJK", "data":{"id":"54321"}}'
+        response = '{"janus":"success", "session_id":12345, "transaction":"ABCDEFGHIJK", "data":{"id":"54321"}}'
       when 'message'
         response = [
           '{"janus":"success", "session_id":12345, "sender_id":"54321", "transaction":"ABCDEFGHIJK"',
@@ -61,12 +61,12 @@ class WebSocketClientMock
   end
 end
 
-describe Janus::Plugin::Rtpbroadcast::Mountpoint do
+describe Janus::Plugin::Rtpbroadcast::Resource::Mountpoint do
 
   let(:client) { Janus::Client.new('') }
-  let(:session) { Janus::Session.new(client) }
-  let(:plugin) { Janus::Plugin.new(session, Janus::Plugin::Rtpbroadcast.plugin_name) }
-  let(:rtp_mountpoint) { Janus::Plugin::Rtpbroadcast::Mountpoint.new(plugin, 'test-mountpoint') }
+  let(:session) { Janus::Resource::Session.new(client) }
+  let(:plugin) { Janus::Resource::Plugin.new(session, Janus::Plugin::Rtpbroadcast.plugin_name) }
+  let(:rtp_mountpoint) { Janus::Plugin::Rtpbroadcast::Resource::Mountpoint.new(plugin, 'test-mountpoint') }
 
   it 'should create rtpbroadcast mountpoint' do
 
