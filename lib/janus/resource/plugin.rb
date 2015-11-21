@@ -2,13 +2,11 @@ module Janus
 
   class Resource::Plugin < Resource
 
-    include EventEmitter
-
-    attr_accessor :id
-
     def initialize(session, name)
       @session = session
       @name = name
+
+      super()
     end
 
     def name

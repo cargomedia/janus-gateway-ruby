@@ -38,6 +38,5 @@ describe Janus::Plugin::Rtpbroadcast::Resource::Mountpoint do
     end
 
     client.connect
-
   end
 end

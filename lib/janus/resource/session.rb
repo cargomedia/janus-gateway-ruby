@@ -2,14 +2,11 @@ module Janus
 
   class Resource::Session < Resource
 
-    include EventEmitter
-
-    attr_accessor :id
-
     def initialize(janus_client)
       @janus_client = janus_client
       @heartbeat_thread = nil
-      @id = nil
+
+      super()
     end
 
     def name

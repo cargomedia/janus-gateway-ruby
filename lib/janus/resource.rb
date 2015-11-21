@@ -2,6 +2,14 @@ module Janus
 
   class Resource
 
+    include EventEmitter
+
+    attr_accessor :id
+
+    def initialize(id = nil)
+      @id = id
+    end
+
     def name
       raise("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
