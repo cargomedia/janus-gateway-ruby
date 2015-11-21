@@ -17,7 +17,7 @@ describe Janus::Plugin::Rtpbroadcast::Resource::Mountpoint do
         '"plugindata":{"plugin":"janus.plugin.cm.rtpbroadcast", "data":{"streaming":"created"',
         '"created":"test-mountpoint", "stream":{"id":"test-mountpoint"',
         '"description":"test-mountpoint", "streams":[{"audioport":8576, "videoport":8369}]}}}}'
-      ].join(',')For
+      ].join(',')
     }
 
     client.stub(:websocket_client_new).and_return(WebSocketClientMock.new(janus_response))
