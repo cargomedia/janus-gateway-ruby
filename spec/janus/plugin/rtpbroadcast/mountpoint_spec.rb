@@ -24,17 +24,14 @@ describe Janus::Plugin::Rtpbroadcast::Resource::Mountpoint do
     client.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
 
     _self = self
-    client.on :open do |data|
-      _self.session.on :create do |id|
-        _self.plugin.on :create do |id|
-          _self.rtp_mountpoint.on :create do |data|
+    client.on :open do
+      _self.session.create.then do
+        _self.plugin.create.then do
+          _self.rtp_mountpoint.create.then do
             _self.client.destroy
           end
-          _self.rtp_mountpoint.create
         end
-        _self.plugin.create
       end
-      _self.session.create
     end
 
     client.connect
