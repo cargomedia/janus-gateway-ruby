@@ -25,6 +25,8 @@ module Janus
     end
 
     def create
+      p = Concurrent::Promise.new
+
       janus_client.send_transaction(
         {
           :janus => 'message',
@@ -43,10 +45,14 @@ module Janus
         plugindata = data['plugindata']['data']
         if plugindata['error_code'].nil?
           on_created(data)
+
+          p.execute { self }
         else
           on_error(plugindata['error_code'], plugindata['error'])
         end
       end
+
+      p
     end
 
     def on_error(code, message)

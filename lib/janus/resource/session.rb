@@ -14,6 +14,8 @@ module Janus
     end
 
     def create
+      p = Concurrent::Promise.new
+
       janus_client.send_transaction(
         {
           :janus => "create"
@@ -21,7 +23,11 @@ module Janus
       ) do |*args|
         on_created(*args)
         heartbeat
+
+        p.execute { self }
       end
+
+      p
     end
 
     def on_created(data)
