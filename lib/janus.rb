@@ -2,6 +2,7 @@ module Janus
 
   require 'json'
   require 'event_emitter'
+  require 'concurrent'
 
   require 'janus/client'
   require 'janus/resource'
