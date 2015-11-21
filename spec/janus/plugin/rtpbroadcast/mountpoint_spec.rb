@@ -15,9 +15,9 @@ describe Janus::Plugin::Rtpbroadcast::Resource::Mountpoint do
       :message => [
         '{"janus":"success", "session_id":12345, "sender_id":"54321", "transaction":"ABCDEFGHIJK"',
         '"plugindata":{"plugin":"janus.plugin.cm.rtpbroadcast", "data":{"streaming":"created"',
-        '"created":"rndmvr-studio-agent-bulldog1448032631000", "stream":{"id":"rndmvr-studio-agent-bulldog1448032631000"',
-        '"description":"rndmvr-studio-agent-bulldog1448032631000", "streams":[{"audioport":8576, "videoport":8369}]}}}}'
-      ].join(',')
+        '"created":"test-mountpoint", "stream":{"id":"test-mountpoint"',
+        '"description":"test-mountpoint", "streams":[{"audioport":8576, "videoport":8369}]}}}}'
+      ].join(',')For
     }
 
     client.stub(:websocket_client_new).and_return(WebSocketClientMock.new(janus_response))
