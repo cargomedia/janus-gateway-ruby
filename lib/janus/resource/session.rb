@@ -6,8 +6,8 @@ module Janus
 
     attr_accessor :id
 
-    def initialize(cm_janus_client)
-      @cm_janus_client = cm_janus_client
+    def initialize(janus_client)
+      @janus_client = janus_client
       @heartbeat_thread = nil
       @id = nil
     end
@@ -67,21 +67,20 @@ module Janus
         while true do
           sleep(30)
 
-          @cm_janus_client.send_transaction(
+          janus_client.send_transaction(
             {
               :janus => "keepalive",
               :session_id => @id
             }
           ) do |*args|
-            # should returns
-            # {"janus"=>"ack", "session_id"=><int>, "transaction"=>"<string>"}
+            # should returns {"janus"=>"ack", "session_id"=><int>, "transaction"=>"<string>"}
           end
         end
       end
     end
 
     def janus_client
-      @cm_janus_client
+      @janus_client
     end
 
   end
