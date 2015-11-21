@@ -6,7 +6,6 @@ module Janus
 
     attr_accessor :cm_janus_client
     attr_accessor :id
-
     attr_accessor :heartbeat
 
     def initialize(cm_janus_client)
