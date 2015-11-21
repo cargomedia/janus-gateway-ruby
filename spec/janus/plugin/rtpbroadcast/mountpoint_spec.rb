@@ -32,7 +32,7 @@ describe Janus::Plugin::Rtpbroadcast::Resource::Mountpoint do
           end
           _self.rtp_mountpoint.create
         end
-        _self.plugin.attach
+        _self.plugin.create
       end
       _self.session.create
     end
