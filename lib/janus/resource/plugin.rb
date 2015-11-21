@@ -4,13 +4,9 @@ module Janus
 
     include EventEmitter
 
-    attr_accessor :cm_janus_client
     attr_accessor :id
-    attr_accessor :name
-    attr_accessor :session
 
     def initialize(session, name)
-      @cm_janus_client = session.cm_janus_client
       @session = session
       @name = name
     end
@@ -19,8 +15,8 @@ module Janus
       @name
     end
 
-    def attach
-      @cm_janus_client.send_transaction(
+    def create
+      janus_client.send_transaction(
         {
           :janus => "attach",
           :plugin => name,
@@ -36,7 +32,7 @@ module Janus
 
       _self = self
 
-      @session.on :destroy do |data|
+      session.on :destroy do |data|
         _self.destroy
       end
 
@@ -45,6 +41,14 @@ module Janus
 
     def destroy
       self.emit :destroy, @id
+    end
+
+    def session
+      @session
+    end
+
+    def janus_client
+      @session.janus_client
     end
   end
 end
