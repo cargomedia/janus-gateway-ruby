@@ -4,25 +4,20 @@ module Janus
 
     include EventEmitter
 
-    attr_accessor :cm_janus_client
-    attr_accessor :name
-    attr_accessor :data
-
-    attr_accessor :plugin
-
-    attr_accessor :audio_rtpmap
-    attr_accessor :audio_opt
-
-    attr_accessor :video_rtpmap
-    attr_accessor :video_opt
-
-    attr_accessor :audio_runtime_port
-    attr_accessor :video_runtime_port
-
-    def initialize(plugin, name)
-      @cm_janus_client = plugin.cm_janus_client
+    def initialize(plugin, name, streams = nil)
       @plugin = plugin
       @name = name
+
+      @streams = streams || [
+        {
+          :audio => 'yes',
+          :video => 'yes',
+          :audiopt => 111,
+          :audiortpmap => 'opus/48000/2',
+          :videopt => 100,
+          :videortpmap => 'VP8/90000'
+        }
+      ]
     end
 
     def name
@@ -30,7 +25,7 @@ module Janus
     end
 
     def create
-      @cm_janus_client.send_transaction(
+      janus_client.send_transaction(
         {
           :janus => 'message',
           :session_id => @plugin.session.id,
@@ -41,18 +36,7 @@ module Janus
             :name => name,
             :description => name,
             :recorded => true,
-            :streams => [
-              {
-                :audio => 'yes',
-                :video => 'yes',
-                :audioport => 9002,
-                :audiopt => 111,
-                :audiortpmap => 'opus/48000/2',
-                :videoport => 9004,
-                :videopt => 100,
-                :videortpmap => 'VP8/90000'
-              }
-            ]
+            :streams => @streams
           }
         }
       ) do |data|
@@ -74,7 +58,7 @@ module Janus
 
       _self = self
 
-      @plugin.on :destroy do |data|
+      plugin.on :destroy do |data|
         _self.destroy
       end
 
@@ -87,6 +71,18 @@ module Janus
 
     def destroy
       self.emit :destroy, @data
+    end
+
+    def session
+      plugin.session
+    end
+
+    def plugin
+      @plugin
+    end
+
+    def janus_client
+      plugin.janus_client
     end
   end
 end
