@@ -4,19 +4,20 @@ module Janus
 
     include EventEmitter
 
-    attr_accessor :cm_janus_client
     attr_accessor :id
-    attr_accessor :heartbeat
 
     def initialize(cm_janus_client)
       @cm_janus_client = cm_janus_client
+      @heartbeat_thread = nil
+      @id = nil
     end
 
     def name
+      @id
     end
 
     def create
-      @cm_janus_client.send_transaction(
+      janus_client.send_transaction(
         {
           :janus => "create"
         }
@@ -31,17 +32,17 @@ module Janus
 
       _self = self
 
-      @cm_janus_client.on :message do |data|
+      janus_client.on :message do |data|
         if data['janus'] == 'timeout' and data['session_id'] == _self.id
           _self.destroy
         end
       end
 
-      @cm_janus_client.on :close do |data|
+      janus_client.on :close do |data|
         _self.emit :destroy, @id
       end
 
-      @cm_janus_client.on :error do |data|
+      janus_client.on :error do |data|
         _self.emit :destroy, @id
       end
 
@@ -49,20 +50,20 @@ module Janus
     end
 
     def destroy
-      @cm_janus_client.send_transaction(
+      janus_client.send_transaction(
         {
           :janus => "destroy",
           :session_id => @id
         }
       ) do |*args|
-        @heartbeat.exit unless @heartbeat.nil?
+        @heartbeat_thread.exit unless @heartbeat_thread.nil?
 
         self.emit :destroy, @id
       end
     end
 
     def heartbeat
-      @heartbeat = Thread.new do
+      @heartbeat_thread = Thread.new do
         while true do
           sleep(30)
 
@@ -77,6 +78,10 @@ module Janus
           end
         end
       end
+    end
+
+    def janus_client
+      @cm_janus_client
     end
 
   end
