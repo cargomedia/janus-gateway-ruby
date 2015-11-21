@@ -20,8 +20,6 @@ class WebSocketClientMock
     janus_action_name = data_json['janus'].to_sym
     reply_message = @response[janus_action_name]
 
-    puts data
-
     Thread.new do
       sleep(0.5)
       self.emit :message, EventMock.new(reply_message)
