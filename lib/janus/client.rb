@@ -31,10 +31,12 @@ module Janus
         @websocket_client.on :message do |event|
           data = JSON.parse(event.data)
 
+          transaction_list = _self.transaction_queue.clone
           unless data['transaction'].nil?
-            _self.transaction_queue.each do |transaction, callback|
+            transaction_list.each do |transaction, callback|
               if transaction == data['transaction']
                 callback.call(data)
+                break
               end
             end
           end
