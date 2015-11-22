@@ -56,7 +56,7 @@ describe Janus::Plugin::Rtpbroadcast::Resource::Mountpoint do
     client.on :open do
       _self.session.create.then do
         _self.plugin.create.then do
-          _self.rtp_mountpoint.create.catch do
+          _self.rtp_mountpoint.create.rescue do
             _self.client.destroy
           end
         end
