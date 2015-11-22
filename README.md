@@ -83,7 +83,7 @@ end
 ```
 
 ### Plugins
-Janus support for native and custom [plugins].
+Janus support for native and custom [plugins](https://janus.conf.meetecho.com/docs/group__plugins.html).
 
 #### Rtpbrodcast
 It support custom plugin for rtp streaming. Please find more details in official [repository](https://github.com/cargomedia/janus-gateway-rtpbroadcast).
