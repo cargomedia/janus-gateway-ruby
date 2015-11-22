@@ -35,7 +35,7 @@ module Janus
           unless data['transaction'].nil?
             transaction_list.each do |transaction, promise|
               if transaction == data['transaction']
-                if 'success' == data['janus']
+                if ['success', 'ack'].include?(data['janus'])
                   promise.set(data)
                   promise.execute
                 else

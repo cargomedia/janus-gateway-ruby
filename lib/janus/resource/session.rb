@@ -82,16 +82,18 @@ module Janus
 
     def heartbeat
       @heartbeat_thread = Thread.new do
+        sleep_time = 5
         while true do
-          sleep(30)
-
+          sleep(sleep_time)
           janus_client.send_transaction(
             {
               :janus => "keepalive",
               :session_id => @id
             }
-          ) do |*args|
-            # should returns {"janus"=>"ack", "session_id"=><int>, "transaction"=>"<string>"}
+          ).then do |*args|
+            sleep_time = 30
+          end.rescue do |error|
+            sleep_time = 1
           end
         end
       end
