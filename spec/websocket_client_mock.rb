@@ -9,7 +9,7 @@ class WebSocketClientMock
 
   def connect_mock
     Thread.new do
-      sleep(0.5)
+      sleep(0.1)
       self.emit :open, EventMock.new
     end
   end
@@ -21,7 +21,7 @@ class WebSocketClientMock
     reply_message = @response[janus_action_name]
 
     Thread.new do
-      sleep(0.5)
+      sleep(0.1)
       self.emit :message, EventMock.new(reply_message)
     end
   end
