@@ -7,6 +7,7 @@ module Janus
   require 'janus/client'
   require 'janus/resource'
   require 'janus/plugin'
+  require 'janus/error'
 
   require 'janus/resource/session'
   require 'janus/resource/plugin'

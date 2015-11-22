@@ -49,15 +49,19 @@ module Janus
           p.set(self)
           p.execute
         else
-          on_error(plugindata['error_code'], plugindata['error'])
+          error = Janus::Error.new(plugindata['error_code'], plugindata['error'])
+
+          on_error(error)
+
+          p.fail(error).execute
         end
       end
 
       p
     end
 
-    def on_error(code, message)
-      self.emit :error, {:code => code, :message => message}
+    def on_error(error)
+      self.emit :error, error
     end
 
     def on_created(data)
