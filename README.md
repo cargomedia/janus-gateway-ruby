@@ -52,7 +52,7 @@ session = Janus::Resource::Session.new(client)
 session.create
 ```
 
-#### Event
+#### Events
 
 ```ruby
 client = Janus::Client.new('url')
@@ -69,7 +69,7 @@ end
 session.create
 ```
 
-#### Chain
+#### Chaining
 
 ```ruby
 client = Janus::Client.new('url')
@@ -85,13 +85,14 @@ end
 ### Plugins
 Janus support for native and custom [plugins](https://janus.conf.meetecho.com/docs/group__plugins.html).
 
-#### Rtpbrodcast
-It support custom plugin for rtp streaming. Please find more details in official [repository](https://github.com/cargomedia/janus-gateway-rtpbroadcast).
+#### Rtpbrodcast plugin
+This is custom plugin for `RTP` streaming. Please find more details in official [repository](https://github.com/cargomedia/janus-gateway-rtpbroadcast).
+Plugin must be installed and active in `Janus` server.
 
-Coverage od plugin resources.
+Coverage of plugin resources.
 
 |Resource       |Get All |Get One |Create |Update |Delete |
 |:--------------|:------:|:------:|:-----:|:-----:|:-----:|
 |Mountpoint     |        |        | +     |       |       |
 
-Plugin resource supports events and chaining in the same way like `Janus` resource.
+Plugin resource supports `events` and `chaining` in the same way like `Janus` resource.
