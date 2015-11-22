@@ -25,7 +25,8 @@ module Janus
       ) do |*args|
         on_created(*args)
 
-        p.execute { self }
+        p.set(self)
+        p.execute
       end
 
       p

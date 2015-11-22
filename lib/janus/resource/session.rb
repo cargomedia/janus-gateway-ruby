@@ -24,7 +24,8 @@ module Janus
         on_created(*args)
         heartbeat
 
-        p.execute { self }
+        p.set(self)
+        p.execute
       end
 
       p

@@ -46,7 +46,8 @@ module Janus
         if plugindata['error_code'].nil?
           on_created(data)
 
-          p.execute { self }
+          p.set(self)
+          p.execute
         else
           on_error(plugindata['error_code'], plugindata['error'])
         end
