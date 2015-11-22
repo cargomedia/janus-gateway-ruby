@@ -74,6 +74,12 @@ module Janus
 
       @transaction_queue[transaction] = p
 
+      Thread.new do
+        sleep(_promise_wait_timeout)
+        p.fail(_timeout_error("Transaction id `#{transaction}` has failed due to timeout!")).execute
+        @transaction_queue.remove(transaction)
+      end
+
       p
     end
 
@@ -100,6 +106,16 @@ module Janus
 
     def websocket_client_new(url, protocol = 'janus-protocol')
       Faye::WebSocket::Client.new(url, protocol)
+    end
+
+    private
+
+    def _promise_wait_timeout
+      5
+    end
+
+    def _timeout_error(message)
+      Janus::Error.new(0, message)
     end
 
   end
