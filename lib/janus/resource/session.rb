@@ -56,16 +56,28 @@ module Janus
     end
 
     def destroy
+      p = Concurrent::Promise.new
+
       janus_client.send_transaction(
         {
           :janus => "destroy",
           :session_id => @id
         }
-      ) do |*args|
-        @heartbeat_thread.exit unless @heartbeat_thread.nil?
+      ).then do |*args|
+        on_destroy(*args)
 
-        self.emit :destroy, @id
+        p.set(self)
+        p.execute
+      end.rescue do |error|
+        p.fail(error).execute
       end
+
+      p
+    end
+
+    def on_destroy(data)
+      @heartbeat_thread.exit unless @heartbeat_thread.nil?
+      self.emit :destroy, @id
     end
 
     def heartbeat
