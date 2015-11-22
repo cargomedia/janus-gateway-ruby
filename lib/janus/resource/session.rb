@@ -20,12 +20,14 @@ module Janus
         {
           :janus => "create"
         }
-      ) do |*args|
+      ).then do |*args|
         on_created(*args)
         heartbeat
 
         p.set(self)
         p.execute
+      end.rescue do |error|
+        p.fail(error).execute
       end
 
       p

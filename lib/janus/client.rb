@@ -33,9 +33,16 @@ module Janus
 
           transaction_list = _self.transaction_queue.clone
           unless data['transaction'].nil?
-            transaction_list.each do |transaction, callback|
+            transaction_list.each do |transaction, promise|
               if transaction == data['transaction']
-                callback.call(data)
+                if 'success' == data['janus']
+                  promise.set(data)
+                  promise.execute
+                else
+                  error_data = data['error']
+                  error = Janus::Error.new(error_data['code'], error_data['reason'])
+                  promise.fail(error).execute
+                end
                 break
               end
             end
@@ -58,13 +65,16 @@ module Janus
       @websocket_client.send(JSON.generate(data));
     end
 
-    def send_transaction(data, &block)
+    def send_transaction(data)
+      p = Concurrent::Promise.new
       transaction = transaction_id_new
 
       data[:transaction] = transaction
       @websocket_client.send(JSON.generate(data))
 
-      @transaction_queue[transaction] = block
+      @transaction_queue[transaction] = p
+
+      p
     end
 
     def transaction_id_new

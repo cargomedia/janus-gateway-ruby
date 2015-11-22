@@ -41,7 +41,7 @@ module Janus
             :streams => @streams
           }
         }
-      ) do |data|
+      ).then do |data|
         plugindata = data['plugindata']['data']
         if plugindata['error_code'].nil?
           on_created(data)
@@ -55,6 +55,8 @@ module Janus
 
           p.fail(error).execute
         end
+      end.rescue do |error|
+        p.fail(error).execute
       end
 
       p

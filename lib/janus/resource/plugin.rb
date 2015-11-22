@@ -22,11 +22,13 @@ module Janus
           :plugin => name,
           :session_id => @session.id
         }
-      ) do |*args|
+      ).then do |*args|
         on_created(*args)
 
         p.set(self)
         p.execute
+      end.rescue do |error|
+        p.fail(error).execute
       end
 
       p
