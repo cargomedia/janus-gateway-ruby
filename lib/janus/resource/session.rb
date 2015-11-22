@@ -40,7 +40,7 @@ module Janus
 
       janus_client.on :message do |data|
         if data['janus'] == 'timeout' and data['session_id'] == _self.id
-          _self.destroy
+          _self.on_destroy(data)
         end
       end
 

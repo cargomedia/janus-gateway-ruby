@@ -69,5 +69,27 @@ describe Janus::Resource::Session do
     client.connect
   end
 
+  it 'should session timeout' do
+
+    janus_response = {
+      :create => '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":12345}}'
+    }
+
+    client.stub(:websocket_client_new).and_return(WebSocketClientMock.new(janus_response))
+    client.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
+
+    _self = self
+    client.on :open do
+      _self.session.on :destroy do
+        _self.client.destroy
+      end
+      _self.session.create.then do
+        _self.client.websocket_client.receive_message('{"janus":"timeout", "session_id":12345}')
+      end
+    end
+
+    client.connect
+  end
+
 end
 

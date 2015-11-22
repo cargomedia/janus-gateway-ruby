@@ -111,7 +111,7 @@ module Janus
     private
 
     def _promise_wait_timeout
-      5
+      30
     end
 
     def _timeout_error(message)
