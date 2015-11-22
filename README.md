@@ -36,7 +36,7 @@ This client is used by all other classes connecting to api no matter if it's Res
 Each resource has built-in event emitter to handle basic behaviours like `create` and `destroy`. Additionally the creation of resources can be chained.
 There are two types of resources: Janus-API resource and Plugin-API (please see Plugin section).
 
-#### Create
+#### New
 
 ```ruby
 client = Janus::Client.new('url')
@@ -44,9 +44,17 @@ session = Janus::Resource::Session.new(client)
 plugin = Janus::Resource::Plugin.new(plugin, 'plugin-name')
 ```
 
+#### Create
+
+```ruby
+client = Janus::Client.new('url')
+session = Janus::Resource::Session.new(client)
+session.create
+```
+
 #### Event
 
-```
+```ruby
 client = Janus::Client.new('url')
 session = Janus::Resource::Session.new(client)
 
@@ -57,11 +65,13 @@ end
 session.on :destroy do |session|
   # do something
 end
+
+session.create
 ```
 
 #### Chain
 
-```
+```ruby
 client = Janus::Client.new('url')
 session = Janus::Resource::Session.new(client)
 
