@@ -34,7 +34,10 @@ This client is used by all other classes connecting to api no matter if it's Res
 
 ### Resources
 Each resource has built-in event emitter to handle basic behaviours like `create` and `destroy`. Additionally the creation of resources can be chained.
+There are two types of resources: Janus-API resource and Plugin-API (please see Plugin section).
+
 #### Create
+
 ```ruby
 client = Janus::Client.new('url')
 session = Janus::Resource::Session.new(client)
@@ -42,6 +45,7 @@ plugin = Janus::Resource::Plugin.new(plugin, 'plugin-name')
 ```
 
 #### Event
+
 ```
 client = Janus::Client.new('url')
 session = Janus::Resource::Session.new(client)
@@ -56,6 +60,7 @@ end
 ```
 
 #### Chain
+
 ```
 client = Janus::Client.new('url')
 session = Janus::Resource::Session.new(client)
@@ -66,3 +71,17 @@ end.rescue fo |error|
   # do something with error
 end
 ```
+
+### Plugins
+Janus support for native and custom [plugins].
+
+#### Rtpbrodcast
+It support custom plugin for rtp streaming. Please find more details in official [repository](https://github.com/cargomedia/janus-gateway-rtpbroadcast).
+
+Coverage od plugin resources.
+
+|Resource       |Get All |Get One |Create |Update |Delete |
+|:--------------|:------:|:------:|:-----:|:-----:|:-----:|
+|Mountpoint     |        |        | +     |       |       |
+
+Plugin resource supports events and chaining in the same way like `Janus` resource.
