@@ -10,5 +10,9 @@ module Janus
       "<Code: #{@code}> <Info: #{@info}>"
     end
 
+    def code
+      @code
+    end
+
   end
 end
