@@ -77,7 +77,7 @@ session = Janus::Resource::Session.new(client)
 
 session.create.then do |session|
   # do something with success
-end.rescue fo |error|
+end.rescue do |error|
   # do something with error
 end
 ```
