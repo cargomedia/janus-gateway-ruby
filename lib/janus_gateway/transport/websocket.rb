@@ -127,7 +127,6 @@ module JanusGateway
       JanusGateway::Error.new(0, message)
     end
 
-
   end
 
 end
