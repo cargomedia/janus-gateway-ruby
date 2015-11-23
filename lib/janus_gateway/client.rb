@@ -8,9 +8,8 @@ module JanusGateway
 
     attr_accessor :transport_client
 
-    def initialize(url, transport = nil)
-      @url = url
-      @transport_client = transport || JanusGateway::Transport::WebSocket.new(url)
+    def initialize(transport)
+      @transport_client = transport
     end
 
     def connect
