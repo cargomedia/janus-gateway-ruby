@@ -1,4 +1,4 @@
-require 'janus'
+require 'janus_gateway'
 require 'eventmachine'
 require 'event_emitter'
 

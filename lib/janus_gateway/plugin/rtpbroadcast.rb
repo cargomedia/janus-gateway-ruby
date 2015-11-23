@@ -1,4 +1,4 @@
-module Janus
+module JanusGateway
 
   class Plugin::Rtpbroadcast
 

@@ -1,6 +1,6 @@
-module Janus
+module JanusGateway
 
-  class Plugin::Rtpbroadcast::Resource::Mountpoint < Janus::Plugin::Rtpbroadcast
+  class Plugin::Rtpbroadcast::Resource::Mountpoint < JanusGateway::Plugin::Rtpbroadcast
 
     include EventEmitter
 
@@ -49,7 +49,7 @@ module Janus
           p.set(self)
           p.execute
         else
-          error = Janus::Error.new(plugindata['error_code'], plugindata['error'])
+          error = JanusGateway::Error.new(plugindata['error_code'], plugindata['error'])
 
           on_error(error)
 

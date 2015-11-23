@@ -1,7 +1,7 @@
 require "spec_helper"
 
-describe Janus::Resource::Session do
-  let(:client) { Janus::Client.new('') }
+describe JanusGateway::Resource::Session do
+  let(:client) { JanusGateway::Client.new('') }
 
   it 'should timeout transaction' do
 

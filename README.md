@@ -1,11 +1,11 @@
-janus-ruby [![Build Status](https://travis-ci.org/cargomedia/janus-ruby.svg)](https://travis-ci.org/cargomedia/janus-ruby)
-==========
+janus-gateway-ruby [![Build Status](https://travis-ci.org/cargomedia/janus-gateway-ruby.svg)](https://travis-ci.org/cargomedia/janus-gateway-ruby)
+==================
 Minimalistic [janus-gateway](https://github.com/meetecho/janus-gateway) client for ruby
 
 Installation
 ------------
 ```
-gem install janus-ruby
+gem install janus_gateway
 ```
 
 API coverage
@@ -27,7 +27,7 @@ Source code itself is well-documented so when writing code it should auto-comple
 Most important part of the api is client. In order to make any request you need to instantiate client with correct params.
 
 ```ruby
-client = Janus::Client.new('url')
+client = JanusGateway::Client.new('url')
 ```
 
 This client is used by all other classes connecting to api no matter if it's Resource or helper class like Agent.
@@ -39,24 +39,24 @@ There are two types of resources: Janus-API resource and Plugin-API (please see 
 #### New
 
 ```ruby
-client = Janus::Client.new('url')
-session = Janus::Resource::Session.new(client)
-plugin = Janus::Resource::Plugin.new(plugin, 'plugin-name')
+client = JanusGateway::Client.new('url')
+session = JanusGateway::Resource::Session.new(client)
+plugin = JanusGateway::Resource::Plugin.new(plugin, 'plugin-name')
 ```
 
 #### Create
 
 ```ruby
-client = Janus::Client.new('url')
-session = Janus::Resource::Session.new(client)
+client = JanusGateway::Client.new('url')
+session = JanusGateway::Resource::Session.new(client)
 session.create
 ```
 
 #### Events
 
 ```ruby
-client = Janus::Client.new('url')
-session = Janus::Resource::Session.new(client)
+client = JanusGateway::Client.new('url')
+session = JanusGateway::Resource::Session.new(client)
 
 session.on :create do |session|
   # do something
@@ -72,8 +72,8 @@ session.create
 #### Chaining
 
 ```ruby
-client = Janus::Client.new('url')
-session = Janus::Resource::Session.new(client)
+client = JanusGateway::Client.new('url')
+session = JanusGateway::Resource::Session.new(client)
 
 session.create.then do |session|
   # do something with success

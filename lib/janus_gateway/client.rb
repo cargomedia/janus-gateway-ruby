@@ -1,7 +1,7 @@
 require 'faye/websocket'
 require 'eventmachine'
 
-module Janus
+module JanusGateway
 
   class Client
 
@@ -40,7 +40,7 @@ module Janus
                   promise.execute
                 else
                   error_data = data['error']
-                  error = Janus::Error.new(error_data['code'], error_data['reason'])
+                  error = JanusGateway::Error.new(error_data['code'], error_data['reason'])
                   promise.fail(error).execute
                 end
                 break
@@ -115,7 +115,7 @@ module Janus
     end
 
     def _timeout_error(message)
-      Janus::Error.new(0, message)
+      JanusGateway::Error.new(0, message)
     end
 
   end

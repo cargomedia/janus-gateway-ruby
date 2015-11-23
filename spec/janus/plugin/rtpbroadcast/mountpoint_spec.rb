@@ -1,11 +1,11 @@
 require "spec_helper"
 
-describe Janus::Plugin::Rtpbroadcast::Resource::Mountpoint do
+describe JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint do
 
-  let(:client) { Janus::Client.new('') }
-  let(:session) { Janus::Resource::Session.new(client) }
-  let(:plugin) { Janus::Resource::Plugin.new(session, Janus::Plugin::Rtpbroadcast.plugin_name) }
-  let(:rtp_mountpoint) { Janus::Plugin::Rtpbroadcast::Resource::Mountpoint.new(plugin, 'test-mountpoint') }
+  let(:client) { JanusGateway::Client.new('') }
+  let(:session) { JanusGateway::Resource::Session.new(client) }
+  let(:plugin) { JanusGateway::Resource::Plugin.new(session, JanusGateway::Plugin::Rtpbroadcast.plugin_name) }
+  let(:rtp_mountpoint) { JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint.new(plugin, 'test-mountpoint') }
 
   it 'should create rtpbroadcast mountpoint' do
 

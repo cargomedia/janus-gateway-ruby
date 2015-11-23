@@ -1,8 +1,8 @@
 require "spec_helper"
 
-describe Janus::Resource::Session do
-  let(:client) { Janus::Client.new('') }
-  let(:session) { Janus::Resource::Session.new(client) }
+describe JanusGateway::Resource::Session do
+  let(:client) { JanusGateway::Client.new('') }
+  let(:session) { JanusGateway::Resource::Session.new(client) }
 
   it 'should throw exception' do
 
