@@ -1,4 +1,5 @@
 require 'eventmachine'
+require 'faye/websocket'
 
 module JanusGateway
 
