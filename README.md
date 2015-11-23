@@ -26,14 +26,18 @@ Source code itself is well-documented so when writing code it should auto-comple
 In order to make any request you need to instantiate client with correct transport layer (see transport section).
 
 ```ruby
-transport = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
-client = JanusGateway::Client.new(transport)
+ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
+client = JanusGateway::Client.new(ws)
 ```
 
 This client is used by all other classes connecting to api no matter if it's Resource or helper class like Agent.
 
 ### Transports
 Client allows to use multiple, supported by Janus transportation layers. Currently the `WebSocket` transport is implemented and is the default.
+
+```ruby
+ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
+```
 
 ### Resources
 Each resource has built-in event emitter to handle basic behaviours like `create` and `destroy`. Additionally the creation of resources can be chained.
@@ -42,8 +46,8 @@ There are two types of resources: Janus-API resource and Plugin-API (please see 
 #### New
 
 ```ruby
-transport = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
-client = JanusGateway::Client.new(transport)
+ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
+client = JanusGateway::Client.new(ws)
 session = JanusGateway::Resource::Session.new(client)
 plugin = JanusGateway::Resource::Plugin.new(plugin, 'plugin-name')
 ```
@@ -51,8 +55,8 @@ plugin = JanusGateway::Resource::Plugin.new(plugin, 'plugin-name')
 #### Create
 
 ```ruby
-transport = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
-client = JanusGateway::Client.new(transport)
+ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
+client = JanusGateway::Client.new(ws)
 session = JanusGateway::Resource::Session.new(client)
 session.create
 ```
@@ -60,8 +64,8 @@ session.create
 #### Events
 
 ```ruby
-transport = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
-client = JanusGateway::Client.new(transport)
+ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
+client = JanusGateway::Client.new(ws)
 session = JanusGateway::Resource::Session.new(client)
 
 session.on :create do |session|
@@ -78,8 +82,8 @@ session.create
 #### Chaining
 
 ```ruby
-transport = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
-client = JanusGateway::Client.new(transport)
+ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
+client = JanusGateway::Client.new(ws)
 session = JanusGateway::Resource::Session.new(client)
 
 session.create.then do |session|
