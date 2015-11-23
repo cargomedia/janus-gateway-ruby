@@ -62,10 +62,13 @@ module JanusGateway
       @client.close
     end
 
+    # @param [String] data
     def send(data)
       @client.send(data)
     end
 
+    # @param [Hash] data
+    # @return [Concurrent::Promise]
     def send_transaction(data)
       p = Concurrent::Promise.new
       transaction = transaction_id_new
@@ -89,18 +92,22 @@ module JanusGateway
       EventMachine.stop
     end
 
+    # @return [Integer]
     def ready_state
       @client.ready_state unless @client.nil?
     end
 
+    # @return [TrueClass, FalseClass]
     def has_client?
       @client.nil? == false
     end
 
+    # @return [TrueClass, FalseClass]
     def has_connection?
       has_client? and @client.ready_state == Faye::WebSocket::API::OPEN
     end
 
+    # @return [String]
     def transaction_id_new
       transaction_id = ''
       24.times do
@@ -109,20 +116,24 @@ module JanusGateway
       transaction_id
     end
 
+    # @return [JanusGateway:Client]
     def client
       @client
     end
 
     private
 
+    # @return [Faye::WebSocket::Client]
     def _client(url, protocol)
       Faye::WebSocket::Client.new(url, protocol)
     end
 
+    # @return [Float, Integer]
     def _promise_wait_timeout
       30
     end
 
+    # @return [JanusGateway::Error]
     def _timeout_error(message)
       JanusGateway::Error.new(0, message)
     end

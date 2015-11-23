@@ -9,10 +9,12 @@ module JanusGateway
       super()
     end
 
+    # @return [String]
     def name
       @id
     end
 
+    # @return [Concurrent::Promise]
     def create
       p = Concurrent::Promise.new
 
@@ -55,6 +57,7 @@ module JanusGateway
       self.emit :create, @id
     end
 
+    # @return [Concurrent::Promise]
     def destroy
       p = Concurrent::Promise.new
 
@@ -80,6 +83,7 @@ module JanusGateway
       self.emit :destroy, @id
     end
 
+    # @return [Thread]
     def heartbeat
       @heartbeat_thread = Thread.new do
         sleep_time = 5
@@ -99,6 +103,7 @@ module JanusGateway
       end
     end
 
+    # @return [JanusGateway:Client]
     def janus_client
       @janus_client
     end

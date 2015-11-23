@@ -18,18 +18,23 @@ module JanusGateway
       @transport_client.disconnect
     end
 
+    # @param [String] data
     def send(data)
       @transport_client.send(JSON.generate(data));
     end
 
+    # @param [Hash] data
+    # @return [Concurrent::Promise]
     def send_transaction(data)
       @transport_client.send_transaction(data)
     end
 
+    # @return [TrueClass, FalseClass]
     def has_client?
       @transport_client.has_client?
     end
 
+    # @return [TrueClass, FalseClass]
     def has_connection?
       @transport_client.has_connection?
     end
@@ -38,8 +43,10 @@ module JanusGateway
       disconnect
     end
 
-    def on(*args, &block)
-      @transport_client.on(*args, &block)
+    # @param [Symbol, String] event
+    # @param [Proc] block
+    def on(event, &block)
+      @transport_client.on(event, &block)
     end
 
   end

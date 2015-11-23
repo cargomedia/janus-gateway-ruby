@@ -17,10 +17,13 @@ module JanusGateway
       raise("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
 
+    # @param [String]
     def send(data)
       raise("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
 
+    # @param [Hash] data
+    # @return [Concurrent::Promise]
     def send_transaction(data)
       raise("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
@@ -29,14 +32,17 @@ module JanusGateway
       raise("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
 
+    # @return [Integer]
     def ready_state
       raise("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
 
+    # @return [TrueClass, FalseClass]
     def has_client?
       raise("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
 
+    # @return [TrueClass, FalseClass]
     def has_connection?
       raise("`#{__method__}` is not implemented for `#{self.class.name}`")
     end

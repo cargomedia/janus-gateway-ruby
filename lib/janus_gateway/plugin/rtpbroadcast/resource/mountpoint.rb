@@ -20,10 +20,12 @@ module JanusGateway
       ]
     end
 
+    # @return [String]
     def name
       @name
     end
 
+    # @return [Concurrent::Promise]
     def create
       p = Concurrent::Promise.new
 
@@ -78,6 +80,7 @@ module JanusGateway
       self.emit :create, @data
     end
 
+    # @return [Array<Hash>]
     def streams
       @data['data']['stream']['streams']
     end
@@ -86,14 +89,17 @@ module JanusGateway
       self.emit :destroy, @data
     end
 
+    # @return [JanusGateway::Resource::Session]
     def session
       plugin.session
     end
 
+    # @return [JanusGateway::Resource::Plugin]
     def plugin
       @plugin
     end
 
+    # @return [JanusGateway::Client]
     def janus_client
       plugin.janus_client
     end

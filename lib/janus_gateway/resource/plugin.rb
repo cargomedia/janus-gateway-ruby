@@ -9,10 +9,12 @@ module JanusGateway
       super()
     end
 
+    # @return [String]
     def name
       @name
     end
 
+    # @return [Concurrent::Promise]
     def create
       p = Concurrent::Promise.new
 
@@ -34,6 +36,17 @@ module JanusGateway
       p
     end
 
+    def destroy
+      p = Concurrent::Promise.new
+
+      _on_destroyed(nil)
+
+      p.set(self)
+      p.execute
+
+      p
+    end
+
     def on_created(data)
       @id = data['data']['id']
 
@@ -46,14 +59,17 @@ module JanusGateway
       self.emit :create, @id
     end
 
-    def destroy
+    def on_destroyed(data)
       self.emit :destroy, @id
     end
 
+
+    # @return self
     def session
       @session
     end
 
+    # @return [JanusGateway::Client]
     def janus_client
       @session.janus_client
     end

@@ -6,12 +6,14 @@ module JanusGateway
       @code, @info = error_code, error_info
     end
 
+    # @return [String]
     def message
       "<Code: #{@code}> <Info: #{@info}>"
     end
 
+    # @return [Integer]
     def code
-      @code
+      @code.to_i
     end
 
   end
