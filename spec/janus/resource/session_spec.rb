@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe JanusGateway::Resource::Session do
   let(:transport) { JanusGateway::Transport::WebSocket.new('') }
-  let(:client) { JanusGateway::Client.new('', transport) }
+  let(:client) { JanusGateway::Client.new(transport) }
   let(:session) { JanusGateway::Resource::Session.new(client) }
 
   it 'should throw exception' do

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint do
   let(:transport) {JanusGateway::Transport::WebSocket.new('') }
-  let(:client) { JanusGateway::Client.new('', transport) }
+  let(:client) { JanusGateway::Client.new(transport) }
   let(:session) { JanusGateway::Resource::Session.new(client) }
   let(:plugin) { JanusGateway::Resource::Plugin.new(session, JanusGateway::Plugin::Rtpbroadcast.plugin_name) }
   let(:rtp_mountpoint) { JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint.new(plugin, 'test-mountpoint') }

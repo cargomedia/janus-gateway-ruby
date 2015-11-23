@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe JanusGateway::Resource::Session do
   let(:transport) {JanusGateway::Transport::WebSocket.new('') }
-  let(:client) { JanusGateway::Client.new('', transport) }
+  let(:client) { JanusGateway::Client.new(transport) }
 
   it 'should timeout transaction' do
 
