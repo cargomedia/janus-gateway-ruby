@@ -32,6 +32,14 @@ client = JanusGateway::Client.new('url')
 
 This client is used by all other classes connecting to api no matter if it's Resource or helper class like Agent.
 
+### Transport
+Client allows to use multiple, supported by Janus transportation layers. Currently the `WebSocket` transport is implemented and is the default.
+
+```ruby
+transport = JanusGateway::Transport::WebSocket.new('url')
+client = JanusGateway::Client.new(nil, transport)
+```
+
 ### Resources
 Each resource has built-in event emitter to handle basic behaviours like `create` and `destroy`. Additionally the creation of resources can be chained.
 There are two types of resources: Janus-API resource and Plugin-API (please see Plugin section).
