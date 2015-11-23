@@ -107,3 +107,14 @@ Coverage of plugin resources.
 |Mountpoint     |        |        | +     |       |       |
 
 Plugin resource supports `events` and `chaining` in the same way like `Janus` resource.
+
+##### Mountpoint create
+Plugins allows to create `RTP` mountpoint.
+
+```ruby
+ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
+client = JanusGateway::Client.new(ws)
+session = JanusGateway::Resource::Session.new(client)
+plugin = JanusGateway::Resource::Plugin.new(session, JanusGateway::Plugin::Rtpbroadcast.plugin_name)
+mountpoint = JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint.new(plugin, 'test-mountpoint')
+```
