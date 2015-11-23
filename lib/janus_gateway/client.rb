@@ -1,5 +1,4 @@
 require 'faye/websocket'
-require 'eventmachine'
 
 module JanusGateway
 
@@ -7,115 +6,43 @@ module JanusGateway
 
     include EventEmitter
 
-    attr_accessor :websocket_client
-    attr_reader :transaction_queue
+    attr_accessor :transport_client
 
-    def initialize(url)
+    def initialize(url, transport = nil)
       @url = url
-      @transaction_queue = Hash.new
+      @transport_client = transport || JanusGateway::Transport::WebSocket.new(url)
     end
 
     def connect
-      EventMachine.run do
-
-        EM.error_handler { |e| raise(e) }
-
-        @websocket_client = websocket_client_new(@url)
-
-        _self = self
-
-        @websocket_client.on :open do |event|
-          _self.emit :open, event
-        end
-
-        @websocket_client.on :message do |event|
-          data = JSON.parse(event.data)
-
-          transaction_list = _self.transaction_queue.clone
-          unless data['transaction'].nil?
-            transaction_list.each do |transaction, promise|
-              if transaction == data['transaction']
-                if ['success', 'ack'].include?(data['janus'])
-                  promise.set(data)
-                  promise.execute
-                else
-                  error_data = data['error']
-                  error = JanusGateway::Error.new(error_data['code'], error_data['reason'])
-                  promise.fail(error).execute
-                end
-                break
-              end
-            end
-          end
-
-          _self.emit :message, data
-        end
-
-        @websocket_client.on :close do |event|
-          _self.emit :error, event
-        end
-      end
+      @transport_client.connect
     end
 
     def disconnect
-      @websocket_client.close
+      @transport_client.disconnect
     end
 
     def send(data)
-      @websocket_client.send(JSON.generate(data));
+      @transport_client.send(JSON.generate(data));
     end
 
     def send_transaction(data)
-      p = Concurrent::Promise.new
-      transaction = transaction_id_new
-
-      data[:transaction] = transaction
-      @websocket_client.send(JSON.generate(data))
-
-      @transaction_queue[transaction] = p
-
-      Thread.new do
-        sleep(_promise_wait_timeout)
-        p.fail(_timeout_error("Transaction id `#{transaction}` has failed due to timeout!")).execute
-        @transaction_queue.remove(transaction)
-      end
-
-      p
-    end
-
-    def transaction_id_new
-      transaction_id = ''
-      24.times do
-        transaction_id << (65 + rand(25)).chr
-      end
-      transaction_id
+      @transport_client.send_transaction(data)
     end
 
     def has_client?
-      @websocket_client.nil? == false
+      @transport_client.has_client?
     end
 
     def has_connection?
-      has_client? and @websocket_client.ready_state == Faye::WebSocket::API::OPEN
+      @transport_client.has_connection?
     end
 
     def destroy
       disconnect
-      EventMachine.stop
     end
 
-    def websocket_client_new(url, protocol = 'janus-protocol')
-      Faye::WebSocket::Client.new(url, protocol)
-    end
-
-    private
-
-    def _promise_wait_timeout
-      30
-    end
-
-    def _timeout_error(message)
-      JanusGateway::Error.new(0, message)
+    def on(*args, &block)
+      @transport_client.on(*args, &block)
     end
 
   end
