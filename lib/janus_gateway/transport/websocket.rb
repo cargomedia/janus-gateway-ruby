@@ -16,49 +16,42 @@ module JanusGateway
     def connect
       EventMachine.run do
 
-        begin
+        EM.error_handler { |e| raise(e) }
 
-          EM.error_handler { |e| raise(e) }
+        @client = _client(@url, @protocol)
 
-          @client = _client(@url, @protocol)
+        _self = self
 
-          _self = self
-
-          @client.on :open do |event|
-            _self.emit :open, event
-          end
-
-          @client.on :message do |event|
-            data = JSON.parse(event.data)
-
-            transaction_list = _self.transaction_queue.clone
-            unless data['transaction'].nil?
-              transaction_list.each do |transaction, promise|
-                if transaction == data['transaction']
-                  if ['success', 'ack'].include?(data['janus'])
-                    promise.set(data)
-                    promise.execute
-                  else
-                    error_data = data['error']
-                    error = JanusGateway::Error.new(error_data['code'], error_data['reason'])
-                    promise.fail(error).execute
-                  end
-                  break
-                end
-              end
-            end
-
-            _self.emit :message, data
-          end
-
-          @client.on :close do |event|
-            _self.emit :error, event
-          end
-
-        rescue => e
-          puts e
+        @client.on :open do |event|
+          _self.emit :open, event
         end
 
+        @client.on :message do |event|
+          data = JSON.parse(event.data)
+
+          transaction_list = _self.transaction_queue.clone
+          unless data['transaction'].nil?
+            transaction_list.each do |transaction, promise|
+              if transaction == data['transaction']
+                if ['success', 'ack'].include?(data['janus'])
+                  promise.set(data)
+                  promise.execute
+                else
+                  error_data = data['error']
+                  error = JanusGateway::Error.new(error_data['code'], error_data['reason'])
+                  promise.fail(error).execute
+                end
+                break
+              end
+            end
+          end
+
+          _self.emit :message, data
+        end
+
+        @client.on :close do |event|
+          _self.emit :error, event
+        end
       end
 
       @client
