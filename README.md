@@ -26,7 +26,7 @@ Source code itself is well-documented so when writing code it should auto-comple
 In order to make any request you need to instantiate client with correct transport layer (see transport section).
 
 ```ruby
-transport = JanusGateway::Transport::WebSocket.new('url')
+transport = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
 client = JanusGateway::Client.new(transport)
 ```
 
@@ -42,7 +42,8 @@ There are two types of resources: Janus-API resource and Plugin-API (please see 
 #### New
 
 ```ruby
-client = JanusGateway::Client.new('url')
+transport = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
+client = JanusGateway::Client.new(transport)
 session = JanusGateway::Resource::Session.new(client)
 plugin = JanusGateway::Resource::Plugin.new(plugin, 'plugin-name')
 ```
@@ -50,7 +51,8 @@ plugin = JanusGateway::Resource::Plugin.new(plugin, 'plugin-name')
 #### Create
 
 ```ruby
-client = JanusGateway::Client.new('url')
+transport = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
+client = JanusGateway::Client.new(transport)
 session = JanusGateway::Resource::Session.new(client)
 session.create
 ```
@@ -58,7 +60,8 @@ session.create
 #### Events
 
 ```ruby
-client = JanusGateway::Client.new('url')
+transport = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
+client = JanusGateway::Client.new(transport)
 session = JanusGateway::Resource::Session.new(client)
 
 session.on :create do |session|
@@ -75,7 +78,8 @@ session.create
 #### Chaining
 
 ```ruby
-client = JanusGateway::Client.new('url')
+transport = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
+client = JanusGateway::Client.new(transport)
 session = JanusGateway::Resource::Session.new(client)
 
 session.create.then do |session|
