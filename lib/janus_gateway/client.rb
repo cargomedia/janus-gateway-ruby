@@ -1,5 +1,3 @@
-require 'faye/websocket'
-
 module JanusGateway
 
   class Client
