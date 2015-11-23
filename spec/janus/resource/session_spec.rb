@@ -1,7 +1,8 @@
 require "spec_helper"
 
 describe JanusGateway::Resource::Session do
-  let(:client) { JanusGateway::Client.new('') }
+  let(:transport) { JanusGateway::Transport::WebSocket.new('') }
+  let(:client) { JanusGateway::Client.new('', transport) }
   let(:session) { JanusGateway::Resource::Session.new(client) }
 
   it 'should throw exception' do
@@ -10,8 +11,8 @@ describe JanusGateway::Resource::Session do
       :create => '{"janus":"error", "transaction":"123", "error":{"code":468, "reason": "The ID provided to create a new session is already in use"}}'
     }
 
-    client.stub(:websocket_client_new).and_return(WebSocketClientMock.new(janus_response))
-    client.stub(:transaction_id_new).and_return('123')
+    transport.stub(:_client).and_return(WebSocketClientMock.new(janus_response))
+    transport.stub(:transaction_id_new).and_return('123')
 
     _self = self
     client.on :open do
@@ -31,8 +32,8 @@ describe JanusGateway::Resource::Session do
       :destroy => '{"janus":"success", "session_id":12345, "transaction":"ABCDEFGHIJK"}'
     }
 
-    client.stub(:websocket_client_new).and_return(WebSocketClientMock.new(janus_response))
-    client.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
+    transport.stub(:_client).and_return(WebSocketClientMock.new(janus_response))
+    transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
 
     _self = self
     client.on :open do
@@ -53,8 +54,8 @@ describe JanusGateway::Resource::Session do
       :destroy => '{"janus":"error", "session_id":999, "transaction":"ABCDEFGHIJK", "error":{"code":458, "error": "Session not found"}}'
     }
 
-    client.stub(:websocket_client_new).and_return(WebSocketClientMock.new(janus_response))
-    client.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
+    transport.stub(:_client).and_return(WebSocketClientMock.new(janus_response))
+    transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
 
     _self = self
     client.on :open do
@@ -75,8 +76,8 @@ describe JanusGateway::Resource::Session do
       :create => '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":12345}}'
     }
 
-    client.stub(:websocket_client_new).and_return(WebSocketClientMock.new(janus_response))
-    client.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
+    transport.stub(:_client).and_return(WebSocketClientMock.new(janus_response))
+    transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
 
     _self = self
     client.on :open do
@@ -84,7 +85,7 @@ describe JanusGateway::Resource::Session do
         _self.client.destroy
       end
       _self.session.create.then do
-        _self.client.websocket_client.receive_message('{"janus":"timeout", "session_id":12345}')
+        _self.client.transport_client.client.receive_message('{"janus":"timeout", "session_id":12345}')
       end
     end
 

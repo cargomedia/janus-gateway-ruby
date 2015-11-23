@@ -1,8 +1,8 @@
 require "spec_helper"
 
 describe JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint do
-
-  let(:client) { JanusGateway::Client.new('') }
+  let(:transport) {JanusGateway::Transport::WebSocket.new('') }
+  let(:client) { JanusGateway::Client.new('', transport) }
   let(:session) { JanusGateway::Resource::Session.new(client) }
   let(:plugin) { JanusGateway::Resource::Plugin.new(session, JanusGateway::Plugin::Rtpbroadcast.plugin_name) }
   let(:rtp_mountpoint) { JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint.new(plugin, 'test-mountpoint') }
@@ -20,8 +20,8 @@ describe JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint do
       ].join(',')
     }
 
-    client.stub(:websocket_client_new).and_return(WebSocketClientMock.new(janus_response))
-    client.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
+    transport.stub(:_client).and_return(WebSocketClientMock.new(janus_response))
+    transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
 
     _self = self
     client.on :open do
@@ -48,8 +48,8 @@ describe JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint do
       ].join(',')
     }
 
-    client.stub(:websocket_client_new).and_return(WebSocketClientMock.new(janus_response))
-    client.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
+    transport.stub(:_client).and_return(WebSocketClientMock.new(janus_response))
+    transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
     rtp_mountpoint.stub(:name).and_return('')
 
     _self = self

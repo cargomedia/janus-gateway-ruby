@@ -1,7 +1,8 @@
 require "spec_helper"
 
 describe JanusGateway::Resource::Session do
-  let(:client) { JanusGateway::Client.new('') }
+  let(:transport) {JanusGateway::Transport::WebSocket.new('') }
+  let(:client) { JanusGateway::Client.new('', transport) }
 
   it 'should timeout transaction' do
 
@@ -9,9 +10,9 @@ describe JanusGateway::Resource::Session do
       :timeout => '{"janus":"success", "transaction":"000"}'
     }
 
-    client.stub(:websocket_client_new).and_return(WebSocketClientMock.new(janus_response))
-    client.stub(:transaction_id_new).and_return('000')
-    client.stub(:_promise_wait_timeout).and_return(0.001)
+    transport.stub(:_client).and_return(WebSocketClientMock.new(janus_response))
+    transport.stub(:transaction_id_new).and_return('000')
+    transport.stub(:_promise_wait_timeout).and_return(0.001)
 
     _self = self
     client.on :open do
