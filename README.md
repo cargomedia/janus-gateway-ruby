@@ -32,7 +32,7 @@ client = JanusGateway::Client.new('url')
 
 This client is used by all other classes connecting to api no matter if it's Resource or helper class like Agent.
 
-### Transport
+### Transports
 Client allows to use multiple, supported by Janus transportation layers. Currently the `WebSocket` transport is implemented and is the default.
 
 ```ruby

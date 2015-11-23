@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint do
   let(:transport) {JanusGateway::Transport::WebSocket.new('') }

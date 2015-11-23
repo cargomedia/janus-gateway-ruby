@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe JanusGateway::Resource::Session do
   let(:transport) { JanusGateway::Transport::WebSocket.new('') }
