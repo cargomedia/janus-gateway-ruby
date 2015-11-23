@@ -22,23 +22,18 @@ Library usage
 
 Source code itself is well-documented so when writing code it should auto-complete and hint in all supported usages.
 
-
 ### Client
-Most important part of the api is client. In order to make any request you need to instantiate client with correct params.
+In order to make any request you need to instantiate client with correct transport layer (see transport section).
 
 ```ruby
-client = JanusGateway::Client.new('url')
+transport = JanusGateway::Transport::WebSocket.new('url')
+client = JanusGateway::Client.new(transport)
 ```
 
 This client is used by all other classes connecting to api no matter if it's Resource or helper class like Agent.
 
 ### Transports
 Client allows to use multiple, supported by Janus transportation layers. Currently the `WebSocket` transport is implemented and is the default.
-
-```ruby
-transport = JanusGateway::Transport::WebSocket.new('url')
-client = JanusGateway::Client.new(nil, transport)
-```
 
 ### Resources
 Each resource has built-in event emitter to handle basic behaviours like `create` and `destroy`. Additionally the creation of resources can be chained.
