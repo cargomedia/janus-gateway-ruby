@@ -47,5 +47,14 @@ module JanusGateway
       raise("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
 
+    # @return [String]
+    def transaction_id_new
+      transaction_id = ''
+      24.times do
+        transaction_id << (65 + rand(25)).chr
+      end
+      transaction_id
+    end
+
   end
 end

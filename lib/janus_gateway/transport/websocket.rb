@@ -111,15 +111,6 @@ module JanusGateway
       has_client? and @client.ready_state == Faye::WebSocket::API::OPEN
     end
 
-    # @return [String]
-    def transaction_id_new
-      transaction_id = ''
-      24.times do
-        transaction_id << (65 + rand(25)).chr
-      end
-      transaction_id
-    end
-
     # @return [Faye::WebSocket::Client]
     def client
       @client
