@@ -83,7 +83,8 @@ module JanusGateway
 
       Thread.new do
         sleep(_promise_wait_timeout)
-        p.fail(_timeout_error("Transaction id `#{transaction}` has failed due to timeout!")).execute
+        error = JanusGateway::Error.new(0, "Transaction id `#{transaction}` has failed due to timeout!")
+        p.fail(error).execute
         @transaction_queue.remove(transaction)
       end
 
@@ -134,11 +135,6 @@ module JanusGateway
     # @return [Float, Integer]
     def _promise_wait_timeout
       30
-    end
-
-    # @return [JanusGateway::Error]
-    def _timeout_error(message)
-      JanusGateway::Error.new(0, message)
     end
 
   end
