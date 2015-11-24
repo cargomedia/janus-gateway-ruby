@@ -17,7 +17,7 @@ describe JanusGateway::Resource::Session do
     _self = self
     client.on :open do
       _self.client.send_transaction({:janus => "timeout"}).rescue do
-        _self.client.destroy
+        _self.client.disconnect
       end
     end
 

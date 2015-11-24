@@ -28,7 +28,7 @@ describe JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint do
       _self.session.create.then do
         _self.plugin.create.then do
           _self.rtp_mountpoint.create.then do
-            _self.client.destroy
+            _self.client.disconnect
           end
         end
       end
@@ -57,7 +57,7 @@ describe JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint do
       _self.session.create.then do
         _self.plugin.create.then do
           _self.rtp_mountpoint.create.rescue do
-            _self.client.destroy
+            _self.client.disconnect
           end
         end
       end

@@ -18,7 +18,7 @@ describe JanusGateway::Resource::Session do
     client.on :open do
       _self.session.create.rescue do |error|
         error.code.should _self.eq(468)
-        _self.client.destroy
+        _self.client.disconnect
       end
     end
 
@@ -39,7 +39,7 @@ describe JanusGateway::Resource::Session do
     client.on :open do
       _self.session.create.then do
         _self.session.destroy.then do
-          _self.client.destroy
+          _self.client.disconnect
         end
       end
     end
@@ -62,7 +62,7 @@ describe JanusGateway::Resource::Session do
       _self.session.create.then do
         _self.session.id = 999
         _self.session.destroy.rescue do
-          _self.client.destroy
+          _self.client.disconnect
         end
       end
     end
@@ -82,7 +82,7 @@ describe JanusGateway::Resource::Session do
     _self = self
     client.on :open do
       _self.session.on :destroy do
-        _self.client.destroy
+        _self.client.disconnect
       end
       _self.session.create.then do
         _self.client.transport.client.receive_message('{"janus":"timeout", "session_id":12345}')

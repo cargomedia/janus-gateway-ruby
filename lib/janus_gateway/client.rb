@@ -35,10 +35,6 @@ module JanusGateway
       @transport.is_connected?
     end
 
-    def destroy
-      disconnect
-    end
-
     # @param [Symbol, String] event
     # @param [Proc] block
     def on(event, &block)
