@@ -28,7 +28,7 @@ module JanusGateway
 
     # @return [Concurrent::Promise]
     def create
-      p = Concurrent::Promise.new
+      promise = Concurrent::Promise.new
 
       janus_client.send_transaction(
         {
@@ -49,20 +49,20 @@ module JanusGateway
         if plugindata['error_code'].nil?
           on_created(data)
 
-          p.set(self)
-          p.execute
+          promise.set(self)
+          promise.execute
         else
           error = JanusGateway::Error.new(plugindata['error_code'], plugindata['error'])
 
           on_error(error)
 
-          p.fail(error).execute
+          promise.fail(error).execute
         end
       end.rescue do |error|
-        p.fail(error).execute
+        promise.fail(error).execute
       end
 
-      p
+      promise
     end
 
     def on_error(error)
@@ -91,14 +91,14 @@ module JanusGateway
     end
 
     def destroy
-      p = Concurrent::Promise.new
+      promise = Concurrent::Promise.new
 
       on_destroyed
 
-      p.set(self)
-      p.execute
+      promise.set(self)
+      promise.execute
 
-      p
+      promise
     end
 
     # @return [JanusGateway::Resource::Session]

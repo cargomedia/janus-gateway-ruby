@@ -16,7 +16,7 @@ module JanusGateway
 
     # @return [Concurrent::Promise]
     def create
-      p = Concurrent::Promise.new
+      promise = Concurrent::Promise.new
 
       janus_client.send_transaction(
         {
@@ -26,13 +26,13 @@ module JanusGateway
         on_created(*args)
         heartbeat
 
-        p.set(self)
-        p.execute
+        promise.set(self)
+        promise.execute
       end.rescue do |error|
-        p.fail(error).execute
+        promise.fail(error).execute
       end
 
-      p
+      promise
     end
 
     def on_created(data)
@@ -59,7 +59,7 @@ module JanusGateway
 
     # @return [Concurrent::Promise]
     def destroy
-      p = Concurrent::Promise.new
+      promise = Concurrent::Promise.new
 
       janus_client.send_transaction(
         {
@@ -69,13 +69,13 @@ module JanusGateway
       ).then do |*args|
         on_destroy(*args)
 
-        p.set(self)
-        p.execute
+        promise.set(self)
+        promise.execute
       end.rescue do |error|
-        p.fail(error).execute
+        promise.fail(error).execute
       end
 
-      p
+      promise
     end
 
     def on_destroy(data)
