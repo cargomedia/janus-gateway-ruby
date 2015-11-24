@@ -85,7 +85,7 @@ describe JanusGateway::Resource::Session do
         _self.client.destroy
       end
       _self.session.create.then do
-        _self.client.transport_client.client.receive_message('{"janus":"timeout", "session_id":12345}')
+        _self.client.transport.client.receive_message('{"janus":"timeout", "session_id":12345}')
       end
     end
 

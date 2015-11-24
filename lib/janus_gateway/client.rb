@@ -4,35 +4,35 @@ module JanusGateway
 
     include EventEmitter
 
-    attr_accessor :transport_client
+    attr_accessor :transport
 
     # @param [JanusGateway::Transport]
     def initialize(transport)
-      @transport_client = transport
+      @transport = transport
     end
 
     def connect
-      @transport_client.connect
+      @transport.connect
     end
 
     def disconnect
-      @transport_client.disconnect
+      @transport.disconnect
     end
 
     # @param [String] data
     def send(data)
-      @transport_client.send(JSON.generate(data));
+      @transport.send(JSON.generate(data));
     end
 
     # @param [Hash] data
     # @return [Concurrent::Promise]
     def send_transaction(data)
-      @transport_client.send_transaction(data)
+      @transport.send_transaction(data)
     end
 
     # @return [TrueClass, FalseClass]
     def is_connected?
-      @transport_client.is_connected?
+      @transport.is_connected?
     end
 
     def destroy
@@ -42,7 +42,7 @@ module JanusGateway
     # @param [Symbol, String] event
     # @param [Proc] block
     def on(event, &block)
-      @transport_client.on(event, &block)
+      @transport.on(event, &block)
     end
 
   end
