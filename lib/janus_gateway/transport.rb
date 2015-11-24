@@ -34,12 +34,7 @@ module JanusGateway
     end
 
     # @return [TrueClass, FalseClass]
-    def has_client?
-      raise("`#{__method__}` is not implemented for `#{self.class.name}`")
-    end
-
-    # @return [TrueClass, FalseClass]
-    def has_connection?
+    def is_connected?
       raise("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
 

@@ -98,13 +98,8 @@ module JanusGateway
     end
 
     # @return [TrueClass, FalseClass]
-    def has_client?
-      @client.nil? == false
-    end
-
-    # @return [TrueClass, FalseClass]
-    def has_connection?
-      has_client? and @client.ready_state == Faye::WebSocket::API::OPEN
+    def is_connected?
+      (@client.nil? == false) and (@client.ready_state == Faye::WebSocket::API::OPEN)
     end
 
     # @return [Faye::WebSocket::Client]

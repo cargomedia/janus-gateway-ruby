@@ -30,13 +30,8 @@ module JanusGateway
     end
 
     # @return [TrueClass, FalseClass]
-    def has_client?
-      @transport_client.has_client?
-    end
-
-    # @return [TrueClass, FalseClass]
-    def has_connection?
-      @transport_client.has_connection?
+    def is_connected?
+      @transport_client.is_connected?
     end
 
     def destroy
