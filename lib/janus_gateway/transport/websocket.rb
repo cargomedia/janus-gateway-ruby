@@ -54,7 +54,7 @@ module JanusGateway
         end
 
         @client.on :close do |event|
-          _self.emit :error, event
+          _self.emit :close, event
         end
       end
 
