@@ -68,7 +68,7 @@ module JanusGateway
           :session_id => @id
         }
       ).then do |*args|
-        on_destroy(*args)
+        on_destroy
 
         promise.set(self)
         promise.execute
@@ -79,7 +79,7 @@ module JanusGateway
       promise
     end
 
-    def on_destroy(data)
+    def on_destroy
       @heartbeat_thread.exit unless @heartbeat_thread.nil?
       self.emit :destroy, @id
     end
