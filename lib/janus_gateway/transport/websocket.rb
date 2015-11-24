@@ -73,7 +73,7 @@ module JanusGateway
       transaction = transaction_id_new
 
       data[:transaction] = transaction
-      @client.send(data)
+      @client.send(JSON.generate(data))
 
       @transaction_queue[transaction] = promise
 
