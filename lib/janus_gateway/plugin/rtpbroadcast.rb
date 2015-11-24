@@ -1,6 +1,6 @@
 module JanusGateway
 
-  class Plugin::Rtpbroadcast
+  class Plugin::Rtpbroadcast < JanusGateway::Plugin
 
     # @return [String]
     def self.plugin_name
