@@ -11,7 +11,7 @@ module JanusGateway
       super()
     end
 
-    # @return [String]
+    # @return [String, NilClass]
     def name
       @name
     end
@@ -65,8 +65,7 @@ module JanusGateway
       self.emit :destroy, @id
     end
 
-
-    # @return self
+    # @return [JanusGateway::Resource::Session]
     def session
       @session
     end

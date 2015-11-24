@@ -11,7 +11,7 @@ module JanusGateway
       @id = id
     end
 
-    # @return [String]
+    # @return [String, NilClass]
     def name
       raise("`#{__method__}` is not implemented for `#{self.class.name}`")
     end

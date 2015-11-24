@@ -10,7 +10,7 @@ module JanusGateway
       super()
     end
 
-    # @return [String]
+    # @return [String, NilClass]
     def name
       @id
     end

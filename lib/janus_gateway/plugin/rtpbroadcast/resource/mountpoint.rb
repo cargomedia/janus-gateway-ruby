@@ -21,7 +21,7 @@ module JanusGateway
       ]
     end
 
-    # @return [String]
+    # @return [String, NilClass]
     def name
       @name
     end
