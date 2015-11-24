@@ -4,6 +4,9 @@ module JanusGateway
 
     include EventEmitter
 
+    # @param [JanusGateway::Resource::Plugin] plugin
+    # @param [String] name
+    # @param [Array] streams
     def initialize(plugin, name, streams = nil)
       @plugin = plugin
       @name = name
