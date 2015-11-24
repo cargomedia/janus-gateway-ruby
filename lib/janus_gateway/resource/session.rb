@@ -24,7 +24,7 @@ module JanusGateway
           :janus => 'create'
         }
       ).then do |*args|
-        on_created(*args)
+        _on_created(*args)
         heartbeat
 
         promise.set(self)
@@ -36,40 +36,17 @@ module JanusGateway
       promise
     end
 
-    # @param [Hash] data
-    def on_created(data)
-      @id = data['data']['id']
-
-      _self = self
-
-      janus_client.on :message do |data|
-        if data['janus'] == 'timeout' and data['session_id'] == _self.id
-          _self.on_destroy
-        end
-      end
-
-      janus_client.on :close do |data|
-        _self.emit :destroy, @id
-      end
-
-      janus_client.on :error do |data|
-        _self.emit :destroy, @id
-      end
-
-      self.emit :create, @id
-    end
-
     # @return [Concurrent::Promise]
     def destroy
       promise = Concurrent::Promise.new
 
       janus_client.send_transaction(
         {
-          :janus => "destroy",
+          :janus => 'destroy',
           :session_id => @id
         }
       ).then do |*args|
-        on_destroy
+        _on_destroyed
 
         promise.set(self)
         promise.execute
@@ -78,11 +55,6 @@ module JanusGateway
       end
 
       promise
-    end
-
-    def on_destroy
-      @heartbeat_thread.exit unless @heartbeat_thread.nil?
-      self.emit :destroy, @id
     end
 
     # @return [Thread]
@@ -108,6 +80,36 @@ module JanusGateway
     # @return [JanusGateway:Client]
     def janus_client
       @janus_client
+    end
+
+    private
+
+    # @param [Hash] data
+    def _on_created(data)
+      @id = data['data']['id']
+
+      _self = self
+
+      janus_client.on :message do |data|
+        if data['janus'] == 'timeout' and data['session_id'] == _self.id
+          _self.send(:_on_destroyed)
+        end
+      end
+
+      janus_client.on :close do |data|
+        _self.emit :destroy, @id
+      end
+
+      janus_client.on :error do |data|
+        _self.emit :destroy, @id
+      end
+
+      self.emit :create, @id
+    end
+
+    def _on_destroyed
+      @heartbeat_thread.exit unless @heartbeat_thread.nil?
+      self.emit :destroy, @id
     end
 
   end

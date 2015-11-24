@@ -50,14 +50,14 @@ module JanusGateway
       ).then do |data|
         plugindata = data['plugindata']['data']
         if plugindata['error_code'].nil?
-          on_created(data)
+          _on_created(data)
 
           promise.set(self)
           promise.execute
         else
           error = JanusGateway::Error.new(plugindata['error_code'], plugindata['error'])
 
-          on_error(error)
+          _on_error(error)
 
           promise.fail(error).execute
         end
@@ -68,26 +68,6 @@ module JanusGateway
       promise
     end
 
-    def on_error(error)
-      self.emit :error, error
-    end
-
-    def on_created(data)
-      @data = data['plugindata']
-
-      _self = self
-
-      plugin.on :destroy do
-        _self.destroy
-      end
-
-      self.emit :create, @id
-    end
-
-    def on_destroyed
-      self.emit :destroy, @id
-    end
-
     # @return [Array<Hash>]
     def streams
       @data['data']['stream']['streams']
@@ -96,7 +76,7 @@ module JanusGateway
     def destroy
       promise = Concurrent::Promise.new
 
-      on_destroyed
+      _on_destroyed
 
       promise.set(self)
       promise.execute
@@ -117,6 +97,28 @@ module JanusGateway
     # @return [JanusGateway::Client]
     def janus_client
       plugin.janus_client
+    end
+
+    private
+
+    def _on_error(error)
+      self.emit :error, error
+    end
+
+    def _on_created(data)
+      @data = data['plugindata']
+
+      _self = self
+
+      plugin.on :destroy do
+        _self.destroy
+      end
+
+      self.emit :create, @id
+    end
+
+    def _on_destroyed
+      self.emit :destroy, @id
     end
   end
 end

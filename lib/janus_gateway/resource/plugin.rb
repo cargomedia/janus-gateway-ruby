@@ -27,7 +27,7 @@ module JanusGateway
           :session_id => @session.id
         }
       ).then do |*args|
-        on_created(*args)
+        _on_created(*args)
 
         promise.set(self)
         promise.execute
@@ -49,7 +49,19 @@ module JanusGateway
       promise
     end
 
-    def on_created(data)
+    # @return [JanusGateway::Resource::Session]
+    def session
+      @session
+    end
+
+    # @return [JanusGateway::Client]
+    def janus_client
+      @session.janus_client
+    end
+
+    private
+
+    def _on_created(data)
       @id = data['data']['id']
 
       _self = self
@@ -65,14 +77,5 @@ module JanusGateway
       self.emit :destroy, @id
     end
 
-    # @return [JanusGateway::Resource::Session]
-    def session
-      @session
-    end
-
-    # @return [JanusGateway::Client]
-    def janus_client
-      @session.janus_client
-    end
   end
 end
