@@ -17,7 +17,7 @@ module JanusGateway
       raise("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
 
-    # @param [String]
+    # @param [String, Numeric, Array] data
     def send(data)
       raise("`#{__method__}` is not implemented for `#{self.class.name}`")
     end

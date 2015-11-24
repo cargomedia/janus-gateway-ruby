@@ -7,6 +7,8 @@ module JanusGateway
 
     attr_reader :transaction_queue
 
+    # @param [String] url
+    # @param [String] protocol
     def initialize(url, protocol = 'janus-protocol')
       @client = nil
       @transaction_queue = Hash.new
@@ -14,6 +16,7 @@ module JanusGateway
       super
     end
 
+    # @return [Faye::WebSocket::Client]
     def connect
       EventMachine.run do
 
@@ -62,7 +65,7 @@ module JanusGateway
       @client.close
     end
 
-    # @param [String] data
+    # @param [String, Numeric, Array] data
     def send(data)
       @client.send(data)
     end
@@ -92,7 +95,7 @@ module JanusGateway
       EventMachine.stop
     end
 
-    # @return [Integer]
+    # @return [Faye::WebSocket::API::CONNECTING, Faye::WebSocket::API::OPEN, Faye::WebSocket::API::CLOSING, Faye::WebSocket::API::CLOSED]
     def ready_state
       @client.ready_state unless @client.nil?
     end
@@ -116,7 +119,7 @@ module JanusGateway
       transaction_id
     end
 
-    # @return [JanusGateway:Client]
+    # @return [Faye::WebSocket::Client]
     def client
       @client
     end
