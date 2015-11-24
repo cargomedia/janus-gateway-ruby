@@ -34,18 +34,18 @@ module JanusGateway
           data = JSON.parse(event.data)
 
           transaction_list = _self.transaction_queue.clone
-          unless data['transaction'].nil?
-            transaction_list.each do |transaction, promise|
-              if transaction == data['transaction']
-                if ['success', 'ack'].include?(data['janus'])
-                  promise.set(data)
-                  promise.execute
-                else
-                  error_data = data['error']
-                  error = JanusGateway::Error.new(error_data['code'], error_data['reason'])
-                  promise.fail(error).execute
-                end
-                break
+
+          transaction_id = data['transaction']
+          unless transaction_id.nil?
+            promise = transaction_list[transaction_id]
+            unless promise.nil?
+              if ['success', 'ack'].include?(data['janus'])
+                promise.set(data)
+                promise.execute
+              else
+                error_data = data['error']
+                error = JanusGateway::Error.new(error_data['code'], error_data['reason'])
+                promise.fail(error).execute
               end
             end
           end
