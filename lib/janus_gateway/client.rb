@@ -20,11 +20,6 @@ module JanusGateway
     end
 
     # @param [Hash] data
-    def send(data)
-      @transport.send(JSON.generate(data));
-    end
-
-    # @param [Hash] data
     # @return [Concurrent::Promise]
     def send_transaction(data)
       @transport.send_transaction(data)
