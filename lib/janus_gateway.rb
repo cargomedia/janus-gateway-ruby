@@ -1,7 +1,7 @@
 module JanusGateway
 
   require 'json'
-  require 'event_emitter'
+  require 'events'
   require 'concurrent'
 
   require 'janus_gateway/client'

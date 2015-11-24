@@ -24,16 +24,14 @@ module JanusGateway
 
         @client = _create_client(@url, @protocol)
 
-        _self = self
-
         @client.on :open do
-          _self.emit :open
+          self.emit :open
         end
 
         @client.on :message do |event|
           data = JSON.parse(event.data)
 
-          transaction_list = _self.transaction_queue.clone
+          transaction_list = @transaction_queue.clone
 
           transaction_id = data['transaction']
           unless transaction_id.nil?
@@ -50,11 +48,11 @@ module JanusGateway
             end
           end
 
-          _self.emit :message, data
+          self.emit :message, data
         end
 
         @client.on :close do
-          _self.emit :close
+          self.emit :close
         end
       end
 

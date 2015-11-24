@@ -2,7 +2,7 @@ module JanusGateway
 
   class Client
 
-    include EventEmitter
+    include Events::Emitter
 
     attr_accessor :transport
 

@@ -88,20 +88,18 @@ module JanusGateway
     def _on_created(data)
       @id = data['data']['id']
 
-      _self = self
-
       janus_client.on :message do |data|
-        if data['janus'] == 'timeout' and data['session_id'] == _self.id
-          _self.send(:_on_destroyed)
+        if data['janus'] == 'timeout' and data['session_id'] == @id
+          send(:_on_destroyed)
         end
       end
 
       janus_client.on :close do |data|
-        _self.emit :destroy, @id
+        self.emit :destroy, @id
       end
 
       janus_client.on :error do |data|
-        _self.emit :destroy, @id
+        self.emit :destroy, @id
       end
 
       self.emit :create, @id

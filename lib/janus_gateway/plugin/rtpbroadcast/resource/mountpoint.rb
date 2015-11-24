@@ -2,7 +2,7 @@ module JanusGateway
 
   class Plugin::Rtpbroadcast::Resource::Mountpoint < JanusGateway::Resource
 
-    include EventEmitter
+    include Events::Emitter
 
     # @param [JanusGateway::Resource::Plugin] plugin
     # @param [String] name
@@ -108,10 +108,8 @@ module JanusGateway
     def _on_created(data)
       @data = data['plugindata']
 
-      _self = self
-
       plugin.on :destroy do
-        _self.destroy
+        destroy
       end
 
       self.emit :create, @id

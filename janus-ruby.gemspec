@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'faye-websocket', '~> 0.10.1'
   s.add_runtime_dependency 'eventmachine', '~> 1.0.8'
-  s.add_runtime_dependency 'event_emitter', '~> 0.2.5'
+  s.add_runtime_dependency 'events', '~> 0.9.8'
   s.add_runtime_dependency 'concurrent-ruby', '~> 1.0.0'
 
   s.add_development_dependency 'rake'

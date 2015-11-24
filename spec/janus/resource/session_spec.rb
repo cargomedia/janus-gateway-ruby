@@ -14,11 +14,10 @@ describe JanusGateway::Resource::Session do
     transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
     transport.stub(:transaction_id_new).and_return('123')
 
-    _self = self
     client.on :open do
-      _self.session.create.rescue do |error|
-        error.code.should _self.eq(468)
-        _self.client.disconnect
+      session.create.rescue do |error|
+        error.code.should eq(468)
+        client.disconnect
       end
     end
 
@@ -35,11 +34,10 @@ describe JanusGateway::Resource::Session do
     transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
     transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
 
-    _self = self
     client.on :open do
-      _self.session.create.then do
-        _self.session.destroy.then do
-          _self.client.disconnect
+      session.create.then do
+        session.destroy.then do
+          client.disconnect
         end
       end
     end
@@ -57,12 +55,11 @@ describe JanusGateway::Resource::Session do
     transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
     transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
 
-    _self = self
     client.on :open do
-      _self.session.create.then do
-        _self.session.id = 999
-        _self.session.destroy.rescue do
-          _self.client.disconnect
+      session.create.then do
+        session.id = 999
+        session.destroy.rescue do
+          client.disconnect
         end
       end
     end
@@ -79,13 +76,12 @@ describe JanusGateway::Resource::Session do
     transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
     transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
 
-    _self = self
     client.on :open do
-      _self.session.on :destroy do
-        _self.client.disconnect
+      session.on :destroy do
+        client.disconnect
       end
-      _self.session.create.then do
-        _self.client.transport.client.receive_message('{"janus":"timeout", "session_id":12345}')
+      session.create.then do
+        client.transport.client.receive_message('{"janus":"timeout", "session_id":12345}')
       end
     end
 

@@ -115,9 +115,8 @@ Plugins allows to create `RTP` mountpoint.
 ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
 client = JanusGateway::Client.new(ws)
 
-_self = self
 client.on :open do
-  JanusGateway::Resource::Session.new(_self.client).create.then do |session|
+  JanusGateway::Resource::Session.new(client).create.then do |session|
     JanusGateway::Resource::Plugin.new(session, JanusGateway::Plugin::Rtpbroadcast.plugin_name).create.then do |plugin|
       JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint.new(plugin, 'test-mountpoint').create.then do |mountpoint|
         # do something with mountpoint

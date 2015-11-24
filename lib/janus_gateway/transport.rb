@@ -2,7 +2,7 @@ module JanusGateway
 
   class Transport
 
-    include EventEmitter
+    include Events::Emitter
 
     def initialize(url, protocol = 'janus-protocol')
       @url = url

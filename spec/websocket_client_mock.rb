@@ -1,6 +1,6 @@
 class WebSocketClientMock
 
-  include EventEmitter
+  include Events::Emitter
 
   def initialize(response)
     @response = response

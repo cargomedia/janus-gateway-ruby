@@ -2,7 +2,7 @@ module JanusGateway
 
   class Resource
 
-    include EventEmitter
+    include Events::Emitter
 
     attr_accessor :id
 

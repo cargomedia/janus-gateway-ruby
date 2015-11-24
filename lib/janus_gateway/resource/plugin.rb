@@ -64,10 +64,8 @@ module JanusGateway
     def _on_created(data)
       @id = data['data']['id']
 
-      _self = self
-
       session.on :destroy do |data|
-        _self.destroy
+        destroy
       end
 
       self.emit :create, @id

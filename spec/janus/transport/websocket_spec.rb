@@ -14,10 +14,9 @@ describe JanusGateway::Resource::Session do
     transport.stub(:transaction_id_new).and_return('000')
     transport.stub(:_transaction_timeout).and_return(0.001)
 
-    _self = self
     client.on :open do
-      _self.client.send_transaction({:janus => "timeout"}).rescue do
-        _self.client.disconnect
+      client.send_transaction({:janus => "timeout"}).rescue do
+        client.disconnect
       end
     end
 

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint do
-  let(:transport) {JanusGateway::Transport::WebSocket.new('') }
+  let(:transport) { JanusGateway::Transport::WebSocket.new('') }
   let(:client) { JanusGateway::Client.new(transport) }
   let(:session) { JanusGateway::Resource::Session.new(client) }
   let(:plugin) { JanusGateway::Resource::Plugin.new(session, JanusGateway::Plugin::Rtpbroadcast.plugin_name) }
@@ -23,12 +23,11 @@ describe JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint do
     transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
     transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
 
-    _self = self
     client.on :open do
-      _self.session.create.then do
-        _self.plugin.create.then do
-          _self.rtp_mountpoint.create.then do
-            _self.client.disconnect
+      session.create.then do
+        plugin.create.then do
+          rtp_mountpoint.create.then do
+            client.disconnect
           end
         end
       end
@@ -52,12 +51,11 @@ describe JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint do
     transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
     rtp_mountpoint.stub(:name).and_return('')
 
-    _self = self
     client.on :open do
-      _self.session.create.then do
-        _self.plugin.create.then do
-          _self.rtp_mountpoint.create.rescue do
-            _self.client.disconnect
+      session.create.then do
+        plugin.create.then do
+          rtp_mountpoint.create.rescue do
+            client.disconnect
           end
         end
       end
