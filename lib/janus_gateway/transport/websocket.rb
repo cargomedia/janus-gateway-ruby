@@ -69,22 +69,22 @@ module JanusGateway
     # @param [Hash] data
     # @return [Concurrent::Promise]
     def send_transaction(data)
-      p = Concurrent::Promise.new
+      promise = Concurrent::Promise.new
       transaction = transaction_id_new
 
       data[:transaction] = transaction
       @client.send(JSON.generate(data))
 
-      @transaction_queue[transaction] = p
+      @transaction_queue[transaction] = promise
 
       Thread.new do
         sleep(_transaction_timeout)
         error = JanusGateway::Error.new(0, "Transaction id `#{transaction}` has failed due to timeout!")
-        p.fail(error).execute
+        promise.fail(error).execute
         @transaction_queue.remove(transaction)
       end
 
-      p
+      promise
     end
 
     def disconnect
