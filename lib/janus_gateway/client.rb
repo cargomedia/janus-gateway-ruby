@@ -19,7 +19,7 @@ module JanusGateway
       @transport.disconnect
     end
 
-    # @param [String] data
+    # @param [Hash] data
     def send(data)
       @transport.send(JSON.generate(data));
     end
