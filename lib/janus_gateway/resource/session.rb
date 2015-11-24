@@ -36,6 +36,7 @@ module JanusGateway
       promise
     end
 
+    # @param [Hash] data
     def on_created(data)
       @id = data['data']['id']
 
@@ -43,7 +44,7 @@ module JanusGateway
 
       janus_client.on :message do |data|
         if data['janus'] == 'timeout' and data['session_id'] == _self.id
-          _self.on_destroy(data)
+          _self.on_destroy
         end
       end
 
