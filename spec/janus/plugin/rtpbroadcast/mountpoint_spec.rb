@@ -20,7 +20,7 @@ describe JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint do
       ].join(',')
     }
 
-    transport.stub(:_client).and_return(WebSocketClientMock.new(janus_response))
+    transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
     transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
 
     _self = self
@@ -48,7 +48,7 @@ describe JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint do
       ].join(',')
     }
 
-    transport.stub(:_client).and_return(WebSocketClientMock.new(janus_response))
+    transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
     transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
     rtp_mountpoint.stub(:name).and_return('')
 

@@ -22,7 +22,7 @@ module JanusGateway
 
         EM.error_handler { |e| raise(e) }
 
-        @client = _client(@url, @protocol)
+        @client = _create_client(@url, @protocol)
 
         _self = self
 
@@ -127,7 +127,7 @@ module JanusGateway
     private
 
     # @return [Faye::WebSocket::Client]
-    def _client(url, protocol)
+    def _create_client(url, protocol)
       Faye::WebSocket::Client.new(url, protocol)
     end
 

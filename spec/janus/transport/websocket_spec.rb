@@ -10,7 +10,7 @@ describe JanusGateway::Resource::Session do
       :timeout => '{"janus":"success", "transaction":"000"}'
     }
 
-    transport.stub(:_client).and_return(WebSocketClientMock.new(janus_response))
+    transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
     transport.stub(:transaction_id_new).and_return('000')
     transport.stub(:_promise_wait_timeout).and_return(0.001)
 

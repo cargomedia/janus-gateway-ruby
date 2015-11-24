@@ -11,7 +11,7 @@ describe JanusGateway::Resource::Session do
       :create => '{"janus":"error", "transaction":"123", "error":{"code":468, "reason": "The ID provided to create a new session is already in use"}}'
     }
 
-    transport.stub(:_client).and_return(WebSocketClientMock.new(janus_response))
+    transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
     transport.stub(:transaction_id_new).and_return('123')
 
     _self = self
@@ -32,7 +32,7 @@ describe JanusGateway::Resource::Session do
       :destroy => '{"janus":"success", "session_id":12345, "transaction":"ABCDEFGHIJK"}'
     }
 
-    transport.stub(:_client).and_return(WebSocketClientMock.new(janus_response))
+    transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
     transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
 
     _self = self
@@ -54,7 +54,7 @@ describe JanusGateway::Resource::Session do
       :destroy => '{"janus":"error", "session_id":999, "transaction":"ABCDEFGHIJK", "error":{"code":458, "error": "Session not found"}}'
     }
 
-    transport.stub(:_client).and_return(WebSocketClientMock.new(janus_response))
+    transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
     transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
 
     _self = self
@@ -76,7 +76,7 @@ describe JanusGateway::Resource::Session do
       :create => '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":12345}}'
     }
 
-    transport.stub(:_client).and_return(WebSocketClientMock.new(janus_response))
+    transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
     transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
 
     _self = self
