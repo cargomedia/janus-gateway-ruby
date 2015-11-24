@@ -2,6 +2,8 @@ module JanusGateway
 
   class Error < StandardError
 
+    # @param [Integer] error_code
+    # @param [String] error_info
     def initialize(error_code, error_info)
       @code, @info = error_code, error_info
     end
@@ -13,7 +15,7 @@ module JanusGateway
 
     # @return [Integer]
     def code
-      @code.to_i
+      @code
     end
 
   end

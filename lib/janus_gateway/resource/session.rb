@@ -2,6 +2,7 @@ module JanusGateway
 
   class Resource::Session < Resource
 
+    # @param [JanusGateway::Client] janus_client
     def initialize(janus_client)
       @janus_client = janus_client
       @heartbeat_thread = nil

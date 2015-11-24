@@ -2,6 +2,8 @@ module JanusGateway
 
   class Resource::Plugin < Resource
 
+    # @param [JanusGateway::Resource::Session] session
+    # @param [String] name
     def initialize(session, name)
       @session = session
       @name = name

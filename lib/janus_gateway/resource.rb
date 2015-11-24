@@ -6,6 +6,7 @@ module JanusGateway
 
     attr_accessor :id
 
+    # @param [String] id
     def initialize(id = nil)
       @id = id
     end

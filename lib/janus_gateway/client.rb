@@ -6,6 +6,7 @@ module JanusGateway
 
     attr_accessor :transport_client
 
+    # @param [JanusGateway::Transport]
     def initialize(transport)
       @transport_client = transport
     end
