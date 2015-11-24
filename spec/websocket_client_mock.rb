@@ -10,7 +10,7 @@ class WebSocketClientMock
   def connect_mock
     Thread.new do
       sleep(0.1)
-      self.emit :open, EventMock.new
+      self.emit :open
     end
   end
 
@@ -36,7 +36,7 @@ class WebSocketClientMock
   def close
     Thread.new do
       sleep(0.1)
-      self.emit :close, EventMock.new
+      self.emit :close
     end
   end
 end

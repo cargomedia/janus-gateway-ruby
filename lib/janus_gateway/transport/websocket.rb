@@ -26,8 +26,8 @@ module JanusGateway
 
         _self = self
 
-        @client.on :open do |event|
-          _self.emit :open, event
+        @client.on :open do
+          _self.emit :open
         end
 
         @client.on :message do |event|
@@ -53,8 +53,8 @@ module JanusGateway
           _self.emit :message, data
         end
 
-        @client.on :close do |event|
-          _self.emit :close, event
+        @client.on :close do
+          _self.emit :close
         end
       end
 
