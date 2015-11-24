@@ -39,7 +39,7 @@ module JanusGateway
     def destroy
       p = Concurrent::Promise.new
 
-      _on_destroyed(nil)
+      on_destroyed(nil)
 
       p.set(self)
       p.execute

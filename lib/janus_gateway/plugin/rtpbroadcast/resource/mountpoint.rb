@@ -1,12 +1,13 @@
 module JanusGateway
 
-  class Plugin::Rtpbroadcast::Resource::Mountpoint < JanusGateway::Plugin::Rtpbroadcast
+  class Plugin::Rtpbroadcast::Resource::Mountpoint < JanusGateway::Resource
 
     include EventEmitter
 
     def initialize(plugin, name, streams = nil)
       @plugin = plugin
       @name = name
+      @id = name
 
       @streams = streams || [
         {
@@ -73,11 +74,15 @@ module JanusGateway
 
       _self = self
 
-      plugin.on :destroy do |data|
+      plugin.on :destroy do
         _self.destroy
       end
 
-      self.emit :create, @data
+      self.emit :create, @id
+    end
+
+    def on_destroyed
+      self.emit :destroy, @id
     end
 
     # @return [Array<Hash>]
@@ -86,7 +91,14 @@ module JanusGateway
     end
 
     def destroy
-      self.emit :destroy, @data
+      p = Concurrent::Promise.new
+
+      on_destroyed
+
+      p.set(self)
+      p.execute
+
+      p
     end
 
     # @return [JanusGateway::Resource::Session]

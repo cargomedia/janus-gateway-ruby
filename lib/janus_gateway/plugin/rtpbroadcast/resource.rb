@@ -1,4 +1,4 @@
 module JanusGateway
-  class Plugin::Rtpbroadcast::Resource < Plugin::Rtpbroadcast
+  class Plugin::Rtpbroadcast::Resource
   end
 end
