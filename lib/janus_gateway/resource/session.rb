@@ -20,7 +20,7 @@ module JanusGateway
 
       janus_client.send_transaction(
         {
-          :janus => "create"
+          :janus => 'create'
         }
       ).then do |*args|
         on_created(*args)
@@ -91,7 +91,7 @@ module JanusGateway
           sleep(sleep_time)
           janus_client.send_transaction(
             {
-              :janus => "keepalive",
+              :janus => 'keepalive',
               :session_id => @id
             }
           ).then do |*args|

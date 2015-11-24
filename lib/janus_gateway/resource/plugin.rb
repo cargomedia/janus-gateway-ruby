@@ -20,7 +20,7 @@ module JanusGateway
 
       janus_client.send_transaction(
         {
-          :janus => "attach",
+          :janus => 'attach',
           :plugin => name,
           :session_id => @session.id
         }
