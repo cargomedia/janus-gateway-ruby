@@ -61,10 +61,6 @@ module JanusGateway
       @client
     end
 
-    def close
-      @client.close
-    end
-
     # @param [String, Numeric, Array] data
     def send(data)
       @client.send(data)
