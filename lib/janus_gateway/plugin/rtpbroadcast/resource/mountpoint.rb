@@ -72,7 +72,7 @@ module JanusGateway
 
     # @return [Array<Hash>]
     def streams
-      data.nil? ? data['data']['stream']['streams'] : []
+      !data.nil? ? data['data']['stream']['streams'] : []
     end
 
     # @return [Concurrent::Promise]
