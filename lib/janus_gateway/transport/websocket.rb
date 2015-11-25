@@ -23,11 +23,11 @@ module JanusGateway
 
         @client = _create_client(@url, @protocol)
 
-        @client.on :open do
+        client.on :open do
           self.emit :open
         end
 
-        @client.on :message do |event|
+        client.on :message do |event|
           data = JSON.parse(event.data)
 
           transaction_list = @transaction_queue.clone
@@ -50,7 +50,7 @@ module JanusGateway
           self.emit :message, data
         end
 
-        @client.on :close do
+        client.on :close do
           self.emit :close
         end
       end
