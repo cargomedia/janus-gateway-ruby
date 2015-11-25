@@ -24,6 +24,8 @@ module JanusGateway
     end
 
     def connect_client
+      raise('WebSocket client already exists!') unless @client.nil?
+      
       @client = _create_client(@url, @protocol)
 
       client.on :open do
