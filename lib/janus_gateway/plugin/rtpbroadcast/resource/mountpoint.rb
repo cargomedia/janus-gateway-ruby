@@ -9,6 +9,7 @@ module JanusGateway
       @plugin = plugin
       @name = name
       @id = name
+      @data = nil
 
       @streams = streams || [
         {
@@ -70,7 +71,7 @@ module JanusGateway
 
     # @return [Array<Hash>]
     def streams
-      @data['data']['stream']['streams']
+      data.nil? ? data['data']['stream']['streams'] : []
     end
 
     # @return [Concurrent::Promise]
@@ -93,6 +94,11 @@ module JanusGateway
     # @return [JanusGateway::Resource::Plugin]
     def plugin
       @plugin
+    end
+
+    # @return [Hash, NilClass]
+    def data
+      @data
     end
 
     private
