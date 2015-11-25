@@ -55,7 +55,7 @@ resource = JanusGateway::Resource::Resource.new(client)
 ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
 client = JanusGateway::Client.new(ws)
 session = JanusGateway::Resource::Session.new(client)
-plugin = JanusGateway::Resource::Plugin.new(client, plugin, 'plugin-name')
+plugin = JanusGateway::Resource::Plugin.new(client, session, 'plugin-name')
 ```
 
 #### Create
