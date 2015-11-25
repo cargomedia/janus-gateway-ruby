@@ -32,7 +32,7 @@ describe JanusGateway::Transport::WebSocket do
 
       sleep(0.5)
       ws_client.connect_mock
-      Thread.new { transport.connect }.join(0.5)
+      Thread.new { transport.run }.join(0.5)
 
       expect(promise.value).to eq(nil)
       expect(promise.rejected?).to eq(true)
@@ -43,7 +43,7 @@ describe JanusGateway::Transport::WebSocket do
 
     it 'emits open' do
       expect(transport).to receive(:emit).with(:open)
-      Thread.new { transport.connect }.join(0.1)
+      Thread.new { transport.run }.join(0.1)
 
       ws_client.emit :open
 
@@ -52,7 +52,7 @@ describe JanusGateway::Transport::WebSocket do
 
     it 'emits close' do
       expect(transport).to receive(:emit).with(:close)
-      Thread.new { transport.connect }.join(0.1)
+      Thread.new { transport.run }.join(0.1)
 
       ws_client.emit :close
 
@@ -63,7 +63,7 @@ describe JanusGateway::Transport::WebSocket do
       transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
       expect(transport).to receive(:emit).with(:message, data)
 
-      Thread.new { transport.connect }.join(0.1)
+      Thread.new { transport.run }.join(0.1)
       promise = transport.send_transaction({:janus => 'test'})
       ws_client.emit :message, Faye::WebSocket::API::MessageEvent.new('message', :data => JSON.generate(data))
 
@@ -79,7 +79,7 @@ describe JanusGateway::Transport::WebSocket do
       transport.stub(:_create_client).with(url, protocol).and_return(ws_client)
 
       expect(ws_client).to receive(:close).once
-      Thread.new { transport.connect }.join(0.1)
+      Thread.new { transport.run }.join(0.1)
 
       transport.disconnect
     end

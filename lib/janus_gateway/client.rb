@@ -12,7 +12,7 @@ module JanusGateway
     end
 
     def connect
-      @transport.connect
+      @transport.run
     end
 
     def disconnect

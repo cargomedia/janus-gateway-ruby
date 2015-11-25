@@ -4,6 +4,10 @@ module JanusGateway
 
     include Events::Emitter
 
+    def run
+      raise("`#{__method__}` is not implemented for `#{self.class.name}`")
+    end
+
     def connect
       raise("`#{__method__}` is not implemented for `#{self.class.name}`")
     end

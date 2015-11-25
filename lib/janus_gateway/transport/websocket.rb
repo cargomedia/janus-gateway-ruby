@@ -16,16 +16,16 @@ module JanusGateway
       @transaction_queue = Hash.new
     end
 
-    def connect
+    def run
       EventMachine.run do
         EM.error_handler { |e| raise(e) }
-        connect_client
+        connect
       end
     end
 
-    def connect_client
+    def connect
       raise('WebSocket client already exists!') unless @client.nil?
-      
+
       @client = _create_client(@url, @protocol)
 
       client.on :open do
