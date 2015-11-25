@@ -22,14 +22,14 @@ class WebSocketClientMock
 
     Thread.new do
       sleep(0.1)
-      self.emit :message, EventMock.new(reply_message)
+      self.emit :message, Faye::WebSocket::API::MessageEvent.new('message', :data => reply_message)
     end
   end
 
   def receive_message(message)
     Thread.new do
       sleep(0.1)
-      self.emit :message, EventMock.new(message)
+      self.emit :message, Faye::WebSocket::API::MessageEvent.new('message', :data => message)
     end
   end
 
