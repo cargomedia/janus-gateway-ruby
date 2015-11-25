@@ -2,8 +2,6 @@ module JanusGateway
 
   class Client
 
-    include Events::Emitter
-
     attr_accessor :transport
 
     # @param [JanusGateway::Transport]
