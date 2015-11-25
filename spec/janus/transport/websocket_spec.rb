@@ -19,7 +19,6 @@ describe JanusGateway::Transport::WebSocket do
     let(:ws_client) { WebSocketClientMock.new(janus_response) }
 
     it 'should disconnect after timeout' do
-
       transport.stub(:transaction_id_new).and_return('000')
       transport.stub(:_transaction_timeout).and_return(0.001)
 
@@ -31,6 +30,8 @@ describe JanusGateway::Transport::WebSocket do
         end
       end
 
+      sleep(0.5)
+      ws_client.connect_mock
       Thread.new { transport.connect }.join(0.5)
 
       expect(promise.value).to eq(nil)
