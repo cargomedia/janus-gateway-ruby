@@ -92,14 +92,9 @@ module JanusGateway
       EventMachine.stop if EventMachine.reactor_running?
     end
 
-    # @return [Faye::WebSocket::API::CONNECTING, Faye::WebSocket::API::OPEN, Faye::WebSocket::API::CLOSING, Faye::WebSocket::API::CLOSED]
-    def ready_state
-      client.ready_state unless client.nil?
-    end
-
     # @return [TrueClass, FalseClass]
     def is_connected?
-      !client.nil? and (ready_state == Faye::WebSocket::API::OPEN)
+      !client.nil? and (client.ready_state == Faye::WebSocket::API::OPEN)
     end
 
     # @return [Faye::WebSocket::Client, NilClass]

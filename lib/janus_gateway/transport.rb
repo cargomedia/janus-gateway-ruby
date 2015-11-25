@@ -23,11 +23,6 @@ module JanusGateway
       raise("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
 
-    # @return [Integer]
-    def ready_state
-      raise("`#{__method__}` is not implemented for `#{self.class.name}`")
-    end
-
     # @return [TrueClass, FalseClass]
     def is_connected?
       raise("`#{__method__}` is not implemented for `#{self.class.name}`")
