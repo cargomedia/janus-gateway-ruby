@@ -71,6 +71,17 @@ describe JanusGateway::Transport::WebSocket do
 
       transport.disconnect
     end
+
+    it 'try to connect 2 times' do
+      expect(transport).to receive(:emit).with(:open)
+      expect(transport).to receive(:connect).twice.and_call_original
+
+      Thread.new { transport.run }.join(0.1)
+      ws_client.emit :open
+
+      expect { transport.connect }.to raise_error(StandardError, /WebSocket client already exists/)
+    end
+
   end
 
   describe '#disconnect' do
