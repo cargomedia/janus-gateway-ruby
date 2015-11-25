@@ -10,10 +10,10 @@ module JanusGateway
     # @param [String] url
     # @param [String] protocol
     def initialize(url, protocol = 'janus-protocol')
+      @url = url
+      @protocol = protocol
       @client = nil
       @transaction_queue = Hash.new
-
-      super
     end
 
     # @return [Faye::WebSocket::Client]
