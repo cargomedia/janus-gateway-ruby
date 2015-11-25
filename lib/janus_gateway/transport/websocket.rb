@@ -16,7 +16,6 @@ module JanusGateway
       @transaction_queue = Hash.new
     end
 
-    # @return [Faye::WebSocket::Client]
     def connect
       EventMachine.run do
 
@@ -55,8 +54,6 @@ module JanusGateway
           self.emit :close
         end
       end
-
-      @client
     end
 
     # @param [String, Numeric, Array] data
