@@ -2,8 +2,6 @@ module JanusGateway
 
   class Plugin::Rtpbroadcast::Resource::Mountpoint < JanusGateway::Resource
 
-    include Events::Emitter
-
     # @param [JanusGateway::Resource::Plugin] plugin
     # @param [String] name
     # @param [Array] streams
