@@ -72,19 +72,22 @@ module JanusGateway
 
       @transaction_queue[transaction] = promise
 
-      Thread.new do
+      thread = Thread.new do
         sleep(_transaction_timeout)
         error = JanusGateway::Error.new(0, "Transaction id `#{transaction}` has failed due to timeout!")
         promise.fail(error).execute
         @transaction_queue.remove(transaction)
       end
 
+      promise.then { thread.exit }
+      promise.rescue { thread.exit }
+
       promise
     end
 
     def disconnect
-      client.close
-      EventMachine.stop
+      client.close unless client.nil?
+      EventMachine.stop if EventMachine.reactor_running?
     end
 
     # @return [Faye::WebSocket::API::CONNECTING, Faye::WebSocket::API::OPEN, Faye::WebSocket::API::CLOSING, Faye::WebSocket::API::CLOSED]
@@ -97,7 +100,7 @@ module JanusGateway
       !client.nil? and (ready_state == Faye::WebSocket::API::OPEN)
     end
 
-    # @return [Faye::WebSocket::Client]
+    # @return [Faye::WebSocket::Client, NilClass]
     def client
       @client
     end
