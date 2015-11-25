@@ -13,9 +13,9 @@ module JanusGateway
       @id = id
     end
 
-    # @return [String, NilClass]
+    # @return [String]
     def id
-      @id
+      @id.to_s
     end
 
     # @return [JanusGateway::Client]
