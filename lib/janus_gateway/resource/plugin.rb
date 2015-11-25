@@ -2,6 +2,7 @@ module JanusGateway
 
   class Resource::Plugin < Resource
 
+    # @param [JanusGateway::Client] client
     # @param [JanusGateway::Resource::Session] session
     # @param [String] plugin_name
     def initialize(client, session, plugin_name)
