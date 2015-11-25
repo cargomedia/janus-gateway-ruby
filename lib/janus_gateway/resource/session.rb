@@ -21,8 +21,7 @@ module JanusGateway
         _on_created(*args)
         heartbeat
 
-        promise.set(self)
-        promise.execute
+        promise.set(self).execute
       end.rescue do |error|
         promise.fail(error).execute
       end
@@ -42,8 +41,7 @@ module JanusGateway
       ).then do |*args|
         _on_destroyed
 
-        promise.set(self)
-        promise.execute
+        promise.set(self).execute
       end.rescue do |error|
         promise.fail(error).execute
       end

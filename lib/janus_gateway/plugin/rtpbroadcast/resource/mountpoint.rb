@@ -54,8 +54,7 @@ module JanusGateway
         if plugindata['error_code'].nil?
           _on_created(data)
 
-          promise.set(self)
-          promise.execute
+          promise.set(self).execute
         else
           error = JanusGateway::Error.new(plugindata['error_code'], plugindata['error'])
 
@@ -80,9 +79,7 @@ module JanusGateway
       promise = Concurrent::Promise.new
 
       _on_destroyed
-
-      promise.set(self)
-      promise.execute
+      promise.set(self).execute
 
       promise
     end

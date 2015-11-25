@@ -42,8 +42,7 @@ module JanusGateway
           promise = transaction_list[transaction_id]
           unless promise.nil?
             if ['success', 'ack'].include?(data['janus'])
-              promise.set(data)
-              promise.execute
+              promise.set(data).execute
             else
               error_data = data['error']
               error = JanusGateway::Error.new(error_data['code'], error_data['reason'])
