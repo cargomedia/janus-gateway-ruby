@@ -1,8 +1,29 @@
 require 'spec_helper'
 
 describe JanusGateway::Resource::Session do
-  let(:transport) {JanusGateway::Transport::WebSocket.new('') }
+  let(:url) { 'ws://example.com' }
+  let(:protocol) { 'janus-protocol' }
+  let(:ws_client) { Events::EventEmitter.new }
+  let(:transport) { JanusGateway::Transport::WebSocket.new(url) }
   let(:client) { JanusGateway::Client.new(transport) }
+
+  it '#connect' do
+    transport.stub(:_create_client).with(url, protocol).and_return(ws_client)
+
+    expect(transport).to receive(:emit).with(:open)
+    Thread.new { client.connect }.join(0.1)
+
+    ws_client.emit :open
+  end
+
+  it '#disconnect' do
+    transport.stub(:_create_client).with(url, protocol).and_return(ws_client)
+
+    expect(transport).to receive(:emit).with(:close)
+    Thread.new { client.connect }.join(0.1)
+
+    ws_client.emit :close
+  end
 
   it 'should disconnect after timeout' do
 
