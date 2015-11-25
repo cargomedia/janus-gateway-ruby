@@ -30,9 +30,8 @@ describe JanusGateway::Transport::WebSocket do
         end
       end
 
-      sleep(0.5)
-      ws_client.connect_mock
-      Thread.new { transport.run }.join(0.5)
+      transport.connect
+      ws_client.emit :open
 
       expect(promise.value).to eq(nil)
       expect(promise.rejected?).to eq(true)
@@ -43,8 +42,8 @@ describe JanusGateway::Transport::WebSocket do
 
     it 'emits open' do
       expect(transport).to receive(:emit).with(:open)
-      Thread.new { transport.run }.join(0.1)
 
+      transport.connect
       ws_client.emit :open
 
       transport.disconnect
@@ -52,8 +51,8 @@ describe JanusGateway::Transport::WebSocket do
 
     it 'emits close' do
       expect(transport).to receive(:emit).with(:close)
-      Thread.new { transport.run }.join(0.1)
 
+      transport.connect
       ws_client.emit :close
 
       transport.disconnect
@@ -63,7 +62,7 @@ describe JanusGateway::Transport::WebSocket do
       transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
       expect(transport).to receive(:emit).with(:message, data)
 
-      Thread.new { transport.run }.join(0.1)
+      transport.connect
       promise = transport.send_transaction({:janus => 'test'})
       ws_client.emit :message, Faye::WebSocket::API::MessageEvent.new('message', :data => JSON.generate(data))
 
@@ -76,10 +75,12 @@ describe JanusGateway::Transport::WebSocket do
       expect(transport).to receive(:emit).with(:open)
       expect(transport).to receive(:connect).twice.and_call_original
 
-      Thread.new { transport.run }.join(0.1)
+      transport.connect
       ws_client.emit :open
 
       expect { transport.connect }.to raise_error(StandardError, /WebSocket client already exists/)
+
+      transport.disconnect
     end
 
   end
@@ -90,7 +91,7 @@ describe JanusGateway::Transport::WebSocket do
       transport.stub(:_create_client).with(url, protocol).and_return(ws_client)
 
       expect(ws_client).to receive(:close).once
-      Thread.new { transport.run }.join(0.1)
+      transport.connect
 
       transport.disconnect
     end
