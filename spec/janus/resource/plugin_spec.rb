@@ -16,16 +16,21 @@ describe JanusGateway::Resource::Plugin do
     transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
     transport.stub(:transaction_id_new).and_return('123')
 
+    expect(session).to receive(:create).once.and_call_original
+    expect(plugin).to receive(:create).once.and_call_original
+    expect(client).to receive(:disconnect).once.and_call_original
+
     client.on :open do
       session.create.then do
         plugin.create.then do
-          plugin.id.should eq("54321")
           client.disconnect
         end
       end
     end
 
     client.connect
+
+    expect(plugin.id).to eq('54321')
   end
 
 end
