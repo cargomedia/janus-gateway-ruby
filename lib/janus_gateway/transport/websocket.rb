@@ -18,41 +18,43 @@ module JanusGateway
 
     def connect
       EventMachine.run do
-
         EM.error_handler { |e| raise(e) }
+        connect_client
+      end
+    end
 
-        @client = _create_client(@url, @protocol)
+    def connect_client
+      @client = _create_client(@url, @protocol)
 
-        client.on :open do
-          self.emit :open
-        end
+      client.on :open do
+        self.emit :open
+      end
 
-        client.on :message do |event|
-          data = JSON.parse(event.data)
+      client.on :message do |event|
+        data = JSON.parse(event.data)
 
-          transaction_list = @transaction_queue.clone
+        transaction_list = @transaction_queue.clone
 
-          transaction_id = data['transaction']
-          unless transaction_id.nil?
-            promise = transaction_list[transaction_id]
-            unless promise.nil?
-              if ['success', 'ack'].include?(data['janus'])
-                promise.set(data)
-                promise.execute
-              else
-                error_data = data['error']
-                error = JanusGateway::Error.new(error_data['code'], error_data['reason'])
-                promise.fail(error).execute
-              end
+        transaction_id = data['transaction']
+        unless transaction_id.nil?
+          promise = transaction_list[transaction_id]
+          unless promise.nil?
+            if ['success', 'ack'].include?(data['janus'])
+              promise.set(data)
+              promise.execute
+            else
+              error_data = data['error']
+              error = JanusGateway::Error.new(error_data['code'], error_data['reason'])
+              promise.fail(error).execute
             end
           end
-
-          self.emit :message, data
         end
 
-        client.on :close do
-          self.emit :close
-        end
+        self.emit :message, data
+      end
+
+      client.on :close do
+        self.emit :close
       end
     end
 
