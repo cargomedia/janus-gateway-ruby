@@ -3,12 +3,12 @@ module JanusGateway
   class Resource::Plugin < Resource
 
     # @param [JanusGateway::Resource::Session] session
-    # @param [String] name
-    def initialize(session, name)
+    # @param [String] plugin_name
+    def initialize(client, session, plugin_name)
       @session = session
-      @name = name
+      @name = plugin_name
 
-      super()
+      super(client)
     end
 
     # @return [String, NilClass]
@@ -20,7 +20,7 @@ module JanusGateway
     def create
       promise = Concurrent::Promise.new
 
-      janus_client.send_transaction(
+      client.send_transaction(
         {
           :janus => 'attach',
           :plugin => name,
@@ -52,11 +52,6 @@ module JanusGateway
     # @return [JanusGateway::Resource::Session]
     def session
       @session
-    end
-
-    # @return [JanusGateway::Client]
-    def janus_client
-      @session.janus_client
     end
 
     private

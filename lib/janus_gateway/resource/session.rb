@@ -2,19 +2,18 @@ module JanusGateway
 
   class Resource::Session < Resource
 
-    # @param [JanusGateway::Client] janus_client
-    def initialize(janus_client)
-      @janus_client = janus_client
+    # @param [JanusGateway::Client] client
+    def initialize(client)
       @heartbeat_thread = nil
 
-      super()
+      super
     end
 
     # @return [Concurrent::Promise]
     def create
       promise = Concurrent::Promise.new
 
-      janus_client.send_transaction(
+      client.send_transaction(
         {
           :janus => 'create'
         }
@@ -35,7 +34,7 @@ module JanusGateway
     def destroy
       promise = Concurrent::Promise.new
 
-      janus_client.send_transaction(
+      client.send_transaction(
         {
           :janus => 'destroy',
           :session_id => @id
@@ -60,7 +59,7 @@ module JanusGateway
         sleep_time = 5
         while true do
           sleep(sleep_time)
-          janus_client.send_transaction(
+          client.send_transaction(
             {
               :janus => 'keepalive',
               :session_id => @id
@@ -74,28 +73,23 @@ module JanusGateway
       end
     end
 
-    # @return [JanusGateway:Client]
-    def janus_client
-      @janus_client
-    end
-
     private
 
     # @param [Hash] data
     def _on_created(data)
       @id = data['data']['id']
 
-      janus_client.on :message do |data|
+      client.on :message do |data|
         if data['janus'] == 'timeout' and data['session_id'] == @id
           send(:_on_destroyed)
         end
       end
 
-      janus_client.on :close do |data|
+      client.on :close do |data|
         self.emit :destroy
       end
 
-      janus_client.on :error do |data|
+      client.on :error do |data|
         self.emit :destroy
       end
 

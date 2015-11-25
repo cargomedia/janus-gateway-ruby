@@ -5,7 +5,7 @@ module JanusGateway
     # @param [JanusGateway::Resource::Plugin] plugin
     # @param [String] name
     # @param [Array] streams
-    def initialize(plugin, name, streams = nil)
+    def initialize(client, plugin, name, streams = nil)
       @plugin = plugin
       @name = name
       @id = name
@@ -20,6 +20,8 @@ module JanusGateway
           :videortpmap => 'VP8/90000'
         }
       ]
+
+      super(client)
     end
 
     # @return [String, NilClass]
@@ -31,7 +33,7 @@ module JanusGateway
     def create
       promise = Concurrent::Promise.new
 
-      janus_client.send_transaction(
+      client.send_transaction(
         {
           :janus => 'message',
           :session_id => plugin.session.id,
@@ -91,11 +93,6 @@ module JanusGateway
     # @return [JanusGateway::Resource::Plugin]
     def plugin
       @plugin
-    end
-
-    # @return [JanusGateway::Client]
-    def janus_client
-      plugin.janus_client
     end
 
     private

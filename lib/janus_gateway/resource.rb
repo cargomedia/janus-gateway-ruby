@@ -6,14 +6,21 @@ module JanusGateway
 
     attr_accessor :id
 
+    # @param [JanusGateway::Client] client
     # @param [String] id
-    def initialize(id = nil)
+    def initialize(client, id = nil)
+      @client = client
       @id = id
     end
 
     # @return [String, NilClass]
     def id
       @id
+    end
+
+    # @return [JanusGateway::Client]
+    def client
+      @client
     end
 
     # @return [String, NilClass]
