@@ -41,7 +41,7 @@ module JanusGateway
     def destroy
       promise = Concurrent::Promise.new
 
-      on_destroyed
+      _on_destroyed
 
       promise.set(self)
       promise.execute
@@ -71,7 +71,7 @@ module JanusGateway
       self.emit :create, @id
     end
 
-    def on_destroyed
+    def _on_destroyed
       self.emit :destroy, @id
     end
 
