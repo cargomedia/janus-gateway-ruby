@@ -43,13 +43,19 @@ ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
 Each resource has built-in event emitter to handle basic behaviours like `create` and `destroy`. Additionally the creation of resources can be chained.
 There are two types of resources: Janus-API resource and Plugin-API (please see Plugin section).
 
+```ruby
+ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
+client = JanusGateway::Client.new(ws)
+resource = JanusGateway::Resource::Resource.new(client)
+```
+
 #### New
 
 ```ruby
 ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
 client = JanusGateway::Client.new(ws)
 session = JanusGateway::Resource::Session.new(client)
-plugin = JanusGateway::Resource::Plugin.new(plugin, 'plugin-name')
+plugin = JanusGateway::Resource::Plugin.new(client, plugin, 'plugin-name')
 ```
 
 #### Create
@@ -117,8 +123,8 @@ client = JanusGateway::Client.new(ws)
 
 client.on :open do
   JanusGateway::Resource::Session.new(client).create.then do |session|
-    JanusGateway::Resource::Plugin.new(session, JanusGateway::Plugin::Rtpbroadcast.plugin_name).create.then do |plugin|
-      JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint.new(plugin, 'test-mountpoint').create.then do |mountpoint|
+    JanusGateway::Resource::Plugin.new(client, session, JanusGateway::Plugin::Rtpbroadcast.plugin_name).create.then do |plugin|
+      JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint.new(client, plugin, 'test-mountpoint').create.then do |mountpoint|
         # do something with mountpoint
       end
     end
