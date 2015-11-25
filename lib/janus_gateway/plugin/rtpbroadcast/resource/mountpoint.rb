@@ -34,8 +34,8 @@ module JanusGateway
       janus_client.send_transaction(
         {
           :janus => 'message',
-          :session_id => @plugin.session.id,
-          :handle_id => @plugin.id,
+          :session_id => plugin.session.id,
+          :handle_id => plugin.id,
           :body => {
             :request => 'create',
             :id => name,
