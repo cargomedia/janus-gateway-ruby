@@ -4,7 +4,7 @@ describe JanusGateway::Resource::Session do
   let(:transport) {JanusGateway::Transport::WebSocket.new('') }
   let(:client) { JanusGateway::Client.new(transport) }
 
-  it 'should timeout transaction' do
+  it 'should disconnect after timeout' do
 
     janus_response = {
       :timeout => '{"janus":"success", "transaction":"000"}'
