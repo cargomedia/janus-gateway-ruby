@@ -104,6 +104,8 @@ module JanusGateway
 
     private
 
+    # @param [String] url
+    # @param [String] protocol
     # @return [Faye::WebSocket::Client]
     def _create_client(url, protocol)
       Faye::WebSocket::Client.new(url, protocol)
