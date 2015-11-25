@@ -56,9 +56,9 @@ module JanusGateway
       end
     end
 
-    # @param [String, Numeric, Array] data
+    # @param [Hash] data
     def send(data)
-      @client.send(data)
+      @client.send(JSON.generate(data))
     end
 
     # @param [Hash] data
@@ -68,7 +68,7 @@ module JanusGateway
       transaction = transaction_id_new
 
       data[:transaction] = transaction
-      @client.send(JSON.generate(data))
+      send(data)
 
       @transaction_queue[transaction] = promise
 
