@@ -99,7 +99,7 @@ module JanusGateway
 
     # @return [Faye::WebSocket::Client]
     def client
-      @client || raise('Client for WebSocket transport is not created!')
+      @client
     end
 
     private

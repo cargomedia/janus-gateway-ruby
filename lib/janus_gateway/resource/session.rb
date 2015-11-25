@@ -54,6 +54,8 @@ module JanusGateway
 
     # @return [Thread]
     def heartbeat
+      @heartbeat_thread.exit unless @heartbeat_thread.nil?
+
       @heartbeat_thread = Thread.new do
         sleep_time = 5
         while true do
