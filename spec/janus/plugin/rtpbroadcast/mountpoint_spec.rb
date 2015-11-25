@@ -23,6 +23,11 @@ describe JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint do
     transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
     transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
 
+    expect(session).to receive(:create).once.and_call_original
+    expect(plugin).to receive(:create).once.and_call_original
+    expect(rtp_mountpoint).to receive(:create).once.and_call_original
+    expect(client).to receive(:disconnect).once.and_call_original
+
     client.on :open do
       session.create.then do
         plugin.create.then do
@@ -50,6 +55,11 @@ describe JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint do
     transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
     transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
     rtp_mountpoint.stub(:name).and_return('')
+
+    expect(session).to receive(:create).once.and_call_original
+    expect(plugin).to receive(:create).once.and_call_original
+    expect(rtp_mountpoint).to receive(:create).once.and_call_original
+    expect(client).to receive(:disconnect).once.and_call_original
 
     client.on :open do
       session.create.then do
