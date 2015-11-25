@@ -71,6 +71,7 @@ module JanusGateway
       @data['data']['stream']['streams']
     end
 
+    # @return [Concurrent::Promise]
     def destroy
       promise = Concurrent::Promise.new
 
