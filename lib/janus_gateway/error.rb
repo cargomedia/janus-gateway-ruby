@@ -10,12 +10,17 @@ module JanusGateway
 
     # @return [String]
     def message
-      "<Code: #{@code}> <Info: #{@info}>"
+      "<Code: #{code}> <Info: #{info}>"
     end
 
     # @return [Integer]
     def code
       @code
+    end
+
+    # @return [String]
+    def info
+      @info
     end
 
   end
