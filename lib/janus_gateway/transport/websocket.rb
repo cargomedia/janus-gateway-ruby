@@ -58,7 +58,7 @@ module JanusGateway
 
     # @param [Hash] data
     def send(data)
-      @client.send(JSON.generate(data))
+      client.send(JSON.generate(data))
     end
 
     # @param [Hash] data
@@ -83,18 +83,18 @@ module JanusGateway
     end
 
     def disconnect
-      @client.close
+      client.close
       EventMachine.stop
     end
 
     # @return [Faye::WebSocket::API::CONNECTING, Faye::WebSocket::API::OPEN, Faye::WebSocket::API::CLOSING, Faye::WebSocket::API::CLOSED]
     def ready_state
-      @client.ready_state unless @client.nil?
+      client.ready_state unless client.nil?
     end
 
     # @return [TrueClass, FalseClass]
     def is_connected?
-      (@client.nil? == false) and (@client.ready_state == Faye::WebSocket::API::OPEN)
+      (client.nil? == false) and (ready_state == Faye::WebSocket::API::OPEN)
     end
 
     # @return [Faye::WebSocket::Client]
