@@ -92,19 +92,19 @@ module JanusGateway
       end
 
       janus_client.on :close do |data|
-        self.emit :destroy, @id
+        self.emit :destroy
       end
 
       janus_client.on :error do |data|
-        self.emit :destroy, @id
+        self.emit :destroy
       end
 
-      self.emit :create, @id
+      self.emit :create
     end
 
     def _on_destroyed
       @heartbeat_thread.exit unless @heartbeat_thread.nil?
-      self.emit :destroy, @id
+      self.emit :destroy
     end
 
   end
