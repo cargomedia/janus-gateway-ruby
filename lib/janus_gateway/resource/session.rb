@@ -10,11 +10,6 @@ module JanusGateway
       super()
     end
 
-    # @return [String, NilClass]
-    def name
-      @id
-    end
-
     # @return [Concurrent::Promise]
     def create
       promise = Concurrent::Promise.new
