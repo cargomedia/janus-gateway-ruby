@@ -74,11 +74,11 @@ ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
 client = JanusGateway::Client.new(ws)
 session = JanusGateway::Resource::Session.new(client)
 
-session.on :create do |session|
+session.on :create do
   # do something
 end
 
-session.on :destroy do |session|
+session.on :destroy do
   # do something
 end
 

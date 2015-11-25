@@ -85,11 +85,11 @@ module JanusGateway
         end
       end
 
-      client.on :close do |data|
+      client.on :close do
         self.emit :destroy
       end
 
-      client.on :error do |data|
+      client.on :error do
         self.emit :destroy
       end
 
