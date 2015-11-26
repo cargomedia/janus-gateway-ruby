@@ -3,9 +3,11 @@ module JanusGateway
   class Resource::Session < Resource
 
     # @param [JanusGateway::Client] client
-    def initialize(client)
+    # @param [String] token
+    def initialize(client, session_data = nil)
       @heartbeat_thread = nil
 
+      client.register_extra_data({:token => session_data})
       super
     end
 

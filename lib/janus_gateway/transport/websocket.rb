@@ -14,6 +14,7 @@ module JanusGateway
       @protocol = protocol
       @client = nil
       @transaction_queue = Hash.new
+      @extra_data = {}
     end
 
     def run
@@ -71,6 +72,7 @@ module JanusGateway
       transaction = transaction_id_new
 
       data[:transaction] = transaction
+      data = data.merge(extra_data)
       send(data)
 
       @transaction_queue[transaction] = promise
@@ -86,6 +88,19 @@ module JanusGateway
       promise.rescue { thread.exit }
 
       promise
+    end
+
+    # @param [Hash] data
+    def register_extra_data(data)
+      @extra_data = @extra_data.merge(data)
+    end
+
+    def clear_extra_data
+      @extra_data = {}
+    end
+
+    def extra_data
+      @extra_data
     end
 
     def disconnect

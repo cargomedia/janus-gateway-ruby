@@ -23,6 +23,19 @@ module JanusGateway
       @transport.send_transaction(data)
     end
 
+    # @param [Hash] data
+    def register_extra_data(data)
+      @transport.register_extra_data(data)
+    end
+
+    def clear_extra_data
+      @transport.clear_extra_data
+    end
+
+    def extra_data
+      @transport.extra_data
+    end
+
     # @return [TrueClass, FalseClass]
     def is_connected?
       @transport.is_connected?
