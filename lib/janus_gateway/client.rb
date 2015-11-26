@@ -36,6 +36,7 @@ module JanusGateway
       @transport.clear_extra_data
     end
 
+    # @return [Hash] data
     def extra_data
       @transport.extra_data
     end
