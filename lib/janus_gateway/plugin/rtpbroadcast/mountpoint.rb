@@ -1,9 +1,9 @@
-module JanusGateway
+module JanusGateway::Plugin
 
-  class Plugin::Rtpbroadcast::Resource::Mountpoint < JanusGateway::Resource
+  class Rtpbroadcast::Mountpoint < JanusGateway::Resource
 
     # @param [JanusGateway::Client] client
-    # @param [JanusGateway::Resource::Plugin] plugin
+    # @param [JanusGateway::Plugin::Rtpbroadcast] plugin
     # @param [String] name
     # @param [Array] streams
     def initialize(client, plugin, name, streams = nil)

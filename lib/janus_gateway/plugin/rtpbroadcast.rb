@@ -1,10 +1,12 @@
-module JanusGateway
+module JanusGateway::Plugin
 
-  class Plugin::Rtpbroadcast < JanusGateway::Plugin
+  class Rtpbroadcast < JanusGateway::Resource::Plugin
 
-    # @return [String]
-    def self.plugin_name
-      'janus.plugin.cm.rtpbroadcast'
+    # @param [JanusGateway::Client] client
+    # @param [JanusGateway::Resource::Session] session
+    def initialize(client, session)
+      super(client, session, 'janus.plugin.cm.rtpbroadcast')
     end
+
   end
 end
