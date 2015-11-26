@@ -28,7 +28,7 @@ describe JanusGateway::Resource::Plugin do
       end
     end
 
-    client.connect
+    client.run
 
     expect(plugin.id).to eq('54321')
   end

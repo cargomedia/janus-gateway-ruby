@@ -38,7 +38,7 @@ describe JanusGateway::Plugin::Rtpbroadcast::Mountpoint do
       end
     end
 
-    client.connect
+    client.run
   end
 
   it 'should handle error for mountpoint create' do
@@ -71,7 +71,7 @@ describe JanusGateway::Plugin::Rtpbroadcast::Mountpoint do
       end
     end
 
-    client.connect
+    client.run
   end
 
 end
