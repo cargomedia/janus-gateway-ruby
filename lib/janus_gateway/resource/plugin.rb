@@ -61,11 +61,11 @@ module JanusGateway
         destroy
       end
 
-      self.emit :create, @id
+      self.emit :create
     end
 
     def _on_destroyed
-      self.emit :destroy, @id
+      self.emit :destroy
     end
 
   end
