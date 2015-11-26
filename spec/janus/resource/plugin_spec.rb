@@ -4,7 +4,7 @@ describe JanusGateway::Resource::Plugin do
   let(:transport) { JanusGateway::Transport::WebSocket.new('') }
   let(:client) { JanusGateway::Client.new(transport) }
   let(:session) { JanusGateway::Resource::Session.new(client) }
-  let(:plugin) { JanusGateway::Resource::Plugin.new(client, session, JanusGateway::Plugin::Rtpbroadcast.plugin_name) }
+  let(:plugin) { JanusGateway::Plugin::Rtpbroadcast.new(client, session) }
 
   it 'should return plugin handler id' do
 

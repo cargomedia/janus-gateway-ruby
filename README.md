@@ -123,8 +123,8 @@ client = JanusGateway::Client.new(ws)
 
 client.on :open do
   JanusGateway::Resource::Session.new(client).create.then do |session|
-    JanusGateway::Resource::Plugin.new(client, session, JanusGateway::Plugin::Rtpbroadcast.plugin_name).create.then do |plugin|
-      JanusGateway::Plugin::Rtpbroadcast::Resource::Mountpoint.new(client, plugin, 'test-mountpoint').create.then do |mountpoint|
+    JanusGateway::Plugin::Rtpbroadcast.new(client, session).create.then do |plugin|
+      JanusGateway::Plugin::Rtpbroadcast::Mountpoint.new(client, plugin, 'test-mountpoint').create.then do |mountpoint|
         # do something with mountpoint
       end
     end
