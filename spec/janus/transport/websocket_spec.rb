@@ -26,6 +26,7 @@ describe JanusGateway::Transport::WebSocket do
       transport.on :open do
         promise = transport.send_transaction({:janus => 'timeout'})
         promise.rescue do
+          EventMachine.stop
           transport.disconnect
         end
       end

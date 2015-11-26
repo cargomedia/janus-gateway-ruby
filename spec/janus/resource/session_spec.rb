@@ -22,7 +22,7 @@ describe JanusGateway::Resource::Session do
 
     client.on :open do
       session.create.rescue do |error|
-        client.disconnect
+        EventMachine.stop
         spec_success.call(error.code, error.info)
       end
     end
@@ -47,7 +47,7 @@ describe JanusGateway::Resource::Session do
     client.on :open do
       session.create.then do
         session.destroy.then do
-          client.disconnect
+          EventMachine.stop
           spec_success.call
         end
       end
@@ -74,7 +74,7 @@ describe JanusGateway::Resource::Session do
       session.create.then do
         session.id = 999
         session.destroy.rescue do |error|
-          client.disconnect
+          EventMachine.stop
           spec_success.call(error.code, error.info)
         end
       end
@@ -97,7 +97,7 @@ describe JanusGateway::Resource::Session do
 
     client.on :open do
       session.on :destroy do
-        client.disconnect
+        EventMachine.stop
         spec_success.call
       end
       session.create.then do
