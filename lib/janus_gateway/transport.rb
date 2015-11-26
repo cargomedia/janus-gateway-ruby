@@ -4,6 +4,10 @@ module JanusGateway
 
     include Events::Emitter
 
+    def initialize
+      @extra_data = {}
+    end
+
     def run
       raise("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
@@ -30,6 +34,20 @@ module JanusGateway
     # @return [TrueClass, FalseClass]
     def is_connected?
       raise("`#{__method__}` is not implemented for `#{self.class.name}`")
+    end
+
+    # @param [Hash] data
+    def register_extra_data(data)
+      @extra_data.merge!(data)
+    end
+
+    def clear_extra_data
+      @extra_data = {}
+    end
+
+    # @return [Hash]
+    def extra_data
+      @extra_data
     end
 
     # @return [String]
