@@ -9,8 +9,12 @@ module JanusGateway
       @transport = transport
     end
 
-    def connect
+    def run
       @transport.run
+    end
+
+    def connect
+      @transport.connect
     end
 
     def disconnect

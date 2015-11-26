@@ -26,19 +26,19 @@ describe JanusGateway::Plugin::Rtpbroadcast::Mountpoint do
     expect(session).to receive(:create).once.and_call_original
     expect(plugin).to receive(:create).once.and_call_original
     expect(rtp_mountpoint).to receive(:create).once.and_call_original
-    expect(client).to receive(:disconnect).once.and_call_original
+    expect(EventMachine).to receive(:stop).once.and_call_original
 
     client.on :open do
       session.create.then do
         plugin.create.then do
           rtp_mountpoint.create.then do
-            client.disconnect
+            EventMachine.stop
           end
         end
       end
     end
 
-    client.connect
+    client.run
   end
 
   it 'should handle error for mountpoint create' do
@@ -59,19 +59,19 @@ describe JanusGateway::Plugin::Rtpbroadcast::Mountpoint do
     expect(session).to receive(:create).once.and_call_original
     expect(plugin).to receive(:create).once.and_call_original
     expect(rtp_mountpoint).to receive(:create).once.and_call_original
-    expect(client).to receive(:disconnect).once.and_call_original
+    expect(EventMachine).to receive(:stop).once.and_call_original
 
     client.on :open do
       session.create.then do
         plugin.create.then do
           rtp_mountpoint.create.rescue do
-            client.disconnect
+            EventMachine.stop
           end
         end
       end
     end
 
-    client.connect
+    client.run
   end
 
 end
