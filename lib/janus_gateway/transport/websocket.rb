@@ -90,7 +90,6 @@ module JanusGateway
 
     def disconnect
       client.close unless client.nil?
-      EventMachine.stop if EventMachine.reactor_running?
     end
 
     # @return [TrueClass, FalseClass]
