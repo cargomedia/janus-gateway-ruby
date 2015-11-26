@@ -4,12 +4,11 @@ module JanusGateway::Plugin
 
     # @param [JanusGateway::Client] client
     # @param [JanusGateway::Plugin::Rtpbroadcast] plugin
-    # @param [String] name
+    # @param [String] id
     # @param [Array] streams
-    def initialize(client, plugin, name, streams = nil)
+    def initialize(client, plugin, id, streams = nil)
       @plugin = plugin
-      @name = name
-      @id = name
+      @id = id
       @data = nil
 
       @streams = streams || [
@@ -26,11 +25,6 @@ module JanusGateway::Plugin
       super(client)
     end
 
-    # @return [String, NilClass]
-    def name
-      @name
-    end
-
     # @return [Concurrent::Promise]
     def create
       promise = Concurrent::Promise.new
@@ -42,9 +36,9 @@ module JanusGateway::Plugin
           :handle_id => plugin.id,
           :body => {
             :request => 'create',
-            :id => name,
-            :name => name,
-            :description => name,
+            :id => id,
+            :name => id,
+            :description => id,
             :recorded => true,
             :streams => @streams
           }

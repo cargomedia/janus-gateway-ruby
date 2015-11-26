@@ -12,7 +12,7 @@ module JanusGateway
       super(client)
     end
 
-    # @return [String, NilClass]
+    # @return [String]
     def name
       @name
     end
