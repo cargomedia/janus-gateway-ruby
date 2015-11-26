@@ -121,14 +121,16 @@ describe JanusGateway::Resource::Session do
     expect(session).to receive(:create).once.and_call_original
     expect(transport).to receive(:send).once.and_call_original
     expect(transport.extra_data).to eq({:token => session_data})
+    expect(spec_success).to receive(:call).once
 
     client.on :open do
       session.create.then do
-        client.disconnect
+        EventMachine.stop
+        spec_success.call
       end
     end
 
-    client.connect
+    client.run
   end
 
 end
