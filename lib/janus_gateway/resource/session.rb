@@ -38,7 +38,7 @@ module JanusGateway
       client.send_transaction(
         {
           :janus => 'destroy',
-          :session_id => @id
+          :session_id => id
         }
       ).then do |*args|
         _on_destroyed
@@ -62,7 +62,7 @@ module JanusGateway
           client.send_transaction(
             {
               :janus => 'keepalive',
-              :session_id => @id
+              :session_id => id
             }
           ).then do |*args|
             sleep_time = 30
@@ -80,7 +80,7 @@ module JanusGateway
       @id = data['data']['id']
 
       client.on :message do |data|
-        if data['janus'] == 'timeout' and data['session_id'] == @id
+        if data['janus'] == 'timeout' and data['session_id'] == id
           send(:_on_destroyed)
         end
       end

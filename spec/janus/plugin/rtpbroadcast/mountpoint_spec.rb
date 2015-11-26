@@ -74,4 +74,8 @@ describe JanusGateway::Plugin::Rtpbroadcast::Mountpoint do
     client.run
   end
 
+  it 'should set id in constructor' do
+    expect(rtp_mountpoint.id).to eq('test-mountpoint')
+  end
+
 end

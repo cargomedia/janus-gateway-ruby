@@ -8,7 +8,6 @@ module JanusGateway::Plugin
     # @param [Array] streams
     def initialize(client, plugin, id, streams = nil, mountpoint_data = nil)
       @plugin = plugin
-      @id = id
       @data = nil
       @mountpoint_data = mountpoint_data
 
@@ -23,7 +22,7 @@ module JanusGateway::Plugin
         }
       ]
 
-      super(client)
+      super(client, id)
     end
 
     # @return [Concurrent::Promise]
@@ -108,11 +107,11 @@ module JanusGateway::Plugin
         destroy
       end
 
-      self.emit :create, @id
+      self.emit :create
     end
 
     def _on_destroyed
-      self.emit :destroy, @id
+      self.emit :destroy
     end
   end
 end
