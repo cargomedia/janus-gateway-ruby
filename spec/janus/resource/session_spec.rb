@@ -27,7 +27,7 @@ describe JanusGateway::Resource::Session do
       end
     end
 
-    client.connect
+    client.run
   end
 
   it 'should destroy session' do
@@ -53,7 +53,7 @@ describe JanusGateway::Resource::Session do
       end
     end
 
-    client.connect
+    client.run
   end
 
   it 'should fail to destroy session' do
@@ -80,7 +80,7 @@ describe JanusGateway::Resource::Session do
       end
     end
 
-    client.connect
+    client.run
   end
 
   it 'should session timeout' do
@@ -105,7 +105,7 @@ describe JanusGateway::Resource::Session do
       end
     end
 
-    client.connect
+    client.run
   end
 
 end

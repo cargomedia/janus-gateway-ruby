@@ -114,5 +114,5 @@ client.on :open do
   end
 end
 
-client.connect
+client.run
 ```
