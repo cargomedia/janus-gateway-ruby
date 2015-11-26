@@ -7,7 +7,7 @@ module JanusGateway
     def initialize(client, session_data = nil)
       @heartbeat_thread = nil
 
-      client.register_extra_data({:token => session_data})
+      client.register_extra_data({:token => session_data}) unless session_data.nil?
       super
     end
 
