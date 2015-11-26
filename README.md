@@ -12,11 +12,6 @@ API coverage
 ------------
 Current implementation support only a few of API features. For more details please follow official documentation of [REST API](https://janus.conf.meetecho.com/docs/rest.html)
 
-|Resource       |Get All |Get One |Create |Update |Delete |
-|:--------------|:------:|:------:|:-----:|:-----:|:-----:|
-|Session        |        |        | +     |       | +     |
-|Plugin         |        |        | +     |       |       |
-
 Library usage
 -------------
 
@@ -43,35 +38,8 @@ ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
 Each resource has built-in event emitter to handle basic behaviours like `create` and `destroy`. Additionally the creation of resources can be chained.
 There are two types of resources: Janus-API resource and Plugin-API (please see Plugin section).
 
+You can bind on events:
 ```ruby
-ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
-client = JanusGateway::Client.new(ws)
-resource = JanusGateway::Resource::Resource.new(client)
-```
-
-#### New
-
-```ruby
-ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
-client = JanusGateway::Client.new(ws)
-session = JanusGateway::Resource::Session.new(client)
-plugin = JanusGateway::Resource::Plugin.new(client, session, 'plugin-name')
-```
-
-#### Create
-
-```ruby
-ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
-client = JanusGateway::Client.new(ws)
-session = JanusGateway::Resource::Session.new(client)
-session.create
-```
-
-#### Events
-
-```ruby
-ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
-client = JanusGateway::Client.new(ws)
 session = JanusGateway::Resource::Session.new(client)
 
 session.on :create do
@@ -85,11 +53,8 @@ end
 session.create
 ```
 
-#### Chaining
-
+Resource creation and destroying are asynchronous operations which return a `Concurrent::Promise`:
 ```ruby
-ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
-client = JanusGateway::Client.new(ws)
 session = JanusGateway::Resource::Session.new(client)
 
 session.create.then do |session|
@@ -99,18 +64,36 @@ end.rescue do |error|
 end
 ```
 
+#### Session
+Create new session:
+```ruby
+session = JanusGateway::Resource::Session.new(client)
+session.create
+```
+
+Destroy a session:
+```ruby
+session.destroy
+```
+
+#### Plugin
+Create new plugin:
+```ruby
+plugin = JanusGateway::Resource::Plugin.new(client, session, 'plugin-name')
+plugin.create
+```
+
+Destroy a plugin:
+```ruby
+plugin.destroy
+```
+
 ### Plugins
 Janus support for native and custom [plugins](https://janus.conf.meetecho.com/docs/group__plugins.html).
 
 #### Rtpbrodcast plugin
 This is custom plugin for `RTP` streaming. Please find more details in official [repository](https://github.com/cargomedia/janus-gateway-rtpbroadcast).
 Plugin must be installed and active in `Janus` server.
-
-Coverage of plugin resources.
-
-|Resource       |Get All |Get One |Create |Update |Delete |
-|:--------------|:------:|:------:|:-----:|:-----:|:-----:|
-|Mountpoint     |        |        | +     |       |       |
 
 Plugin resource supports `events` and `chaining` in the same way like `Janus` resource.
 
