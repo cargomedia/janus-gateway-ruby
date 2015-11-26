@@ -18,12 +18,12 @@ describe JanusGateway::Resource::Plugin do
 
     expect(session).to receive(:create).once.and_call_original
     expect(plugin).to receive(:create).once.and_call_original
-    expect(client).to receive(:disconnect).once.and_call_original
+    expect(EventMachine).to receive(:stop).once.and_call_original
 
     client.on :open do
       session.create.then do
         plugin.create.then do
-          client.disconnect
+          EventMachine.stop
         end
       end
     end
