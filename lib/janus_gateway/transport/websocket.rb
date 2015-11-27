@@ -73,7 +73,6 @@ module JanusGateway
       transaction = transaction_id_new
 
       data[:transaction] = transaction
-      data = data.merge(extra_data)
       send(data)
 
       @transaction_queue[transaction] = promise

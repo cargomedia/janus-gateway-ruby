@@ -7,6 +7,7 @@ module JanusGateway
     # @param [JanusGateway::Transport]
     def initialize(transport)
       @transport = transport
+      @extra_data = {}
     end
 
     def run
@@ -24,21 +25,22 @@ module JanusGateway
     # @param [Hash] data
     # @return [Concurrent::Promise]
     def send_transaction(data)
+      data.merge!(extra_data)
       @transport.send_transaction(data)
     end
 
     # @param [Hash] data
     def register_extra_data(data)
-      @transport.register_extra_data(data)
+      @extra_data.merge!(data)
     end
 
     def clear_extra_data
-      @transport.clear_extra_data
+      @extra_data = {}
     end
 
     # @return [Hash] data
     def extra_data
-      @transport.extra_data
+      @extra_data
     end
 
     # @return [TrueClass, FalseClass]
