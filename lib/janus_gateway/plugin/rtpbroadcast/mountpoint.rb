@@ -6,9 +6,11 @@ module JanusGateway::Plugin
     # @param [JanusGateway::Plugin::Rtpbroadcast] plugin
     # @param [String] id
     # @param [Array] streams
-    def initialize(client, plugin, id, streams = nil)
+    # @param [String] channel_data
+    def initialize(client, plugin, id, streams = nil, channel_data = nil)
       @plugin = plugin
       @data = nil
+      @channel_data = channel_data
 
       @streams = streams || [
         {
@@ -39,7 +41,8 @@ module JanusGateway::Plugin
             :name => id,
             :description => id,
             :recorded => true,
-            :streams => @streams
+            :streams => @streams,
+            :channel_data => @channel_data
           }
         }
       ).then do |data|
