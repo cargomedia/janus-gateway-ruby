@@ -14,8 +14,6 @@ module JanusGateway
       @protocol = protocol
       @client = nil
       @transaction_queue = Hash.new
-
-      super()
     end
 
     def run
