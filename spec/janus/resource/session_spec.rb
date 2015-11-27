@@ -3,8 +3,7 @@ require 'spec_helper'
 describe JanusGateway::Resource::Session do
   let(:transport) { JanusGateway::Transport::WebSocket.new('') }
   let(:client) { JanusGateway::Client.new(transport) }
-  let(:session_data) { {:session => 123} }
-  let(:session) { JanusGateway::Resource::Session.new(client, session_data) }
+  let(:session) { JanusGateway::Resource::Session.new(client) }
   let(:spec_success) { double(Proc) }
   let(:error_468) { JanusGateway::Error.new(468, 'The ID provided to create a new session is already in use') }
   let(:error_458) { JanusGateway::Error.new(458, 'Session not found') }
@@ -103,30 +102,6 @@ describe JanusGateway::Resource::Session do
       end
       session.create.then do
         client.transport.client.receive_message('{"janus":"timeout", "session_id":12345}')
-      end
-    end
-
-    client.run
-  end
-
-  it 'should set extra data' do
-
-    janus_response = {
-      :create => '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":12345}}'
-    }
-
-    transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
-    transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
-
-    expect(session).to receive(:create).once.and_call_original
-    expect(transport).to receive(:send).once.and_call_original
-    expect(client.extra_data).to eq({:token => session_data})
-    expect(spec_success).to receive(:call).once
-
-    client.on :open do
-      session.create.then do
-        EventMachine.stop
-        spec_success.call
       end
     end
 

@@ -5,9 +5,13 @@ module JanusGateway
     attr_accessor :transport
 
     # @param [JanusGateway::Transport]
-    def initialize(transport)
+    # @param [Hash] options
+    def initialize(transport, options = {})
       @transport = transport
-      @extra_data = {}
+      @options = {
+        :token => nil,
+        :admin_secret => nil
+      }.merge(options)
     end
 
     def run
@@ -25,22 +29,8 @@ module JanusGateway
     # @param [Hash] data
     # @return [Concurrent::Promise]
     def send_transaction(data)
-      data.merge!(extra_data)
-      @transport.send_transaction(data)
-    end
-
-    # @param [Hash] data
-    def register_extra_data(data)
-      @extra_data.merge!(data)
-    end
-
-    def clear_extra_data
-      @extra_data = {}
-    end
-
-    # @return [Hash] data
-    def extra_data
-      @extra_data
+      extra_fields = @options.delete_if { |k, v| v.nil? }
+      @transport.send_transaction(data.merge(extra_fields))
     end
 
     # @return [TrueClass, FalseClass]
