@@ -22,7 +22,7 @@ describe JanusGateway::Client do
     context 'when no options passed' do
       let(:client) { JanusGateway::Client.new(transport) }
 
-      it 'should send along token and admin_secret' do
+      it 'should not send along token and admin_secret' do
         expect(transport).to receive(:send_transaction).with({:foo => 2})
         client.send_transaction({:foo => 2})
       end
