@@ -6,6 +6,7 @@ module JanusGateway::Plugin
     # @param [JanusGateway::Plugin::Rtpbroadcast] plugin
     # @param [String] id
     # @param [Array] streams
+    # @param [String] channel_data
     def initialize(client, plugin, id, streams = nil, channel_data = nil)
       @plugin = plugin
       @data = nil
