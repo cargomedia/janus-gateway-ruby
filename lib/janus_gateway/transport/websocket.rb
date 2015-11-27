@@ -79,11 +79,10 @@ module JanusGateway
         sleep(_transaction_timeout)
         error = JanusGateway::Error.new(0, "Transaction id `#{transaction}` has failed due to timeout!")
         promise.fail(error).execute
-        @transaction_queue.remove(transaction)
       end
 
-      promise.then { thread.exit }
-      promise.rescue { thread.exit }
+      promise.then { @transaction_queue.remove(transaction); thread.exit }
+      promise.rescue { @transaction_queue.remove(transaction); thread.exit }
 
       promise
     end
