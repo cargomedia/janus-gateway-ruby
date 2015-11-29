@@ -7,7 +7,7 @@ describe JanusGateway::Error do
   let(:error) { JanusGateway::Error.new(error_code, error_info) }
 
   it 'should convert error to the string' do
-    expect(error.to_s).to eq('test-123')
+    expect(error.to_s).to eq('<Code: 123> <Info: test-123>')
   end
 
 end
