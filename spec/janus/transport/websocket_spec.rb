@@ -5,15 +5,14 @@ describe JanusGateway::Transport::WebSocket do
   let(:protocol) { 'janus-protocol' }
   let(:ws_client) { Events::EventEmitter.new }
   let(:transport) { JanusGateway::Transport::WebSocket.new(url) }
-  let(:data) { {'janus' => 'success', 'transaction' => 'ABCDEFGHIJK'} }
+  let(:data) { { 'janus' => 'success', 'transaction' => 'ABCDEFGHIJK' } }
   before { transport.stub(:_create_client).with(url, protocol).and_return(ws_client) }
   before { ws_client.stub(:send) }
   before { ws_client.stub(:close) }
 
   describe '#send_transaction' do
-
     janus_response = {
-      :timeout => '{"janus":"success", "transaction":"000"}'
+      timeout: '{"janus":"success", "transaction":"000"}'
     }
 
     let(:ws_client) { WebSocketClientMock.new(janus_response) }
@@ -24,7 +23,7 @@ describe JanusGateway::Transport::WebSocket do
 
       promise = nil
       transport.on :open do
-        promise = transport.send_transaction({:janus => 'timeout'})
+        promise = transport.send_transaction(janus: 'timeout')
         promise.rescue do
           EventMachine.stop
         end
@@ -39,7 +38,6 @@ describe JanusGateway::Transport::WebSocket do
   end
 
   describe '#connect' do
-
     it 'emits open' do
       expect(transport).to receive(:emit).with(:open)
 
@@ -63,8 +61,8 @@ describe JanusGateway::Transport::WebSocket do
       expect(transport).to receive(:emit).with(:message, data)
 
       transport.connect
-      promise = transport.send_transaction({:janus => 'test'})
-      ws_client.emit :message, Faye::WebSocket::API::MessageEvent.new('message', :data => JSON.generate(data))
+      promise = transport.send_transaction(janus: 'test')
+      ws_client.emit :message, Faye::WebSocket::API::MessageEvent.new('message', data: JSON.generate(data))
 
       expect(promise.value).to eq(data)
 
@@ -82,11 +80,9 @@ describe JanusGateway::Transport::WebSocket do
 
       transport.disconnect
     end
-
   end
 
   describe '#disconnect' do
-
     it 'should close websocket connect' do
       transport.stub(:_create_client).with(url, protocol).and_return(ws_client)
 
@@ -96,5 +92,4 @@ describe JanusGateway::Transport::WebSocket do
       transport.disconnect
     end
   end
-
 end

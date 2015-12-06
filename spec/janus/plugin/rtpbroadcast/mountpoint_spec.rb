@@ -8,11 +8,10 @@ describe JanusGateway::Plugin::Rtpbroadcast::Mountpoint do
   let(:rtp_mountpoint) { JanusGateway::Plugin::Rtpbroadcast::Mountpoint.new(client, plugin, 'test-mountpoint') }
 
   it 'should create rtpbroadcast mountpoint' do
-
     janus_response = {
-      :create => '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":"12345"}}',
-      :attach => '{"janus":"success", "session_id":12345, "transaction":"ABCDEFGHIJK", "data":{"id":"54321"}}',
-      :message => [
+      create: '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":"12345"}}',
+      attach: '{"janus":"success", "session_id":12345, "transaction":"ABCDEFGHIJK", "data":{"id":"54321"}}',
+      message: [
         '{"janus":"success", "session_id":12345, "sender_id":"54321", "transaction":"ABCDEFGHIJK"',
         '"plugindata":{"plugin":"janus.plugin.cm.rtpbroadcast", "data":{"streaming":"created"',
         '"created":"test-mountpoint", "stream":{"id":"test-mountpoint"',
@@ -42,11 +41,10 @@ describe JanusGateway::Plugin::Rtpbroadcast::Mountpoint do
   end
 
   it 'should handle error for mountpoint create' do
-
     janus_response = {
-      :create => '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":"12345"}}',
-      :attach => '{"janus":"success", "session_id":12345, "transaction":"ABCDEFGHIJK", "data":{"id":"54321"}}',
-      :message => [
+      create: '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":"12345"}}',
+      attach: '{"janus":"success", "session_id":12345, "transaction":"ABCDEFGHIJK", "data":{"id":"54321"}}',
+      message: [
         '{"janus":"success", "session_id":12345, "sender_id":"54321", "transaction":"ABCDEFGHIJK"',
         '"plugindata":{"plugin":"janus.plugin.cm.rtpbroadcast", "data":{"error_code":456, "error": "Cannot create mounpoint"}}}'
       ].join(',')
@@ -77,5 +75,4 @@ describe JanusGateway::Plugin::Rtpbroadcast::Mountpoint do
   it 'should set id in constructor' do
     expect(rtp_mountpoint.id).to eq('test-mountpoint')
   end
-
 end

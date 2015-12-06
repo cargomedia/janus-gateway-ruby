@@ -1,5 +1,4 @@
 module JanusGateway
-
   require 'json'
   require 'events'
   require 'concurrent'

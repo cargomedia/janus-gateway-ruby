@@ -1,35 +1,33 @@
 module JanusGateway
-
   class Transport
-
     include Events::Emitter
 
     def run
-      raise("`#{__method__}` is not implemented for `#{self.class.name}`")
+      fail("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
 
     def connect
-      raise("`#{__method__}` is not implemented for `#{self.class.name}`")
+      fail("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
 
     def disconnect
-      raise("`#{__method__}` is not implemented for `#{self.class.name}`")
+      fail("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
 
     # @param [Hash] data
-    def send(data)
-      raise("`#{__method__}` is not implemented for `#{self.class.name}`")
+    def send(_data)
+      fail("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
 
     # @param [Hash] data
     # @return [Concurrent::Promise]
-    def send_transaction(data)
-      raise("`#{__method__}` is not implemented for `#{self.class.name}`")
+    def send_transaction(_data)
+      fail("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
 
     # @return [TrueClass, FalseClass]
-    def is_connected?
-      raise("`#{__method__}` is not implemented for `#{self.class.name}`")
+    def connected?
+      fail("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
 
     # @return [String]
@@ -40,6 +38,5 @@ module JanusGateway
       end
       transaction_id
     end
-
   end
 end
