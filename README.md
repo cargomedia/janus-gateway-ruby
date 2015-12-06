@@ -1,6 +1,9 @@
-janus-gateway-ruby [![Build Status](https://travis-ci.org/cargomedia/janus-gateway-ruby.svg)](https://travis-ci.org/cargomedia/janus-gateway-ruby)
+janus-gateway-ruby
 ==================
-Minimalistic [janus-gateway](https://github.com/meetecho/janus-gateway) client for ruby
+Minimalistic client for the [Janus](https://github.com/meetecho/janus-gateway) WebRTC gateway.
+
+[![Build Status](https://img.shields.io/travis/cargomedia/janus-gateway-ruby/master.svg)](https://travis-ci.org/cargomedia/janus-gateway-ruby)
+[![Gem Version](https://img.shields.io/gem/v/janus_gateway.svg)](https://rubygems.org/gems/janus_gateway)
 
 Installation
 ------------
