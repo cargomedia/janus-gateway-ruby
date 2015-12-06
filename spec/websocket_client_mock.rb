@@ -1,5 +1,4 @@
 class WebSocketClientMock
-
   include Events::Emitter
 
   def initialize(response)
@@ -10,7 +9,7 @@ class WebSocketClientMock
   def connect_mock
     Thread.new do
       sleep(0.1)
-      self.emit :open
+      emit :open
     end
   end
 
@@ -22,21 +21,21 @@ class WebSocketClientMock
 
     Thread.new do
       sleep(0.1)
-      self.emit :message, Faye::WebSocket::API::MessageEvent.new('message', :data => reply_message)
+      emit :message, Faye::WebSocket::API::MessageEvent.new('message', data: reply_message)
     end
   end
 
   def receive_message(message)
     Thread.new do
       sleep(0.1)
-      self.emit :message, Faye::WebSocket::API::MessageEvent.new('message', :data => message)
+      emit :message, Faye::WebSocket::API::MessageEvent.new('message', data: message)
     end
   end
 
   def close
     Thread.new do
       sleep(0.1)
-      self.emit :close
+      emit :close
     end
   end
 end

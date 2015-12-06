@@ -1,6 +1,10 @@
 module JanusGateway::Plugin
-
   class Rtpbroadcast::Mountpoint < JanusGateway::Resource
+    # @return [JanusGateway::Resource::Plugin]
+    attr_reader :plugin
+
+    # @return [Hash, NilClass]
+    attr_reader :data
 
     # @param [JanusGateway::Client] client
     # @param [JanusGateway::Plugin::Rtpbroadcast] plugin
@@ -14,12 +18,12 @@ module JanusGateway::Plugin
 
       @streams = streams || [
         {
-          :audio => 'yes',
-          :video => 'yes',
-          :audiopt => 111,
-          :audiortpmap => 'opus/48000/2',
-          :videopt => 100,
-          :videortpmap => 'VP8/90000'
+          audio: 'yes',
+          video: 'yes',
+          audiopt: 111,
+          audiortpmap: 'opus/48000/2',
+          videopt: 100,
+          videortpmap: 'VP8/90000'
         }
       ]
 
@@ -31,19 +35,17 @@ module JanusGateway::Plugin
       promise = Concurrent::Promise.new
 
       client.send_transaction(
-        {
-          :janus => 'message',
-          :session_id => plugin.session.id,
-          :handle_id => plugin.id,
-          :body => {
-            :request => 'create',
-            :id => id,
-            :name => id,
-            :description => id,
-            :recorded => true,
-            :streams => @streams,
-            :channel_data => @channel_data
-          }
+        janus: 'message',
+        session_id: plugin.session.id,
+        handle_id: plugin.id,
+        body: {
+          request: 'create',
+          id: id,
+          name: id,
+          description: id,
+          recorded: true,
+          streams: @streams,
+          channel_data: @channel_data
         }
       ).then do |data|
         plugindata = data['plugindata']['data']
@@ -85,20 +87,10 @@ module JanusGateway::Plugin
       plugin.session
     end
 
-    # @return [JanusGateway::Resource::Plugin]
-    def plugin
-      @plugin
-    end
-
-    # @return [Hash, NilClass]
-    def data
-      @data
-    end
-
     private
 
     def _on_error(error)
-      self.emit :error, error
+      emit :error, error
     end
 
     def _on_created(data)
@@ -108,11 +100,11 @@ module JanusGateway::Plugin
         destroy
       end
 
-      self.emit :create
+      emit :create
     end
 
     def _on_destroyed
-      self.emit :destroy
+      emit :destroy
     end
   end
 end

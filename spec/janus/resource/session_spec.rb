@@ -9,9 +9,8 @@ describe JanusGateway::Resource::Session do
   let(:error_458) { JanusGateway::Error.new(458, 'Session not found') }
 
   it 'should throw exception' do
-
     janus_response = {
-      :create => "{\"janus\":\"error\", \"transaction\":\"123\", \"error\":{\"code\":#{error_468.code}, \"reason\": \"#{error_468.info}\"}}"
+      create: "{\"janus\":\"error\", \"transaction\":\"123\", \"error\":{\"code\":#{error_468.code}, \"reason\": \"#{error_468.info}\"}}"
     }
 
     transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
@@ -31,10 +30,9 @@ describe JanusGateway::Resource::Session do
   end
 
   it 'should destroy session' do
-
     janus_response = {
-      :create => '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":"12345"}}',
-      :destroy => '{"janus":"success", "session_id":12345, "transaction":"ABCDEFGHIJK"}'
+      create: '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":"12345"}}',
+      destroy: '{"janus":"success", "session_id":12345, "transaction":"ABCDEFGHIJK"}'
     }
 
     transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
@@ -57,10 +55,9 @@ describe JanusGateway::Resource::Session do
   end
 
   it 'should fail to destroy session' do
-
     janus_response = {
-      :create => '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":"12345"}}',
-      :destroy => '{"janus":"error", "session_id":999, "transaction":"ABCDEFGHIJK", "error":{"code":458, "reason": "Session not found"}}'
+      create: '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":"12345"}}',
+      destroy: '{"janus":"error", "session_id":999, "transaction":"ABCDEFGHIJK", "error":{"code":458, "reason": "Session not found"}}'
     }
 
     transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
@@ -84,9 +81,8 @@ describe JanusGateway::Resource::Session do
   end
 
   it 'should session timeout' do
-
     janus_response = {
-      :create => '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":12345}}'
+      create: '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":12345}}'
     }
 
     transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
@@ -107,6 +103,4 @@ describe JanusGateway::Resource::Session do
 
     client.run
   end
-
 end
-

@@ -7,10 +7,9 @@ describe JanusGateway::Resource::Plugin do
   let(:plugin) { JanusGateway::Plugin::Rtpbroadcast.new(client, session) }
 
   it 'should return plugin handler id' do
-
     janus_response = {
-      :create => '{"janus":"success", "transaction":"123", "data":{"id":"12345"}}',
-      :attach => '{"janus":"success", "session_id":12345, "transaction":"123", "data":{"id":"54321"}}'
+      create: '{"janus":"success", "transaction":"123", "data":{"id":"12345"}}',
+      attach: '{"janus":"success", "session_id":12345, "transaction":"123", "data":{"id":"54321"}}'
     }
 
     transport.stub(:_create_client).and_return(WebSocketClientMock.new(janus_response))
@@ -32,6 +31,4 @@ describe JanusGateway::Resource::Plugin do
 
     expect(plugin.id).to eq('54321')
   end
-
 end
-

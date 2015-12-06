@@ -1,6 +1,10 @@
 module JanusGateway
-
   class Resource::Plugin < Resource
+    # @return [JanusGateway::Resource::Session]
+    attr_reader :session
+
+    # @return [String]
+    attr_reader :name
 
     # @param [JanusGateway::Client] client
     # @param [JanusGateway::Resource::Session] session
@@ -12,21 +16,14 @@ module JanusGateway
       super(client)
     end
 
-    # @return [String]
-    def name
-      @name
-    end
-
     # @return [Concurrent::Promise]
     def create
       promise = Concurrent::Promise.new
 
       client.send_transaction(
-        {
-          :janus => 'attach',
-          :plugin => name,
-          :session_id => @session.id
-        }
+        janus: 'attach',
+        plugin: name,
+        session_id: @session.id
       ).then do |*args|
         _on_created(*args)
 
@@ -47,26 +44,20 @@ module JanusGateway
       promise
     end
 
-    # @return [JanusGateway::Resource::Session]
-    def session
-      @session
-    end
-
     private
 
     def _on_created(data)
       @id = data['data']['id']
 
-      session.on :destroy do |data|
+      session.on :destroy do |_data|
         destroy
       end
 
-      self.emit :create
+      emit :create
     end
 
     def _on_destroyed
-      self.emit :destroy
+      emit :destroy
     end
-
   end
 end

@@ -1,7 +1,5 @@
 module JanusGateway
-
   class Client
-
     attr_accessor :transport
 
     # @param [JanusGateway::Transport]
@@ -9,8 +7,8 @@ module JanusGateway
     def initialize(transport, options = {})
       @transport = transport
       @options = {
-        :token => nil,
-        :admin_secret => nil
+        token: nil,
+        admin_secret: nil
       }.merge(options)
     end
 
@@ -29,13 +27,13 @@ module JanusGateway
     # @param [Hash] data
     # @return [Concurrent::Promise]
     def send_transaction(data)
-      extra_fields = @options.delete_if { |k, v| v.nil? }
+      extra_fields = @options.delete_if { |_, v| v.nil? }
       @transport.send_transaction(data.merge(extra_fields))
     end
 
     # @return [TrueClass, FalseClass]
-    def is_connected?
-      @transport.is_connected?
+    def connected?
+      @transport.connected?
     end
 
     # @param [Symbol, String] event
@@ -43,6 +41,5 @@ module JanusGateway
     def on(event, &block)
       @transport.on(event, &block)
     end
-
   end
 end

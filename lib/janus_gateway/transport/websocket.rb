@@ -2,9 +2,7 @@ require 'eventmachine'
 require 'faye/websocket'
 
 module JanusGateway
-
   class Transport::WebSocket < Transport
-
     attr_reader :transaction_queue
 
     # @param [String] url
@@ -13,23 +11,23 @@ module JanusGateway
       @url = url
       @protocol = protocol
       @client = nil
-      @transaction_queue = Hash.new
+      @transaction_queue = {}
     end
 
     def run
       EventMachine.run do
-        EM.error_handler { |e| raise(e) }
+        EM.error_handler { |e| fail(e) }
         connect
       end
     end
 
     def connect
-      raise('WebSocket client already exists!') unless @client.nil?
+      fail('WebSocket client already exists!') unless @client.nil?
 
       @client = _create_client(@url, @protocol)
 
       client.on :open do
-        self.emit :open
+        emit :open
       end
 
       client.on :message do |event|
@@ -41,7 +39,7 @@ module JanusGateway
         unless transaction_id.nil?
           promise = transaction_list[transaction_id]
           unless promise.nil?
-            if ['success', 'ack'].include?(data['janus'])
+            if %w(success ack).include?(data['janus'])
               promise.set(data).execute
             else
               error_data = data['error']
@@ -51,11 +49,11 @@ module JanusGateway
           end
         end
 
-        self.emit :message, data
+        emit :message, data
       end
 
       client.on :close do
-        self.emit :close
+        emit :close
       end
     end
 
@@ -81,8 +79,14 @@ module JanusGateway
         promise.fail(error).execute
       end
 
-      promise.then { @transaction_queue.remove(transaction); thread.exit }
-      promise.rescue { @transaction_queue.remove(transaction); thread.exit }
+      promise.then do
+        @transaction_queue.remove(transaction)
+        thread.exit
+      end
+      promise.rescue do
+        @transaction_queue.remove(transaction)
+        thread.exit
+      end
 
       promise
     end
@@ -92,14 +96,12 @@ module JanusGateway
     end
 
     # @return [TrueClass, FalseClass]
-    def is_connected?
-      !client.nil? and (client.ready_state == Faye::WebSocket::API::OPEN)
+    def connected?
+      !client.nil? && (client.ready_state == Faye::WebSocket::API::OPEN)
     end
 
     # @return [Faye::WebSocket::Client, NilClass]
-    def client
-      @client
-    end
+    attr_reader :client
 
     private
 
@@ -114,7 +116,5 @@ module JanusGateway
     def _transaction_timeout
       30
     end
-
   end
-
 end
