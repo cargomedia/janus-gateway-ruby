@@ -14,6 +14,7 @@ module JanusGateway
   require 'janus_gateway/transport/websocket'
 
   require 'janus_gateway/plugin/rtpbroadcast'
+  require 'janus_gateway/plugin/rtpbroadcast/list'
   require 'janus_gateway/plugin/rtpbroadcast/mountpoint'
 
   require 'janus_gateway/version'
