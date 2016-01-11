@@ -5,7 +5,7 @@ describe JanusGateway::Transport::WebSocket do
   let(:protocol) { 'janus-protocol' }
   let(:ws_client) { Events::EventEmitter.new }
   let(:transport) { JanusGateway::Transport::WebSocket.new(url) }
-  let(:data) { { 'janus' => 'success', 'transaction' => 'ABCDEFGHIJK' } }
+  let(:data) { {'janus' => 'success', 'transaction' => 'ABCDEFGHIJK'} }
   before { transport.stub(:_create_client).with(url, protocol).and_return(ws_client) }
   before { ws_client.stub(:send) }
   before { ws_client.stub(:close) }
@@ -101,9 +101,12 @@ describe JanusGateway::Transport::WebSocket do
       promise2 = transport.send_transaction(janus: 'test2')
       promise3 = transport.send_transaction(janus: 'test3')
 
-      promise3.set('dummy').execute
+      expect(transport.transaction_queue.count).to eq(3)
 
-      ws_client.emit :close
+      promise3.set(nil).execute.then do
+        expect(transport.transaction_queue.count).to eq(2)
+        ws_client.emit :close
+      end
 
       expect(promise1.value).to eq(nil)
       expect(promise1.rejected?).to eq(true)
@@ -111,7 +114,6 @@ describe JanusGateway::Transport::WebSocket do
       expect(promise2.value).to eq(nil)
       expect(promise2.rejected?).to eq(true)
 
-      expect(promise3.value).to eq('dummy')
       expect(promise3.fulfilled?).to eq(true)
     end
   end
