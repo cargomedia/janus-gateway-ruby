@@ -20,8 +20,6 @@ module JanusGateway::Plugin
     def create
       promise = Concurrent::Promise.new
 
-      puts 'sending'
-
       client.send_transaction(
         janus: 'message',
         session_id: plugin.session.id,
