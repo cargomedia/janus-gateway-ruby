@@ -26,11 +26,8 @@ module JanusGateway::Plugin
         janus: 'message',
         session_id: plugin.session.id,
         handle_id: plugin.id,
-        body: {
-          request: 'list',
-        }
+        body: { request: 'list' }
       ).then do |data|
-
         plugindata = data['plugindata']['data']
         if plugindata['error_code'].nil?
           _on_created(data)
