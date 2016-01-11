@@ -5,7 +5,7 @@ describe JanusGateway::Transport::WebSocket do
   let(:protocol) { 'janus-protocol' }
   let(:ws_client) { Events::EventEmitter.new }
   let(:transport) { JanusGateway::Transport::WebSocket.new(url) }
-  let(:data) { {'janus' => 'success', 'transaction' => 'ABCDEFGHIJK'} }
+  let(:data) { { 'janus' => 'success', 'transaction' => 'ABCDEFGHIJK' } }
   before { transport.stub(:_create_client).with(url, protocol).and_return(ws_client) }
   before { ws_client.stub(:send) }
   before { ws_client.stub(:close) }
