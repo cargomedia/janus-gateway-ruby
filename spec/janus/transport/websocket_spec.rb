@@ -94,19 +94,27 @@ describe JanusGateway::Transport::WebSocket do
 
     it 'should remove pending transactions if connections drops' do
       transport.stub(:_create_client).with(url, protocol).and_return(ws_client)
-      transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK-1', 'ABCDEFGHIJK-2')
+      transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK-1', 'ABCDEFGHIJK-2', 'ABCDEFGHIJK-3')
 
       transport.connect
       promise1 = transport.send_transaction(janus: 'test1')
       promise2 = transport.send_transaction(janus: 'test2')
+      promise3 = transport.send_transaction(janus: 'test3')
 
-      ws_client.emit :close
+      expect(transport.transaction_queue.count).to eq(3)
+
+      promise3.set(nil).execute.then do
+        expect(transport.transaction_queue.count).to eq(2)
+        ws_client.emit :close
+      end
 
       expect(promise1.value).to eq(nil)
       expect(promise1.rejected?).to eq(true)
 
       expect(promise2.value).to eq(nil)
       expect(promise2.rejected?).to eq(true)
+
+      expect(promise3.fulfilled?).to eq(true)
     end
   end
 end

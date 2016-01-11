@@ -85,11 +85,11 @@ module JanusGateway
       end
 
       promise.then do
-        @transaction_queue.remove(transaction)
+        @transaction_queue.delete(transaction)
         thread.exit
       end
       promise.rescue do
-        @transaction_queue.remove(transaction)
+        @transaction_queue.delete(transaction)
         thread.exit
       end
 
