@@ -17,7 +17,7 @@ module JanusGateway::Plugin
     end
 
     # @return [Concurrent::Promise]
-    def create
+    def get
       promise = Concurrent::Promise.new
 
       client.send_transaction(
@@ -28,7 +28,7 @@ module JanusGateway::Plugin
       ).then do |data|
         plugindata = data['plugindata']['data']
         if plugindata['error_code'].nil?
-          _on_created(data)
+          _on_success(data)
 
           promise.set(self).execute
         else
@@ -52,10 +52,10 @@ module JanusGateway::Plugin
 
     private
 
-    def _on_created(data)
+    def _on_success(data)
       @data = data['plugindata']
 
-      emit :create
+      emit :success
     end
 
     def _on_error(error)
