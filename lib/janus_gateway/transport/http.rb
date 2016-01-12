@@ -1,69 +1,23 @@
 module JanusGateway
   class Transport::Http < Transport
-
-    class JanusHTTPClient
-
-      include Events::Emitter
-
-      CONNECTING = 0
-      OPEN       = 1
-      CLOSING    = 2
-      CLOSED     = 3
-
-      def initialize(url)
-        @url = url
-        @state = CONNECTING
-
-        self.on :open do
-          @state = OPEN
-        end
-      end
-
-      def send(data)
-        Thread.new do
-          uri = URI.parse(@url)
-          http = Net::HTTP.new(uri.host, uri.port)
-          request = Net::HTTP::Post.new(uri.request_uri, 'Content-Type' => 'application/json')
-          request.body = data
-          response = http.request(request)
-
-          emit(:message, :data => response.body)
-        end
-      end
-
-      def close
-        remove_all_listeners
-        @state = CLOSED
-        emit(:close)
-      end
-
-      def ready_state
-        @state
-      end
-    end
-
     attr_reader :transaction_queue
 
     # @param [String] url
     def initialize(url)
       @url = url
-      @client = nil
       @transaction_queue = {}
     end
 
-    def run
-      connect
-    end
+    # @param [Hash] data
+    def send(data)
+      Thread.new do
+        uri = URI.parse(@url)
+        http = Net::HTTP.new(uri.host, uri.port)
+        request = Net::HTTP::Post.new(uri.request_uri, 'Content-Type' => 'application/json')
+        request.body = JSON.generate(data)
+        response = http.request(request)
 
-    def connect
-      @client = _create_client(@url)
-
-      client.on :open do
-        emit :open
-      end
-
-      client.on :message do |event|
-        data = JSON.parse(event[:data])
+        data = JSON.parse(response.body)
 
         transaction_list = @transaction_queue.clone
 
@@ -80,16 +34,7 @@ module JanusGateway
             end
           end
         end
-
-        emit :message, data
       end
-
-      client.emit(:open)
-    end
-
-    # @param [Hash] data
-    def send(data)
-      client.send(JSON.generate(data))
     end
 
     # @param [Hash] data
@@ -121,25 +66,10 @@ module JanusGateway
       promise
     end
 
-    def disconnect
-      client.close unless client.nil?
-    end
-
-    # @return [TrueClass, FalseClass]
-    def connected?
-      !client.nil? && (client.ready_state == JanusHTTPClient::OPEN)
-    end
-
     # @return [JanusHTTPClient]
     attr_reader :client
 
     private
-
-    # @param [String] url
-    # @return [JanusHTTPClient]
-    def _create_client(url)
-      JanusHTTPClient.new(url)
-    end
 
     # @return [Float, Integer]
     def _transaction_timeout
