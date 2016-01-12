@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe JanusGateway::Plugin::Rtpbroadcast::Mountpoint do
+describe JanusGateway::Plugin::Rtpbroadcast::List do
   let(:transport) { JanusGateway::Transport::WebSocket.new('') }
   let(:client) { JanusGateway::Client.new(transport) }
   let(:session) { JanusGateway::Resource::Session.new(client) }
@@ -23,13 +23,13 @@ describe JanusGateway::Plugin::Rtpbroadcast::Mountpoint do
 
     expect(session).to receive(:create).once.and_call_original
     expect(plugin).to receive(:create).once.and_call_original
-    expect(rtp_list).to receive(:create).once.and_call_original
+    expect(rtp_list).to receive(:get).once.and_call_original
     expect(EventMachine).to receive(:stop).once.and_call_original
 
     client.on :open do
       session.create.then do
         plugin.create.then do
-          rtp_list.create.then do
+          rtp_list.get.then do
             EventMachine.stop
           end
         end
