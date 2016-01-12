@@ -24,6 +24,7 @@ Style/ClassAndModuleChildren:
     - 'lib/janus_gateway/plugin/rtpbroadcast/mountpoint.rb'
     - 'lib/janus_gateway/resource/plugin.rb'
     - 'lib/janus_gateway/resource/session.rb'
+    - 'lib/janus_gateway/transport/http.rb'
     - 'lib/janus_gateway/transport/websocket.rb'
 
 # Offense count: 5
