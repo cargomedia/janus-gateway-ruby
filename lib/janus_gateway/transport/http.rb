@@ -5,8 +5,18 @@ module JanusGateway
 
       include Events::Emitter
 
+      CONNECTING = 0
+      OPEN       = 1
+      CLOSING    = 2
+      CLOSED     = 3
+
       def initialize(url)
         @url = url
+        @state = CONNECTING
+
+        self.on :open do
+          @state = OPEN
+        end
       end
 
       def send(data)
@@ -19,6 +29,16 @@ module JanusGateway
 
           emit(:message, :data => response.body)
         end
+      end
+
+      def close
+        remove_all_listeners
+        @state = CLOSED
+        emit(:close)
+      end
+
+      def ready_state
+        @state
       end
     end
 
@@ -102,11 +122,12 @@ module JanusGateway
     end
 
     def disconnect
+      client.close unless client.nil?
     end
 
     # @return [TrueClass, FalseClass]
     def connected?
-      true
+      !client.nil? && (client.ready_state == JanusHTTPClient::OPEN)
     end
 
     # @return [JanusHTTPClient]
