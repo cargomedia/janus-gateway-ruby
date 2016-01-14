@@ -26,7 +26,6 @@ module JanusGateway::Plugin
         handle_id: plugin.id,
         body: { request: 'list' }
       ).then do |data|
-
         plugindata = data['plugindata']['data']
         if plugindata['error_code'].nil?
           _on_success(data)
