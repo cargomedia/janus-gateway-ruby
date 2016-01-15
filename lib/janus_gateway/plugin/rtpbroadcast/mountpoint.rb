@@ -4,6 +4,12 @@ module JanusGateway::Plugin
     attr_reader :plugin
 
     # @return [Hash, NilClass]
+    attr_reader :streams
+
+    # @return [String]
+    attr_reader :channel_data
+
+    # @return [Hash, NilClass]
     attr_reader :data
 
     # @param [JanusGateway::Client] client
@@ -32,39 +38,13 @@ module JanusGateway::Plugin
 
     # @return [Concurrent::Promise]
     def create
-      promise = Concurrent::Promise.new
-
-      client.send_transaction(
-        janus: 'message',
-        session_id: plugin.session.id,
-        handle_id: plugin.id,
-        body: {
-          request: 'create',
-          id: id,
-          name: id,
-          description: id,
-          recorded: true,
-          streams: @streams,
-          channel_data: @channel_data
-        }
-      ).then do |data|
-        plugindata = data['plugindata']['data']
-        if plugindata['error_code'].nil?
-          _on_created(data)
-
-          promise.set(self).execute
-        else
-          error = JanusGateway::Error.new(plugindata['error_code'], plugindata['error'])
-
-          _on_error(error)
-
-          promise.fail(error).execute
-        end
+      JanusGateway::Plugin::Rtpbroadcast::Api::Create.new(@client)
+      .execute(self)
+      .then do |data|
+        _on_created(data)
       end.rescue do |error|
-        promise.fail(error).execute
+        _on_error(error)
       end
-
-      promise
     end
 
     # @return [Array<Hash>]
