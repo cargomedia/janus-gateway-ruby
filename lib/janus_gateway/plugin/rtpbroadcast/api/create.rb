@@ -1,9 +1,7 @@
 module JanusGateway::Plugin::Rtpbroadcast::Api
   class Create < JanusGateway::ApiEndpoint
-
     # @param [JanusGateway::Client] client
     def initialize(client)
-
       @client = client
     end
 

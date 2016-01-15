@@ -39,8 +39,8 @@ module JanusGateway::Plugin
     # @return [Concurrent::Promise]
     def create
       JanusGateway::Plugin::Rtpbroadcast::Api::Create.new(@client)
-      .execute(self)
-      .then do |data|
+                                                     .execute(self)
+                                                     .then do |data|
         _on_created(data)
       end.rescue do |error|
         _on_error(error)

@@ -1,6 +1,5 @@
 module JanusGateway
   class ApiEndpoint
-
     # @return [JanusGateway::Client]
     attr_reader :client
 
