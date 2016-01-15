@@ -127,4 +127,4 @@ Plugin must be installed and active in `Janus` server.
 Plugin resource supports `events` and `chaining` in the same way like `Janus` resource.
 
 ##### List
-Plugin allows for listing current audio rooms.
+Endpoint allows to retrieve the list of current audio rooms.
