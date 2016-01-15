@@ -7,7 +7,6 @@ module JanusGateway
   require 'janus_gateway/transport'
   require 'janus_gateway/resource'
   require 'janus_gateway/error'
-  require 'janus_gateway/api_endpoint'
 
   require 'janus_gateway/resource/session'
   require 'janus_gateway/resource/plugin'
@@ -15,9 +14,8 @@ module JanusGateway
   require 'janus_gateway/transport/websocket'
 
   require 'janus_gateway/plugin/rtpbroadcast'
+  require 'janus_gateway/plugin/rtpbroadcast/list'
   require 'janus_gateway/plugin/rtpbroadcast/mountpoint'
-  require 'janus_gateway/plugin/rtpbroadcast/api/list'
-  require 'janus_gateway/plugin/rtpbroadcast/api/create'
 
   require 'janus_gateway/version'
 end

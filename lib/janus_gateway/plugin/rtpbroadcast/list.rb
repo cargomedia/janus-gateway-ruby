@@ -1,5 +1,5 @@
-module JanusGateway::Plugin::Rtpbroadcast::Api
-  class List < JanusGateway::ApiEndpoint
+module JanusGateway::Plugin
+  class Rtpbroadcast::List < JanusGateway::Resource
     # @return [JanusGateway::Resource::Plugin]
     attr_reader :plugin
 
@@ -8,11 +8,12 @@ module JanusGateway::Plugin::Rtpbroadcast::Api
 
     # @param [JanusGateway::Client] client
     # @param [JanusGateway::Plugin::Rtpbroadcast] plugin
-    def initialize(client, plugin)
+    # @param [String] id
+    def initialize(client, plugin, id = nil)
       @plugin = plugin
       @data = nil
 
-      super(client)
+      super(client, id)
     end
 
     # @return [Concurrent::Promise]
@@ -27,9 +28,14 @@ module JanusGateway::Plugin::Rtpbroadcast::Api
       ).then do |data|
         plugindata = data['plugindata']['data']
         if plugindata['error_code'].nil?
-          promise.set(data).execute
+          _on_success(data)
+
+          promise.set(self).execute
         else
           error = JanusGateway::Error.new(plugindata['error_code'], plugindata['error'])
+
+          _on_error(error)
+
           promise.fail(error).execute
         end
       end.rescue do |error|
@@ -37,6 +43,23 @@ module JanusGateway::Plugin::Rtpbroadcast::Api
       end
 
       promise
+    end
+
+    # @return [JanusGateway::Resource::Session]
+    def session
+      plugin.session
+    end
+
+    private
+
+    def _on_success(data)
+      @data = data['plugindata']
+
+      emit :success
+    end
+
+    def _on_error(error)
+      emit :error, error
     end
   end
 end

@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe JanusGateway::Plugin::Rtpbroadcast::Api::List do
+describe JanusGateway::Plugin::Rtpbroadcast::List do
   let(:transport) { JanusGateway::Transport::WebSocket.new('') }
   let(:client) { JanusGateway::Client.new(transport) }
   let(:session) { JanusGateway::Resource::Session.new(client) }
   let(:plugin) { JanusGateway::Plugin::Rtpbroadcast.new(client, session) }
-  let(:rtp_list) { JanusGateway::Plugin::Rtpbroadcast::Api::List.new(client, plugin) }
+  let(:rtp_list) { JanusGateway::Plugin::Rtpbroadcast::List.new(client, plugin) }
 
   it 'should create rtpbroadcast mountpoint' do
     janus_response = {
