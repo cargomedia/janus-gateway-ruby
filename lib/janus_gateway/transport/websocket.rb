@@ -54,6 +54,11 @@ module JanusGateway
 
       client.on :close do
         emit :close
+
+        @transaction_queue.each do |transaction_id, promise|
+          error = JanusGateway::Error.new(0, "Transaction id `#{transaction_id}` has failed due to websocket `close`!")
+          promise.fail(error).execute
+        end
       end
     end
 
@@ -75,16 +80,16 @@ module JanusGateway
 
       thread = Thread.new do
         sleep(_transaction_timeout)
-        error = JanusGateway::Error.new(0, "Transaction id `#{transaction}` has failed due to timeout!")
+        error = JanusGateway::Error.new(0, "Transaction id `#{transaction}` has failed due to `timeout`!")
         promise.fail(error).execute
       end
 
       promise.then do
-        @transaction_queue.remove(transaction)
+        @transaction_queue.delete(transaction)
         thread.exit
       end
       promise.rescue do
-        @transaction_queue.remove(transaction)
+        @transaction_queue.delete(transaction)
         thread.exit
       end
 
