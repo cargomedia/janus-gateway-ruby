@@ -20,7 +20,7 @@ module JanusGateway::Plugin
         if plugindata['error_code'].nil?
           _on_success(data)
 
-          promise.set(self).execute
+          promise.set(data).execute
         else
           error = JanusGateway::Error.new(plugindata['error_code'], plugindata['error'])
 
