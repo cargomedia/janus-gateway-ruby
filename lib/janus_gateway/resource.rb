@@ -27,10 +27,5 @@ module JanusGateway
     def destroy
       fail("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
-
-    # @return [Concurrent::Promise]
-    def get
-      fail("`#{__method__}` is not implemented for `#{self.class.name}`")
-    end
   end
 end
