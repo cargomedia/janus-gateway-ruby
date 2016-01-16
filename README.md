@@ -100,8 +100,11 @@ Plugin must be installed and active in `Janus` server.
 
 Plugin resource supports `events` and `chaining` in the same way like `Janus` resource.
 
+#### List
+Endpoint allows to retrieve the list of current mountpoints.
+
 ##### Mountpoint create
-Plugins allows to create `RTP` mountpoint.
+Endpoint allows to create `RTP` mountpoint.
 
 ```ruby
 ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
