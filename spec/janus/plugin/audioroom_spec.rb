@@ -1,11 +1,10 @@
 require 'spec_helper'
 
-describe JanusGateway::Plugin::Audioroom::List do
+describe JanusGateway::Plugin::Audioroom do
   let(:transport) { JanusGateway::Transport::WebSocket.new('') }
   let(:client) { JanusGateway::Client.new(transport) }
   let(:session) { JanusGateway::Resource::Session.new(client) }
   let(:plugin) { JanusGateway::Plugin::Audioroom.new(client, session) }
-  let(:audioroom_list) { JanusGateway::Plugin::Audioroom::List.new(client, plugin) }
 
   it 'should list audio rooms' do
     janus_response = {
@@ -22,16 +21,13 @@ describe JanusGateway::Plugin::Audioroom::List do
     transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
 
     expect(session).to receive(:create).once.and_call_original
-    expect(plugin).to receive(:create).once.and_call_original
-    expect(audioroom_list).to receive(:get).once.and_call_original
+    expect(plugin).to receive(:list).once.and_call_original
     expect(EventMachine).to receive(:stop).once.and_call_original
 
     client.on :open do
       session.create.then do
-        plugin.create.then do
-          audioroom_list.get.then do
-            EventMachine.stop
-          end
+        plugin.list.then do
+          EventMachine.stop
         end
       end
     end

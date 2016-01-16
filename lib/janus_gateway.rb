@@ -17,7 +17,6 @@ module JanusGateway
   require 'janus_gateway/plugin/rtpbroadcast/mountpoint'
 
   require 'janus_gateway/plugin/audioroom'
-  require 'janus_gateway/plugin/audioroom/list'
 
   require 'janus_gateway/version'
 end
