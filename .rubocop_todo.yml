@@ -21,6 +21,7 @@ Style/ClassAndModuleChildren:
   Exclude:
     - 'lib/janus_gateway/plugin/rtpbroadcast.rb'
     - 'lib/janus_gateway/plugin/rtpbroadcast/mountpoint.rb'
+    - 'lib/janus_gateway/plugin/audioroom.rb'
     - 'lib/janus_gateway/resource/plugin.rb'
     - 'lib/janus_gateway/resource/session.rb'
     - 'lib/janus_gateway/transport/websocket.rb'
@@ -28,6 +29,7 @@ Style/ClassAndModuleChildren:
 # Offense count: 5
 Style/MultilineBlockChain:
   Exclude:
+    - 'lib/janus_gateway/plugin/audioroom.rb'
     - 'lib/janus_gateway/plugin/rtpbroadcast.rb'
     - 'lib/janus_gateway/plugin/rtpbroadcast/mountpoint.rb'
     - 'lib/janus_gateway/resource/plugin.rb'

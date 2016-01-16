@@ -122,3 +122,12 @@ end
 
 client.run
 ```
+
+#### Audioroom plugin
+This is custom plugin for `audio` bridging. Please find more details in official [repository](https://github.com/cargomedia/janus-gateway-audioroom).
+Plugin must be installed and active in `Janus` server.
+
+Plugin resource supports `events` and `chaining` in the same way like `Janus` resource.
+
+##### List
+Endpoint allows to retrieve the list of current audio rooms.
