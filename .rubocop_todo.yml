@@ -31,6 +31,7 @@ Style/ClassAndModuleChildren:
 Style/MultilineBlockChain:
   Exclude:
     - 'lib/janus_gateway/plugin/audioroom/list.rb'
+    - 'lib/janus_gateway/plugin/rtpbroadcast.rb'
     - 'lib/janus_gateway/plugin/rtpbroadcast/mountpoint.rb'
     - 'lib/janus_gateway/resource/plugin.rb'
     - 'lib/janus_gateway/resource/session.rb'
