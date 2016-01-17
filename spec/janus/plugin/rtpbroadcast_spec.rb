@@ -1,13 +1,12 @@
 require 'spec_helper'
 
-describe JanusGateway::Plugin::Rtpbroadcast::List do
+describe JanusGateway::Plugin::Rtpbroadcast do
   let(:transport) { JanusGateway::Transport::WebSocket.new('') }
   let(:client) { JanusGateway::Client.new(transport) }
   let(:session) { JanusGateway::Resource::Session.new(client) }
   let(:plugin) { JanusGateway::Plugin::Rtpbroadcast.new(client, session) }
-  let(:rtp_list) { JanusGateway::Plugin::Rtpbroadcast::List.new(client, plugin) }
 
-  it 'should create rtpbroadcast mountpoint' do
+  it 'should list mountpoints' do
     janus_response = {
       create: '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":"12345"}}',
       attach: '{"janus":"success", "session_id":12345, "transaction":"ABCDEFGHIJK", "data":{"id":"54321"}}',
@@ -22,16 +21,13 @@ describe JanusGateway::Plugin::Rtpbroadcast::List do
     transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
 
     expect(session).to receive(:create).once.and_call_original
-    expect(plugin).to receive(:create).once.and_call_original
-    expect(rtp_list).to receive(:get).once.and_call_original
+    expect(plugin).to receive(:list).once.and_call_original
     expect(EventMachine).to receive(:stop).once.and_call_original
 
     client.on :open do
       session.create.then do
-        plugin.create.then do
-          rtp_list.get.then do
-            EventMachine.stop
-          end
+        plugin.list.then do
+          EventMachine.stop
         end
       end
     end
