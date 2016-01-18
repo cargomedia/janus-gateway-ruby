@@ -47,6 +47,7 @@ describe JanusGateway::Transport::Http do
       promise = transport.send_transaction(janus: 'create')
 
       expect(promise.value).to eq(nil)
+      expect(promise.rejected?).to eq(true)
     end
   end
 end
