@@ -14,7 +14,8 @@ describe JanusGateway::Transport::Http do
   describe '#send_transaction' do
     janus_response = {
       timeout: '{"janus":"success", "transaction":"000"}',
-      test: '{"janus":"success", "transaction":"ABCDEFGHIJK"}'
+      test: '{"janus":"success", "transaction":"ABCDEFGHIJK"}',
+      create: '{"error":{"code": 0, "reason": "HTTP/Transport response code is `501`"}}'
     }
 
     let(:janus_server) { HttpDummyJanusServer.new(janus_response) }
@@ -33,11 +34,19 @@ describe JanusGateway::Transport::Http do
 
     it 'fulfills transaction promises' do
       transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
-      expect(transport).to receive(:_send).with(JSON.generate(janus: 'test', transaction: 'ABCDEFGHIJK'))
+      expect(transport).to receive(:_send).with(janus: 'test', transaction: 'ABCDEFGHIJK')
 
       promise = transport.send_transaction(janus: 'test')
 
       expect(promise.value).to eq(data)
+    end
+
+    it 'rejects transaction promises' do
+      transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
+
+      promise = transport.send_transaction(janus: 'create')
+
+      expect(promise.value).to eq(nil)
     end
   end
 end

@@ -11,13 +11,14 @@ module JanusGateway
     # @param [Hash] data
     def send(data)
       Thread.new do
-        response = JSON.parse(_send(JSON.generate(data)))
+        response = _send(data)
+
+        request_transaction_id = data[:transaction]
+        response_transaction_id = response['transaction']
 
         transaction_list = @transaction_queue.clone
-
-        transaction_id = response['transaction']
-        unless transaction_id.nil?
-          promise = transaction_list[transaction_id]
+        unless response_transaction_id.nil? and request_transaction_id.nil?
+          promise = transaction_list[response_transaction_id] || transaction_list[request_transaction_id]
           unless promise.nil?
             if %w(success ack).include?(response['janus'])
               promise.set(response).execute
@@ -62,14 +63,22 @@ module JanusGateway
 
     private
 
+    # @param [Hash] data
+    # @return [Hash]
     def _send(data)
       uri = URI.parse(@url)
       http = Net::HTTP.new(uri.host, uri.port)
       request = Net::HTTP::Post.new(uri.request_uri, 'Content-Type' => 'application/json')
-      request.body = data
+      request.body = JSON.generate(data)
       response = http.request(request)
 
-      response.body
+      response_json = JSON.parse(response.body)
+
+      unless response.code == '200'
+        response_json['error'] = { 'code' => 0, 'reason' => "HTTP/Transport response code is `#{response.code}`" }
+      end
+
+      response_json
     end
 
     # @return [Float, Integer]
