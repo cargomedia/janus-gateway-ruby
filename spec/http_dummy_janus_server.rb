@@ -8,6 +8,6 @@ class HttpDummyJanusServer
     janus_action_name = data_json['janus'].to_sym
 
     sleep(0.1)
-    JSON.parse(@response[janus_action_name])
+    @response[janus_action_name]
   end
 end

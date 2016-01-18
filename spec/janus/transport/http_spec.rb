@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe JanusGateway::Transport::Http do
   let(:url) { 'http://example.com' }
+  let(:data) { { 'janus' => 'success', 'transaction' => 'ABCDEFGHIJK' } }
   let(:transport) { JanusGateway::Transport::Http.new(url) }
   let(:http_client) { Net::HTTP.new(url) }
   before do
@@ -12,7 +13,8 @@ describe JanusGateway::Transport::Http do
 
   describe '#send_transaction' do
     janus_response = {
-      timeout: '{"janus":"success", "transaction":"000"}'
+      timeout: '{"janus":"success", "transaction":"000"}',
+      test: '{"janus":"success", "transaction":"ABCDEFGHIJK"}'
     }
 
     let(:janus_server) { HttpDummyJanusServer.new(janus_response) }
@@ -27,6 +29,15 @@ describe JanusGateway::Transport::Http do
 
       expect(promise.value).to eq(nil)
       expect(promise.rejected?).to eq(true)
+    end
+
+    it 'fulfills transaction promises' do
+      transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
+      expect(transport).to receive(:_send).with(JSON.generate({janus: 'test', transaction: 'ABCDEFGHIJK'}))
+
+      promise = transport.send_transaction(janus: 'test')
+
+      expect(promise.value).to eq(data)
     end
   end
 end

@@ -11,12 +11,11 @@ module JanusGateway
     # @param [Hash] data
     def send(data)
       Thread.new do
-        response = _send(data)
+        response = JSON.parse(_send(JSON.generate(data)))
 
         transaction_list = @transaction_queue.clone
 
         transaction_id = response['transaction']
-
         unless transaction_id.nil?
           promise = transaction_list[transaction_id]
           unless promise.nil?
@@ -67,10 +66,10 @@ module JanusGateway
       uri = URI.parse(@url)
       http = Net::HTTP.new(uri.host, uri.port)
       request = Net::HTTP::Post.new(uri.request_uri, 'Content-Type' => 'application/json')
-      request.body = JSON.generate(data)
+      request.body = data
       response = http.request(request)
 
-      JSON.parse(response.body)
+      response.body
     end
 
     # @return [Float, Integer]
