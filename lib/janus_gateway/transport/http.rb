@@ -17,7 +17,7 @@ module JanusGateway
         response_transaction_id = response['transaction']
 
         transaction_list = @transaction_queue.clone
-        unless response_transaction_id.nil? and request_transaction_id.nil?
+        unless response_transaction_id.nil? && request_transaction_id.nil?
           promise = transaction_list[response_transaction_id] || transaction_list[request_transaction_id]
           unless promise.nil?
             if %w(success ack).include?(response['janus'])
@@ -72,11 +72,11 @@ module JanusGateway
       request.body = JSON.generate(data)
       response = http.request(request)
 
-      if response.code == '200'
-        response_json = JSON.parse(response.body)
-      else
-        response_json = { 'error' => { 'code' => 0, 'reason' => "HTTP/Transport response code is `#{response.code}`" } }
-      end
+      response_json = if response.code == '200'
+                        JSON.parse(response.body)
+                      else
+                        { 'error' => { 'code' => 0, 'reason' => "HTTP/Transport response code is `#{response.code}`" } }
+                      end
 
       response_json
     end
