@@ -72,10 +72,10 @@ module JanusGateway
       request.body = JSON.generate(data)
       response = http.request(request)
 
-      response_json = JSON.parse(response.body)
-
-      unless response.code == '200'
-        response_json['error'] = { 'code' => 0, 'reason' => "HTTP/Transport response code is `#{response.code}`" }
+      if response.code == '200'
+        response_json = JSON.parse(response.body)
+      else
+        response_json = { 'error' => { 'code' => 0, 'reason' => "HTTP/Transport response code is `#{response.code}`" } }
       end
 
       response_json
