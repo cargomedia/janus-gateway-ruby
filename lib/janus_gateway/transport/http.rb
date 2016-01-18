@@ -11,7 +11,7 @@ module JanusGateway
     # @param [Hash] data
     def send(data)
       Thread.new do
-        response = _send(JSON.generate(data))
+        response = _send(data)
 
         transaction_list = @transaction_queue.clone
 
