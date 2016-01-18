@@ -33,7 +33,7 @@ describe JanusGateway::Transport::Http do
 
     it 'fulfills transaction promises' do
       transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
-      expect(transport).to receive(:_send).with(JSON.generate({janus: 'test', transaction: 'ABCDEFGHIJK'}))
+      expect(transport).to receive(:_send).with(JSON.generate(janus: 'test', transaction: 'ABCDEFGHIJK'))
 
       promise = transport.send_transaction(janus: 'test')
 
