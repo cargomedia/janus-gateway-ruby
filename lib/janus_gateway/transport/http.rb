@@ -20,8 +20,10 @@ module JanusGateway
         unless response_transaction_id.nil? && request_transaction_id.nil?
           promise = transaction_list[response_transaction_id] || transaction_list[request_transaction_id]
           unless promise.nil?
-            if %w(success ack).include?(response['janus'])
+            if %w(success).include?(response['janus'])
               promise.set(response).execute
+            elsif %w(ack event).include?(response['janus'])
+              # do nothing for now
             else
               error_data = response['error']
               error = JanusGateway::Error.new(error_data['code'], error_data['reason'])
