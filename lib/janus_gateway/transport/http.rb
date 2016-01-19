@@ -77,7 +77,7 @@ module JanusGateway
       response_json = if response.code == '200'
                         JSON.parse(response.body)
                       else
-                        { 'error' => { 'code' => 0, 'reason' => "HTTP/Transport response code is `#{response.code}`" } }
+                        { 'error' => { 'code' => 0, 'reason' => "HTTP/Transport response code: `#{response.code}`, body: `#{response.body}`" } }
                       end
 
       response_json
