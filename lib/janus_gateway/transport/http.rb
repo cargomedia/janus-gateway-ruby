@@ -47,7 +47,7 @@ module JanusGateway
         unless request_transaction_id.nil?
           promise = transaction_list[request_transaction_id]
           unless promise.nil?
-            error_data = {'code' => 0, 'reason' => "HTTP/Transport response: `#{error}`"}
+            error_data = { 'code' => 0, 'reason' => "HTTP/Transport response: `#{error}`" }
             error = JanusGateway::Error.new(error_data['code'], error_data['reason'])
             promise.fail(error).execute
           end
@@ -92,7 +92,7 @@ module JanusGateway
       promise = Concurrent::Promise.new
 
       http = EventMachine::HttpRequest.new(@url)
-      post = http.post(:body => JSON.generate(data), :head => {'Content-Type' => 'application/json'})
+      post = http.post(body: JSON.generate(data), head: { 'Content-Type' => 'application/json' })
 
       post.callback do
         promise.set(JSON.parse(sender.response)).execute
