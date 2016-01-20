@@ -97,11 +97,11 @@ module JanusGateway
       post = http.post(body: JSON.generate(data), head: { 'Content-Type' => 'application/json' })
 
       post.callback do
-        promise.set(JSON.parse(sender.response)).execute
+        promise.set(JSON.parse(post.response)).execute
       end
 
       post.errback do
-        promise.fail(sender.error).execute
+        promise.fail(post.error).execute
       end
 
       promise
