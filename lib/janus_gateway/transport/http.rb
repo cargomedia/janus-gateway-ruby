@@ -1,3 +1,6 @@
+require 'eventmachine'
+require 'em-http-request'
+
 module JanusGateway
   class Transport::Http < Transport
     attr_reader :transaction_queue
@@ -8,17 +11,23 @@ module JanusGateway
       @transaction_queue = {}
     end
 
+    def run
+      EventMachine.run do
+        EM.error_handler { |e| fail(e) }
+        # will be used for long-pooling. currently does nothing
+      end
+    end
+
     # @param [Hash] data
     def send(data)
-      Thread.new do
-        response = _send(data)
+      sender = _send(data)
 
-        request_transaction_id = data[:transaction]
+      sender.then do |response|
         response_transaction_id = response['transaction']
 
         transaction_list = @transaction_queue.clone
-        unless response_transaction_id.nil? && request_transaction_id.nil?
-          promise = transaction_list[response_transaction_id] || transaction_list[request_transaction_id]
+        unless response_transaction_id.nil?
+          promise = transaction_list[response_transaction_id]
           unless promise.nil?
             if %w(success).include?(response['janus'])
               promise.set(response).execute
@@ -29,6 +38,18 @@ module JanusGateway
               error = JanusGateway::Error.new(error_data['code'], error_data['reason'])
               promise.fail(error).execute
             end
+          end
+        end
+      end.rescue do |error|
+        request_transaction_id = data[:transaction]
+
+        transaction_list = @transaction_queue.clone
+        unless request_transaction_id.nil?
+          promise = transaction_list[request_transaction_id]
+          unless promise.nil?
+            error_data = {'code' => 0, 'reason' => "HTTP/Transport response: `#{error}`"}
+            error = JanusGateway::Error.new(error_data['code'], error_data['reason'])
+            promise.fail(error).execute
           end
         end
       end
@@ -66,19 +87,22 @@ module JanusGateway
     private
 
     # @param [Hash] data
-    # @return [Hash]
+    # @return [EventMachine::HttpRequest]
     def _send(data)
-      uri = URI.parse(@url)
-      http = Net::HTTP.new(uri.host, uri.port)
-      request = Net::HTTP::Post.new(uri.request_uri, 'Content-Type' => 'application/json')
-      request.body = JSON.generate(data)
-      response = http.request(request)
+      promise = Concurrent::Promise.new
 
-      if response.code == '200'
-        JSON.parse(response.body)
-      else
-        {'error' => {'code' => 0, 'reason' => "HTTP/Transport response code: `#{response.code}`, body: `#{response.body}`"}}
+      http = EventMachine::HttpRequest.new(@url)
+      post = http.post(:body => JSON.generate(data), :head => {'Content-Type' => 'application/json'})
+
+      post.callback do
+        promise.set(JSON.parse(sender.response)).execute
       end
+
+      post.errback do
+        promise.fail(sender.error).execute
+      end
+
+      promise
     end
 
     # @return [Float, Integer]
