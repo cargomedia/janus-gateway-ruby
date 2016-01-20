@@ -90,17 +90,32 @@ module JanusGateway
     # @param [Hash] data
     # @return [EventMachine::HttpRequest]
     def _send(data)
+
       promise = Concurrent::Promise.new
 
-      http = EventMachine::HttpRequest.new(@url)
-      post = http.post(body: JSON.generate(data), head: { 'Content-Type' => 'application/json' })
+      begin
+        http = EventMachine::HttpRequest.new(@url)
+        request = http.post(body: JSON.generate(data), head: { 'Content-Type' => 'application/json' })
 
-      post.callback do
-        promise.set(JSON.parse(post.response)).execute
-      end
+        request.callback do
+          status = request.response_header.status
+          if status == 200
+            begin
+              promise.set(JSON.parse(request.response)).execute
+            rescue Exception => e
+              promise.fail(e).execute
+            end
+          else
+            promise.fail(Error.new(status, 'Not valid response')).execute
+          end
 
-      post.errback do
-        promise.fail(post.error).execute
+        end
+
+        request.errback do
+          promise.fail(request.error).execute
+        end
+      rescue Exception => e
+        return Concurrent::Promise.reject(e)
       end
 
       promise
