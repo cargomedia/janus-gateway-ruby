@@ -40,7 +40,9 @@ module JanusGateway
             end
           end
         end
-      end.rescue do |error|
+      end
+
+      sender.rescue do |error|
         request_transaction_id = data[:transaction]
 
         transaction_list = @transaction_queue.clone

@@ -4,4 +4,10 @@ Metrics/LineLength:
 Style/Documentation:
   Enabled: false
 
+Metrics/CyclomaticComplexity:
+  Max: 7
+
+Metrics/PerceivedComplexity:
+  Max: 8
+
 inherit_from: .rubocop_todo.yml
