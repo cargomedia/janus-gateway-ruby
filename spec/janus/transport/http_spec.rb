@@ -72,46 +72,41 @@ describe JanusGateway::Transport::Http do
     include WebMock::API
 
     context 'when given invalid data' do
-
       it 'should raise when cannot parse to json' do
         expect { transport.__send__(:_send, 'foo') }.to raise_error
       end
     end
 
     context 'when given proper data' do
-
       let(:http_request) { stub_request(:post, url) }
-      let(:request) { transport.__send__(:_send, {:request_param => 'value'}) }
+      let(:request) { transport.__send__(:_send, 'request_param' => 'value') }
 
       it 'should send proper http request' do
-        http_request.with(:body => {:request_param => 'value'})
-        http_request.to_return(:body => '[]')
+        http_request.with(body: { 'request_param' => 'value' })
+        http_request.to_return(body: '[]')
         EM.run do
           request.then { EM.stop }
           request.rescue { EM.stop }
         end
-
         expect(request.fulfilled?).to eq(true)
       end
 
       context 'and responds with valid response' do
-
         it 'should resolve with body' do
-          http_request.to_return(:body => '{"response_param":"value"}')
+          http_request.to_return(body: '{"response_param":"value"}')
           EM.run do
             request.then { EM.stop }
             request.rescue { EM.stop }
           end
 
           expect(request.fulfilled?).to eq(true)
-          expect(request.value).to eq({'response_param' => 'value'})
+          expect(request.value).to eq('response_param' => 'value')
         end
       end
 
       context 'and responds with non-valid status' do
         it 'should reject with http error' do
-
-          http_request.to_return(:status => [500, 'Internal Server Error'])
+          http_request.to_return(status: [500, 'Internal Server Error'])
           EM.run do
             request.then { EM.stop }
             request.rescue { EM.stop }
@@ -122,9 +117,8 @@ describe JanusGateway::Transport::Http do
       end
 
       context 'and responds with invalid json data' do
-
         it 'should reject with error' do
-          http_request.to_return(:body => 'invalid-json')
+          http_request.to_return(body: 'invalid-json')
           EM.run do
             request.then { EM.stop }
             request.rescue { EM.stop }
@@ -135,7 +129,6 @@ describe JanusGateway::Transport::Http do
       end
 
       context 'and timeouts' do
-
         let(:request) { transport.__send__(:_send, []) }
 
         it 'should reject with error' do

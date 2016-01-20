@@ -90,7 +90,6 @@ module JanusGateway
     # @param [Hash] data
     # @return [EventMachine::HttpRequest]
     def _send(data)
-
       promise = Concurrent::Promise.new
 
       http = EventMachine::HttpRequest.new(@url)
@@ -101,7 +100,7 @@ module JanusGateway
         if status == 200
           begin
             promise.set(JSON.parse(request.response)).execute
-          rescue Exception => e
+          rescue StandardError => e
             promise.fail(e).execute
           end
         else
