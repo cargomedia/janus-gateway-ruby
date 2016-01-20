@@ -93,29 +93,24 @@ module JanusGateway
 
       promise = Concurrent::Promise.new
 
-      begin
-        http = EventMachine::HttpRequest.new(@url)
-        request = http.post(body: JSON.generate(data), head: { 'Content-Type' => 'application/json' })
+      http = EventMachine::HttpRequest.new(@url)
+      request = http.post(body: JSON.generate(data), head: { 'Content-Type' => 'application/json' })
 
-        request.callback do
-          status = request.response_header.status
-          if status == 200
-            begin
-              promise.set(JSON.parse(request.response)).execute
-            rescue Exception => e
-              promise.fail(e).execute
-            end
-          else
-            promise.fail(Error.new(status, 'Not valid response')).execute
+      request.callback do
+        status = request.response_header.status
+        if status == 200
+          begin
+            promise.set(JSON.parse(request.response)).execute
+          rescue Exception => e
+            promise.fail(e).execute
           end
-
+        else
+          promise.fail(Error.new(status, "Invalid response. Status: `#{status}`. Body: `#{request.response}`")).execute
         end
+      end
 
-        request.errback do
-          promise.fail(request.error).execute
-        end
-      rescue Exception => e
-        return Concurrent::Promise.reject(e)
+      request.errback do
+        promise.fail(request.error).execute
       end
 
       promise
