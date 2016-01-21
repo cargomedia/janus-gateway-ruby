@@ -50,7 +50,7 @@ describe JanusGateway::Transport::Http do
         promise.then { EM.stop }
         promise.rescue { EM.stop }
       end
-      expect(promise.reason).to eq(nil)
+      expect(promise.value).to eq(data)
     end
 
     it 'rejects transaction promises' do
