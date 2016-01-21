@@ -43,7 +43,10 @@ describe JanusGateway::Transport::Http do
 
       promise = transport.send_transaction(janus: 'test')
       EM.run do
-        EM.error_handler { |e| puts e; EM.stop }
+        EM.error_handler do |e|
+          puts e
+          EM.stop
+        end
         request.then { EM.stop }
         request.rescue { EM.stop }
       end
