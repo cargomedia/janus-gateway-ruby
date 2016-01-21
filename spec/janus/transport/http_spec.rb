@@ -73,7 +73,7 @@ describe JanusGateway::Transport::Http do
 
     context 'when given invalid data' do
       it 'should raise when cannot parse to json' do
-        expect { transport.__send__(:_send, 'foo') }.to raise_error
+        expect { transport.__send__(:_send, 'foo') }.to raise_error(StandardError)
       end
     end
 

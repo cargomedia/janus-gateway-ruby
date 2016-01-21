@@ -21,8 +21,8 @@ describe JanusGateway::Resource::Session do
 
     client.on :open do
       session.create.rescue do |error|
-        EventMachine.stop
         spec_success.call(error.code, error.info)
+        EventMachine.stop
       end
     end
 
@@ -45,8 +45,8 @@ describe JanusGateway::Resource::Session do
     client.on :open do
       session.create.then do
         session.destroy.then do
-          EventMachine.stop
           spec_success.call
+          EventMachine.stop
         end
       end
     end
@@ -71,8 +71,8 @@ describe JanusGateway::Resource::Session do
       session.create.then do
         session.id = 999
         session.destroy.rescue do |error|
-          EventMachine.stop
           spec_success.call(error.code, error.info)
+          EventMachine.stop
         end
       end
     end
@@ -93,8 +93,8 @@ describe JanusGateway::Resource::Session do
 
     client.on :open do
       session.on :destroy do
-        EventMachine.stop
         spec_success.call
+        EventMachine.stop
       end
       session.create.then do
         client.transport.client.receive_message('{"janus":"timeout", "session_id":12345}')
