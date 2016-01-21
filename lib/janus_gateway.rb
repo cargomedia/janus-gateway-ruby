@@ -11,6 +11,7 @@ module JanusGateway
   require 'janus_gateway/resource/session'
   require 'janus_gateway/resource/plugin'
 
+  require 'janus_gateway/transport/http'
   require 'janus_gateway/transport/websocket'
 
   require 'janus_gateway/plugin/rtpbroadcast'
