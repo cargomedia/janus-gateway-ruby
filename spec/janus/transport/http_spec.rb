@@ -29,9 +29,8 @@ describe JanusGateway::Transport::Http do
 
       promise = transport.send_transaction(janus: 'timeout')
       EM.run do
-        promise.rescue do
-          EM.stop
-        end
+        promise.then { EM.stop }
+        promise.rescue { EM.stop }
       end
       expect(promise.value).to eq(nil)
       expect(promise.rejected?).to eq(true)
