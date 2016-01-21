@@ -23,7 +23,7 @@ describe JanusGateway::Transport::Http do
 
     it 'should response with timeout' do
       transport.stub(:transaction_id_new).and_return('000')
-      transport.stub(:_transaction_timeout).and_return(0.001)
+      transport.stub(:_transaction_timeout).and_return(0)
 
       transport.stub(:send)
 
