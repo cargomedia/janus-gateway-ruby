@@ -47,8 +47,8 @@ describe JanusGateway::Transport::Http do
           puts e
           EM.stop
         end
-        request.then { EM.stop }
-        request.rescue { EM.stop }
+        promise.then { EM.stop }
+        promise.rescue { EM.stop }
       end
       expect(promise.value).to eq(data)
     end
