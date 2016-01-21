@@ -9,6 +9,7 @@ describe JanusGateway::Resource::Session do
   let(:error_458) { JanusGateway::Error.new(458, 'Session not found') }
 
   it 'should throw exception' do
+    puts 'should throw exception'
     janus_response = {
       create: "{\"janus\":\"error\", \"transaction\":\"123\", \"error\":{\"code\":#{error_468.code}, \"reason\": \"#{error_468.info}\"}}"
     }
@@ -30,6 +31,7 @@ describe JanusGateway::Resource::Session do
   end
 
   it 'should destroy session' do
+    puts 'should destroy session'
     janus_response = {
       create: '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":"12345"}}',
       destroy: '{"janus":"success", "session_id":12345, "transaction":"ABCDEFGHIJK"}'
@@ -55,6 +57,7 @@ describe JanusGateway::Resource::Session do
   end
 
   it 'should fail to destroy session' do
+    puts 'should fail to destroy session'
     janus_response = {
       create: '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":"12345"}}',
       destroy: '{"janus":"error", "session_id":999, "transaction":"ABCDEFGHIJK", "error":{"code":458, "reason": "Session not found"}}'
@@ -81,6 +84,7 @@ describe JanusGateway::Resource::Session do
   end
 
   it 'should session timeout' do
+    puts 'should session timeout'
     janus_response = {
       create: '{"janus":"success", "transaction":"ABCDEFGHIJK", "data":{"id":12345}}'
     }

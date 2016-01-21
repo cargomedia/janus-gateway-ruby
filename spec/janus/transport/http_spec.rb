@@ -21,7 +21,25 @@ describe JanusGateway::Transport::Http do
 
     let(:janus_server) { HttpDummyJanusServer.new(janus_response) }
 
+    it 'should response with timeout' do
+      puts 'should response with timeout'
+      transport.stub(:transaction_id_new).and_return('000')
+      transport.stub(:_transaction_timeout).and_return(0.001)
+
+      transport.stub(:send)
+
+      promise = transport.send_transaction(janus: 'timeout')
+      EM.run do
+        promise.rescue do
+          EM.stop
+        end
+      end
+      expect(promise.value).to eq(nil)
+      expect(promise.rejected?).to eq(true)
+    end
+
     it 'fulfills transaction promises' do
+      puts 'fulfills transaction promises'
       transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
       expect(transport).to receive(:_send).with(janus: 'test', transaction: 'ABCDEFGHIJK')
 
@@ -116,6 +134,7 @@ describe JanusGateway::Transport::Http do
         let(:request) { transport.__send__(:_send, []) }
 
         it 'should reject with error' do
+          puts 'should reject with error'
           http_request.to_timeout
           EM.run do
             request.then { EM.stop }
