@@ -41,13 +41,14 @@ describe JanusGateway::Transport::Http do
       transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
       expect(transport).to receive(:_send).with(janus: 'test', transaction: 'ABCDEFGHIJK')
 
-      promise = transport.send_transaction(janus: 'test').then { EM.stop }.rescue { EM.stop }
+      promise = transport.send_transaction(janus: 'test')
       EM.run do
         EM.error_handler do |e|
           puts e
           EM.stop
         end
-        promise
+        promise.then { EM.stop }
+        promise.rescue { EM.stop }
       end
       expect(promise.reason).to eq(nil)
     end

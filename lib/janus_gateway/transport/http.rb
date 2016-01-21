@@ -63,9 +63,9 @@ module JanusGateway
       transaction = transaction_id_new
 
       data[:transaction] = transaction
-      send(data)
 
       @transaction_queue[transaction] = promise
+      send(data)
 
       thread = Thread.new do
         sleep(_transaction_timeout)
