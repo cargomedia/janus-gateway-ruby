@@ -37,6 +37,19 @@ describe JanusGateway::Transport::Http do
       expect(promise.rejected?).to eq(true)
     end
 
+    it 'fulfills transaction promises' do
+      transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
+      expect(transport).to receive(:_send).with(janus: 'test', transaction: 'ABCDEFGHIJK')
+
+      promise = transport.send_transaction(janus: 'test')
+      EM.run do
+        EM.error_handler { |e| puts e; EM.stop }
+        request.then { EM.stop }
+        request.rescue { EM.stop }
+      end
+      expect(promise.value).to eq(data)
+    end
+
     it 'rejects transaction promises' do
       transport.stub(:transaction_id_new).and_return('ABCDEFGHIJK')
       transport.stub(:_send) do
