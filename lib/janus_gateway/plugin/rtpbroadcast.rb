@@ -35,6 +35,41 @@ module JanusGateway::Plugin
       promise
     end
 
+    # @param [String] mountpoint_id
+    # @param [Array] streams
+    # @return [Concurrent::Promise]
+    def watch_udp(mountpoint_id, streams)
+      promise = Concurrent::Promise.new
+
+      client.send_transaction(
+        janus: 'message',
+        session_id: session.id,
+        handle_id: id,
+        body: {
+          request: 'watch-udp',
+          id: mountpoint_id,
+          streams: streams
+        }
+      ).then do |data|
+        plugindata = data['plugindata']['data']
+        if plugindata['error_code'].nil?
+          _on_success(data)
+
+          promise.set(data).execute
+        else
+          error = JanusGateway::Error.new(plugindata['error_code'], plugindata['error'])
+
+          _on_error(error)
+
+          promise.fail(error).execute
+        end
+      end.rescue do |error|
+        promise.fail(error).execute
+      end
+
+      promise
+    end
+
     private
 
     def _on_success(data)
