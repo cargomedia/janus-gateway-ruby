@@ -13,7 +13,7 @@ module JanusGateway
 
     def run
       EventMachine.run do
-        EM.error_handler { |e| fail(e) }
+        EM.error_handler { |e| raise(e) }
         # will be used for long-pooling. currently does nothing
       end
     end

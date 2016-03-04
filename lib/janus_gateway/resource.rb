@@ -20,12 +20,12 @@ module JanusGateway
 
     # @return [Concurrent::Promise]
     def create
-      fail("`#{__method__}` is not implemented for `#{self.class.name}`")
+      raise("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
 
     # @return [Concurrent::Promise]
     def destroy
-      fail("`#{__method__}` is not implemented for `#{self.class.name}`")
+      raise("`#{__method__}` is not implemented for `#{self.class.name}`")
     end
   end
 end

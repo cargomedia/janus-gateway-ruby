@@ -16,13 +16,13 @@ module JanusGateway
 
     def run
       EventMachine.run do
-        EM.error_handler { |e| fail(e) }
+        EM.error_handler { |e| raise(e) }
         connect
       end
     end
 
     def connect
-      fail('WebSocket client already exists!') unless @client.nil?
+      raise('WebSocket client already exists!') unless @client.nil?
 
       @client = _create_client(@url, @protocol)
 
