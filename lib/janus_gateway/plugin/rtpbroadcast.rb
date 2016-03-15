@@ -51,13 +51,12 @@ module JanusGateway::Plugin
           streams: streams
         }
       ).then do |data|
-        plugindata = data['plugindata']['data']
-        if plugindata['error_code'].nil?
+        if data['error_code'].nil?
           _on_success(data)
 
           promise.set(data).execute
         else
-          error = JanusGateway::Error.new(plugindata['error_code'], plugindata['error'])
+          error = JanusGateway::Error.new(data['error_code'], data['error'])
 
           _on_error(error)
 
