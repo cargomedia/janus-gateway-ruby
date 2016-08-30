@@ -131,3 +131,22 @@ Plugin resource supports `events` and `chaining` in the same way like `Janus` re
 
 ##### List
 Endpoint allows to retrieve the list of current audio rooms.
+
+Development
+-----------
+
+Install dependencies:
+```
+bundle install
+```
+
+Run tests:
+```
+bundle exec rspec
+```
+
+Release a new version:
+
+1. Bump the version in `lib/janus_gateway/version.rb`, merge to master.
+2. Push a new tag to master.
+3. Release to RubyGems with `bundle exec rake release`.
