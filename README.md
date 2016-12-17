@@ -28,7 +28,20 @@ ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
 client = JanusGateway::Client.new(ws)
 ```
 
-This client is used by all other classes connecting to api no matter if it's Resource or helper class like Agent.
+The client's `connect` method should be called in an [EventMachine](https://github.com/eventmachine/eventmachine) context, for events to be emitted etc.
+You can call the `run` method to start an EventMachine (which will block the execution of the program):
+```ruby
+ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
+client = JanusGateway::Client.new(ws)
+
+client.on(:open) do
+  # We can start sending commands to the server now
+end
+
+client.run
+```
+
+Refer to the [Examples](#examples) section for a complete example of connecting to a server.
 
 ### Transports
 Client allows to use multiple, supported by Janus transportation layers. Currently the `WebSocket` transport is implemented and is the default.
@@ -131,6 +144,26 @@ Plugin resource supports `events` and `chaining` in the same way like `Janus` re
 
 ##### List
 Endpoint allows to retrieve the list of current audio rooms.
+
+Examples
+--------
+
+Connect to the server using the WebSocket transport and create a session:
+```ruby
+ws = JanusGateway::Transport::WebSocket.new('ws://localhost:8188/janus')
+client = JanusGateway::Client.new(ws)
+client.on(:open) { puts 'client connected' }
+client.on(:close) { puts 'client disconnected' }
+
+client.on(:open) do
+  session = JanusGateway::Resource::Session.new(client)
+  session.on(:create) { puts 'session created' }
+  session.on(:destroy) { puts 'session destroyed' }
+  session.create
+end
+
+client.run
+```
 
 Development
 -----------
