@@ -64,6 +64,7 @@ module JanusGateway
 
     # @param [Hash] data
     def send(data)
+      raise 'WebSocket transport not connected' unless connected?
       client.send(JSON.generate(data))
     end
 

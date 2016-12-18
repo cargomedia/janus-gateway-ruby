@@ -38,4 +38,8 @@ class WebSocketClientMock
       emit :close
     end
   end
+
+  def ready_state
+    Faye::WebSocket::API::OPEN
+  end
 end

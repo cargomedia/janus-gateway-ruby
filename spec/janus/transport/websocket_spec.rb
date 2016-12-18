@@ -9,6 +9,13 @@ describe JanusGateway::Transport::WebSocket do
   before { transport.stub(:_create_client).with(url, protocol).and_return(ws_client) }
   before { ws_client.stub(:send) }
   before { ws_client.stub(:close) }
+  before { ws_client.stub(:ready_state).and_return(Faye::WebSocket::API::OPEN) }
+
+  describe '#send' do
+    it 'should raise if not connected' do
+      expect { transport.send('oo') }.to raise_error(StandardError)
+    end
+  end
 
   describe '#send_transaction' do
     janus_response = {
