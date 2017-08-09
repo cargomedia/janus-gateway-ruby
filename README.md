@@ -1,3 +1,8 @@
+UNMAINTAINED
+============
+This project is not maintained anymore.
+If you want to take over contact us at tech@cargomedia.ch.
+
 janus-gateway-ruby
 ==================
 Minimalistic client for the [Janus](https://github.com/meetecho/janus-gateway) WebRTC gateway.
